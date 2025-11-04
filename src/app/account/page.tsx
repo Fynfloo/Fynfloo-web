@@ -15,6 +15,7 @@ export default function AccountPage() {
           </li>
         ))}
       </ul>
+      {/* Platform roles section */}
       <h3>Platform roles</h3>
       <p>{user?.platformRoles?.join(', ') || '—'}</p>
     </main>
