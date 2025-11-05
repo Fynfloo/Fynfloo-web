@@ -60,7 +60,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.01 260);
 
-  --primary: #6967c3; /* vibrant co-branding purple */
+  --primary: oklch(0.56 0.14 282); /* vibrant co-branding purple */
   --primary-foreground: oklch(1 0 0);
 
   --secondary: oklch(
@@ -232,4 +232,17 @@
   .container {
     @apply mx-auto px-[var(--container-padding)];
   }
+}
+
+@keyframes gradientMove {
+  0%,
+  100% {
+    transform: translateX(-50%) rotate(30deg);
+  }
+  50% {
+    transform: translateX(-52%) rotate(28deg);
+  }
+}
+.animate-gradientMove {
+  animation: gradientMove 20s ease-in-out infinite alternate;
 }
