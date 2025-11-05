@@ -162,10 +162,10 @@ const Navbar = ({
             </div>
           </div>
           <div className="flex gap-2">
-            <Button asChild variant="outline" size="sm">
+            <Button asChild variant="outline" size="lg">
               <Link href={auth.login.url}>{auth.login.title}</Link>
             </Button>
-            <Button asChild size="sm">
+            <Button asChild size="lg">
               <Link href={auth.signup.url}>{auth.signup.title}</Link>
             </Button>
           </div>
@@ -247,7 +247,7 @@ const renderMenuItem = (item: MenuItem) => {
     <NavigationMenuItem key={item.title}>
       <NavigationMenuLink
         href={item.url}
-        className="bg-background hover:bg-muted hover:text-foreground group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors"
+        className="bg-background hover:bg-secondary hover:text-primary inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors"
       >
         {item.title}
       </NavigationMenuLink>
@@ -281,14 +281,16 @@ const renderMobileMenuItem = (item: MenuItem) => {
 const SubMenuLink = ({ item }: { item: MenuItem }) => {
   return (
     <Link
-      className="hover:bg-muted hover:text-foreground flex min-w-80 select-none flex-row gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors"
       href={item.url}
+      className="group flex min-w-80 select-none flex-row gap-4 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-secondary"
     >
-      <div className="text-foreground">{item.icon}</div>
-      <div>
+      <div className="text-muted-foreground transition-colors group-hover:text-primary">
+        {item.icon}
+      </div>
+      <div className="transition-colors group-hover:text-primary">
         <div className="text-sm font-semibold">{item.title}</div>
         {item.description && (
-          <p className="text-muted-foreground text-sm leading-snug">
+          <p className="text-muted-foreground text-sm leading-snug group-hover:text-primary/90">
             {item.description}
           </p>
         )}

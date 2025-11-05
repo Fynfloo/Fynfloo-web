@@ -12,7 +12,7 @@ interface HeroProps {
 
 const Hero = ({
   heading = 'Launch Your Online Store in Minutes with AI',
-  description = 'Create a stunning e-commerce website, manage products, and start accepting payments, all powered by AI. No coding, no stress — just your business, live in minutes.',
+  description = 'Create a stunning e-commerce website, manage products, and start accepting payments, all powered by AI. No coding, no stress, just your business, live in minutes.',
   button = {
     text: 'Start for Free',
     url: '/signup',

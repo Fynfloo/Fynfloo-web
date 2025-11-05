@@ -233,16 +233,3 @@
     @apply mx-auto px-[var(--container-padding)];
   }
 }
-
-@keyframes gradientMove {
-  0%,
-  100% {
-    transform: translateX(-50%) rotate(30deg);
-  }
-  50% {
-    transform: translateX(-52%) rotate(28deg);
-  }
-}
-.animate-gradientMove {
-  animation: gradientMove 20s ease-in-out infinite alternate;
-}
