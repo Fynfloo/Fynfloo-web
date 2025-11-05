@@ -2,11 +2,13 @@
 import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
+import { Navbar } from '@/components/navbar';
 
 export default function Home() {
   const { user, logout } = useAuth();
   return (
-    <main style={{ maxWidth: 900, margin: '2rem auto', padding: 20 }}>
+    <main style={{ margin: '0rem auto' }}>
+      <Navbar />
       <h1>Fynfloo — Multi-tenant dashboard</h1>
       {user ? (
         <div>
