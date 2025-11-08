@@ -8,6 +8,7 @@ type TextProps = {
   weight?: keyof typeof tokens.font.weights; // e.g., 'normal', 'medium', 'bold'
   color?: keyof typeof tokens.color | string; // e.g., 'primary', 'secondary', or any valid CSS color
   align?: 'left' | 'center' | 'right';
+  margin?: string | number;
   className?: string;
   children?: React.ReactNode;
 };
@@ -19,6 +20,7 @@ export const Text: React.FC<TextProps> = ({
   weight = 'normal',
   color = 'textPrimary',
   align = 'left',
+  margin = 0,
   className,
   children,
 }) => {
@@ -35,6 +37,7 @@ export const Text: React.FC<TextProps> = ({
         color: textColor,
         textAlign: align,
         fontFamily: tokens.font.family.base,
+        margin,
       }}
     >
       {text ?? children}
