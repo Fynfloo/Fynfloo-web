@@ -1,13 +1,19 @@
 import React from 'react';
 import { tokens } from '@/design-system/tokens';
 
+type ResponsivePadding =
+  | keyof typeof tokens.spacing
+  | string
+  | number
+  | {
+      sm?: keyof typeof tokens.spacing | string | number;
+      md?: keyof typeof tokens.spacing | string | number;
+      lg?: keyof typeof tokens.spacing | string | number;
+    };
+
 type ContainerProps = {
   children?: React.ReactNode;
-  padding?: {
-    sm?: keyof typeof tokens.spacing | string;
-    md?: keyof typeof tokens.spacing | string;
-    lg?: keyof typeof tokens.spacing | string;
-  };
+  padding?: ResponsivePadding;
   maxWidth?: string;
   backgroundColor?: keyof typeof tokens.color | string;
   center?: boolean;
@@ -26,6 +32,20 @@ export const Container: React.FC<ContainerProps> = ({
     tokens.color[backgroundColor as keyof typeof tokens.color] ||
     backgroundColor;
 
+  const resolvePadding = (size: any) =>
+    typeof size === 'number'
+      ? `${size}px`
+      : (tokens.spacing as any)[size] || size;
+
+  const paddingObj =
+    typeof padding === 'object' && !Array.isArray(padding)
+      ? padding
+      : {
+          sm: padding,
+          md: padding,
+          lg: padding,
+        };
+
   return (
     <div
       className={className}
@@ -35,22 +55,14 @@ export const Container: React.FC<ContainerProps> = ({
         margin: center ? '0 auto' : undefined,
         backgroundColor: bgColor,
         boxSizing: 'border-box',
-        padding:
-          tokens.spacing[padding.sm as keyof typeof tokens.spacing] ||
-          padding.sm,
+        padding: resolvePadding(paddingObj.sm ?? 'md'),
       }}
     >
       <div
         style={{
           width: '100%',
-          paddingLeft: `calc(${
-            tokens.spacing[padding.md as keyof typeof tokens.spacing] ||
-            padding.md
-          })`,
-          paddingRight: `calc(${
-            tokens.spacing[padding.md as keyof typeof tokens.spacing] ||
-            padding.md
-          })`,
+          paddingLeft: resolvePadding(paddingObj.md ?? 'lg'),
+          paddingRight: resolvePadding(paddingObj.md ?? 'lg'),
         }}
       >
         {children}
@@ -59,22 +71,14 @@ export const Container: React.FC<ContainerProps> = ({
       <style jsx>{`
         @media (min-width: ${tokens.breakpoint.md}) {
           div > div {
-            padding-left: ${tokens.spacing[
-              padding.md as keyof typeof tokens.spacing
-            ] || padding.md};
-            padding-right: ${tokens.spacing[
-              padding.md as keyof typeof tokens.spacing
-            ] || padding.md};
+            padding-left: ${resolvePadding(paddingObj.md ?? 'lg')};
+            padding-right: ${resolvePadding(paddingObj.md ?? 'lg')};
           }
         }
         @media (min-width: ${tokens.breakpoint.lg}) {
           div > div {
-            padding-left: ${tokens.spacing[
-              padding.lg as keyof typeof tokens.spacing
-            ] || padding.lg};
-            padding-right: ${tokens.spacing[
-              padding.lg as keyof typeof tokens.spacing
-            ] || padding.lg};
+            padding-left: ${resolvePadding(paddingObj.lg ?? 'xl')};
+            padding-right: ${resolvePadding(paddingObj.lg ?? 'xl')};
           }
         }
       `}</style>

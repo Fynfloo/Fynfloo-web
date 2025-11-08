@@ -1,18 +1,14 @@
+'use client';
+
 import React from 'react';
 import { Text } from './text';
 import { Button } from './button';
 import { Container } from './container';
 import { tokens } from '@/design-system/tokens';
 
-type ResponsivePadding = {
-  sm?: keyof typeof tokens.spacing | string;
-  md?: keyof typeof tokens.spacing | string;
-  lg?: keyof typeof tokens.spacing | string;
-};
-
 type CardProps = {
-  backgroundColor?: keyof typeof tokens.color | string;
-  padding?: ResponsivePadding;
+  backgroundColor?: string;
+  padding?: any;
   title?: string;
   subtitle?: string;
   buttonLabel?: string;
@@ -26,32 +22,26 @@ export const Card: React.FC<CardProps> = ({
   buttonLabel = 'Learn More',
 }) => {
   return (
-    <Container
-      backgroundColor={backgroundColor}
-      padding={padding}
-      className="card-wrapper"
-    >
+    <Container backgroundColor={backgroundColor as any} padding={padding}>
       <div
-        className="card-content"
         style={{
           display: 'flex',
           flexDirection: 'column',
           gap: tokens.spacing.md,
         }}
       >
-        <Text size="lg" weight="bold" color="textPrimary">
+        <Text as="h3" size="lg" weight="bold" color="textPrimary">
           {title}
         </Text>
         <Text size="md" weight="normal" color="textSecondary">
           {subtitle}
         </Text>
-        <div className="card-actions">
+        <div>
           <Button
             label={buttonLabel}
             variant="solid"
             color="primary"
-            radius="md"
-            size="sm"
+            size="md"
           />
         </div>
       </div>

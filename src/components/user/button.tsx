@@ -12,57 +12,55 @@ type ButtonProps = {
   className?: string;
 };
 
-export const Button: React.FC<ButtonProps> = ({
-  label,
-  variant = 'solid',
-  size = 'sm',
-  color = 'primary',
-  padding,
-  radius = 'md',
-  onClick,
-  className,
-}) => {
-  const bgColor =
-    variant === 'solid'
-      ? tokens.color[color as keyof typeof tokens.color]
-      : 'transparent';
-  const textColor =
-    variant === 'solid'
-      ? tokens.color.textOnPrimary
-      : tokens.color[color as keyof typeof tokens.color] || color;
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      label = 'Click',
+      variant = 'solid',
+      size = 'md',
+      color = 'primary',
+      padding,
+      radius = 'md',
+      onClick,
+      className,
+    },
+    ref
+  ) => {
+    const tokenColor =
+      tokens.color[color as keyof typeof tokens.color] || color;
+    const bg = variant === 'solid' ? tokenColor : 'transparent';
+    const txt = variant === 'solid' ? tokens.color.textOnPrimary : tokenColor;
+    const border = variant === 'outline' ? `1px solid ${tokenColor}` : 'none';
+    const sizePadding =
+      padding ??
+      (size === 'sm'
+        ? `${tokens.spacing.sm} ${tokens.spacing.md}`
+        : size === 'md'
+        ? `${tokens.spacing.md} ${tokens.spacing.lg}`
+        : `${tokens.spacing.lg} ${tokens.spacing.xl}`);
+    const borderRadius =
+      tokens.radius[radius as keyof typeof tokens.radius] || radius;
 
-  const border =
-    variant === 'outline'
-      ? `2px solid ${tokens.color[color as keyof typeof tokens.color]}`
-      : 'none';
+    return (
+      <button
+        ref={ref}
+        onClick={onClick}
+        className={className}
+        style={{
+          padding: sizePadding,
+          borderRadius: borderRadius,
+          fontWeight: tokens.font.weights.medium,
+          background: bg,
+          color: txt,
+          border,
+          cursor: 'pointer',
+          transition: `all ${tokens.transition.normal} ease`,
+        }}
+      >
+        {label}
+      </button>
+    );
+  }
+);
 
-  const sizePadding = padding
-    ? padding
-    : size === 'sm'
-    ? `${tokens.spacing.sm} ${tokens.spacing.md}`
-    : size === 'md'
-    ? `${tokens.spacing.md} ${tokens.spacing.lg}`
-    : `${tokens.spacing.lg} ${tokens.spacing.xl}`;
-
-  const borderRadius =
-    tokens.radius[radius as keyof typeof tokens.radius] || radius;
-
-  return (
-    <button
-      onClick={onClick}
-      className={className}
-      style={{
-        padding: sizePadding,
-        borderRadius,
-        fontWeight: tokens.font.weights.medium,
-        cursor: 'pointer',
-        border,
-        backgroundColor: bgColor,
-        color: textColor,
-        transition: `all ${tokens.transition.normal} ease`,
-      }}
-    >
-      {label}
-    </button>
-  );
-};
+Button.displayName = 'Button';
