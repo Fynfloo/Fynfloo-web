@@ -202,6 +202,7 @@ export const Inspector: React.FC = () => {
         </div>
       </div>
 
+
       {schema?.settingsComponent
         ? React.createElement(schema.settingsComponent)
         : null}
