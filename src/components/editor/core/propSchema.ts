@@ -13,7 +13,7 @@ export type PropField =
 
 export type ComponentSchema = {
   props: Record<string, PropField>;
-  settingsComponent?: any;
+  settingsComponent?: unknown;
 };
 
 export const propSchema: Record<string, ComponentSchema> = {

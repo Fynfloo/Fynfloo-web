@@ -12,7 +12,7 @@ const TextSettings: React.FC = () => {
   const updateProps = useEditorStore((s) => s.updateProps);
 
   if (!node) return null;
-  const onChange = (k: string, v: any) => updateProps(node.id, { [k]: v });
+  const onChange = (k: string, v: unknown) => updateProps(node.id, { [k]: v });
 
   return (
     <div style={{ display: 'grid', gap: 12 }}>
