@@ -26,19 +26,21 @@ export const Text = React.forwardRef(
       style,
       ...rest
     }: PolymorphicProps<T>,
-    ref: React.Ref<any>
+    ref: React.Ref<unknown>
   ) => {
     const Tag = (as ?? ('p' as ElementType)) as ElementType;
 
     return (
       <Tag
         ref={ref}
-        {...(rest as any)}
+        {...rest}
         style={{
           fontFamily: tokens.font.family.base,
           fontSize: size ? tokens.font.sizes[size] : undefined,
           fontWeight: weight ? tokens.font.weights[weight] : undefined,
-          color: color ? (tokens.color as any)[color] || color : undefined,
+          color: color
+            ? tokens.color[color as keyof typeof tokens.color] || color
+            : undefined,
           textAlign: align,
           ...style,
         }}

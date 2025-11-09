@@ -7,8 +7,8 @@ import { Container } from './container';
 import { tokens } from '@/design-system/tokens';
 
 type CardProps = {
-  backgroundColor?: string;
-  padding?: any;
+  backgroundColor?: keyof typeof tokens.color;
+  padding?: Partial<Record<'sm' | 'md' | 'lg', keyof typeof tokens.spacing>>;
   title?: string;
   subtitle?: string;
   buttonLabel?: string;
@@ -22,7 +22,7 @@ export const Card: React.FC<CardProps> = ({
   buttonLabel = 'Learn More',
 }) => {
   return (
-    <Container backgroundColor={backgroundColor as any} padding={padding}>
+    <Container backgroundColor={backgroundColor} padding={padding}>
       <div
         style={{
           display: 'flex',

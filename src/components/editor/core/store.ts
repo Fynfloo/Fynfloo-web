@@ -5,7 +5,7 @@ import { nanoid } from 'nanoid';
 export type Node = {
   id: string;
   type: string;
-  props: Record<string, any>;
+  props: Record<string, unknown>;
   children: string[];
 };
 
@@ -17,7 +17,7 @@ type EditorState = {
   future: Record<string, Node>[];
   addNode: (
     type: string,
-    props?: Record<string, any>,
+    props?: Record<string, unknown>,
     parentId?: string
   ) => string;
   updateProps: (
@@ -151,5 +151,5 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       return { nodes: next, past, future: newFuture };
     }),
 
-  clearHistory: () => set(() => ({ past: [], future: [] } as any)),
+  clearHistory: () => set(() => ({ past: [], future: [] })),
 }));

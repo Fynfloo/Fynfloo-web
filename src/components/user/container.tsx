@@ -20,6 +20,9 @@ type ContainerProps = {
   className?: string;
 };
 
+type SpacingKey = keyof typeof tokens.spacing;
+type PaddingValue = SpacingKey | string | number;
+
 export const Container: React.FC<ContainerProps> = ({
   children,
   padding = { sm: 'md', md: 'lg', lg: 'xl' },
@@ -32,10 +35,10 @@ export const Container: React.FC<ContainerProps> = ({
     tokens.color[backgroundColor as keyof typeof tokens.color] ||
     backgroundColor;
 
-  const resolvePadding = (size: any) =>
+  const resolvePadding = (size: SpacingKey | string | number): string =>
     typeof size === 'number'
       ? `${size}px`
-      : (tokens.spacing as any)[size] || size;
+      : (tokens.spacing[size as SpacingKey] as string | undefined) || size;
 
   const paddingObj =
     typeof padding === 'object' && !Array.isArray(padding)
@@ -55,14 +58,14 @@ export const Container: React.FC<ContainerProps> = ({
         margin: center ? '0 auto' : undefined,
         backgroundColor: bgColor,
         boxSizing: 'border-box',
-        padding: resolvePadding(paddingObj.sm ?? 'md'),
+        padding: resolvePadding((paddingObj.sm as PaddingValue) ?? 'md'),
       }}
     >
       <div
         style={{
           width: '100%',
-          paddingLeft: resolvePadding(paddingObj.md ?? 'lg'),
-          paddingRight: resolvePadding(paddingObj.md ?? 'lg'),
+          paddingLeft: resolvePadding((paddingObj.md as PaddingValue) ?? 'lg'),
+          paddingRight: resolvePadding((paddingObj.md as PaddingValue) ?? 'lg'),
         }}
       >
         {children}
@@ -71,14 +74,22 @@ export const Container: React.FC<ContainerProps> = ({
       <style jsx>{`
         @media (min-width: ${tokens.breakpoint.md}) {
           div > div {
-            padding-left: ${resolvePadding(paddingObj.md ?? 'lg')};
-            padding-right: ${resolvePadding(paddingObj.md ?? 'lg')};
+            padding-left: ${resolvePadding(
+              (paddingObj.md as PaddingValue) ?? 'lg'
+            )};
+            padding-right: ${resolvePadding(
+              (paddingObj.md as PaddingValue) ?? 'lg'
+            )};
           }
         }
         @media (min-width: ${tokens.breakpoint.lg}) {
           div > div {
-            padding-left: ${resolvePadding(paddingObj.lg ?? 'xl')};
-            padding-right: ${resolvePadding(paddingObj.lg ?? 'xl')};
+            padding-left: ${resolvePadding(
+              (paddingObj.lg as PaddingValue) ?? 'xl'
+            )};
+            padding-right: ${resolvePadding(
+              (paddingObj.lg as PaddingValue) ?? 'xl'
+            )};
           }
         }
       `}</style>
