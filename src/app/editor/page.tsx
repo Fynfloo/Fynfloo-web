@@ -2,7 +2,9 @@
 
 import React from 'react';
 import AuthGuard from '@/components/auth-guard';
-import { EditorShell } from '@/components/editor/components/editorShell';
+// import { Editor } from '@/components/editor/components/editorShell';
+import App from '@/components/craft';
+import { Theme } from '@radix-ui/themes';
 
 export default function EditorPage() {
   return (
@@ -14,8 +16,10 @@ export default function EditorPage() {
 
 function EditorInner() {
   return (
-    <main>
-      <EditorShell />
+    <main style={{ width: '100%' }}>
+      <Theme>
+        <App />
+      </Theme>
     </main>
   );
 }
