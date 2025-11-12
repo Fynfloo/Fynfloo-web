@@ -1,6 +1,13 @@
-import { Box, Grid, Text, Button, Flex } from '@radix-ui/themes';
+import { Box, Grid, Text, Flex } from '@radix-ui/themes';
+import { Element, useEditor } from '@craftjs/core';
+import { Container } from './container';
+import { Card } from './card';
+import { Button } from './button';
+import { Text as TextComponent } from './text';
+import { UIButton } from './ui-button';
 
 export const Toolbox = () => {
+  const { connectors, query } = useEditor();
   return (
     <Flex
       py="2"
@@ -15,13 +22,51 @@ export const Toolbox = () => {
         <Text>Drag to add</Text>
       </Box>
 
-      <Button size="2">Button</Button>
+      <UIButton
+        ref={(ref) => {
+          if (ref) {
+            connectors.create(
+              ref,
+              <Button text="Click me" size="medium" color="blue" />
+            );
+          }
+        }}
+      >
+        Button
+      </UIButton>
 
-      <Button size="2">Text</Button>
+      <UIButton
+        ref={(ref) => {
+          if (ref) {
+            connectors.create(ref, <TextComponent text="Hi world" />);
+          }
+        }}
+      >
+        Text
+      </UIButton>
 
-      <Button size="2">Container</Button>
+      <UIButton
+        ref={(ref) => {
+          if (ref) {
+            connectors.create(
+              ref,
+              <Element is={Container} padding={20} canvas />
+            );
+          }
+        }}
+      >
+        Container
+      </UIButton>
 
-      <Button size="2">Card</Button>
+      <UIButton
+        ref={(ref) => {
+          if (ref) {
+            connectors.create(ref, <Card />);
+          }
+        }}
+      >
+        Card
+      </UIButton>
     </Flex>
   );
 };

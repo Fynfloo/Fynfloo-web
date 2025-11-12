@@ -1,3 +1,4 @@
+// button.tsx — the craft-enabled component
 import React, { ReactNode } from 'react';
 import { useNode } from '@craftjs/core';
 
@@ -6,7 +7,7 @@ interface ButtonProps {
   color?: string;
   size?: 'small' | 'medium' | 'large';
   variant?: 'solid' | 'outlined' | 'ghost';
-  text: string;
+  text?: string;
 }
 
 export const Button = ({
@@ -16,13 +17,17 @@ export const Button = ({
   variant = 'solid',
   text,
 }: ButtonProps) => {
-  const sizeStyles: Record<string, React.CSSProperties> = {
+  const {
+    connectors: { connect, drag },
+  } = useNode();
+
+  const sizeStyles = {
     small: { padding: '4px 8px', fontSize: '12px' },
     medium: { padding: '8px 16px', fontSize: '14px' },
     large: { padding: '12px 20px', fontSize: '16px' },
-  };
+  } as const;
 
-  const variantStyles: Record<string, React.CSSProperties> = {
+  const variantStyles = {
     solid: { backgroundColor: color, border: 'none', color: 'white' },
     outlined: {
       backgroundColor: 'transparent',
@@ -30,10 +35,8 @@ export const Button = ({
       color,
     },
     ghost: { backgroundColor: 'transparent', border: 'none', color },
-  };
-  const {
-    connectors: { connect, drag },
-  } = useNode();
+  } as const;
+
   return (
     <button
       ref={(ref) => {

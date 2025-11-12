@@ -3,15 +3,15 @@ import { useNode } from '@craftjs/core';
 
 interface TextProps {
   text: string;
-  fontSize: string | number;
+  fontSize?: string | number;
 }
 
 export const Text = ({
   text,
-  fontSize,
+  fontSize = 20,
 }: {
   text: string;
-  fontSize: string | number;
+  fontSize?: string | number;
 }) => {
   const {
     connectors: { connect, drag },
