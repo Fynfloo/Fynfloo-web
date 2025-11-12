@@ -3,7 +3,7 @@ import { Badge, Box, Flex, Grid, Text, Button, Slider } from '@radix-ui/themes';
 import { useEditor } from '@craftjs/core';
 
 export const SettingsPanel = () => {
-  const { selected } = useEditor((state) => {
+  const { actions, selected } = useEditor((state, query) => {
     const [currentNodeId] = state.events.selected;
     let selected;
 
@@ -14,6 +14,7 @@ export const SettingsPanel = () => {
         settings:
           state.nodes[currentNodeId].related &&
           state.nodes[currentNodeId].related.settings,
+        isDeletable: query.node(currentNodeId).isDeletable(),
       };
     }
     return { selected };
@@ -40,10 +41,18 @@ export const SettingsPanel = () => {
         <Flex width="100%" direction="column" gap="2" pb="2">
           {selected.settings && <selected.settings />}
         </Flex>
-
-        <Button size="2" variant="outline" color="red">
-          Delete
-        </Button>
+        {selected.isDeletable ? (
+          <Button
+            size="2"
+            variant="outline"
+            color="red"
+            onClick={() => {
+              actions.delete(selected.id);
+            }}
+          >
+            Delete
+          </Button>
+        ) : null}
       </Flex>
     </Flex>
   ) : null;
