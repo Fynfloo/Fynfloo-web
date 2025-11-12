@@ -3,6 +3,7 @@ import { Text } from './text';
 import { Button } from './button';
 import { useNode, Element } from '@craftjs/core';
 import { ReactNode } from 'react';
+import { ContainerSettings, ContainerDefaultProps } from './container';
 
 interface CraftRuleNode {
   data: {
@@ -85,4 +86,11 @@ export const Card = ({
       </Element>
     </Container>
   );
+};
+
+Card.craft = {
+  props: ContainerDefaultProps,
+  related: {
+    settings: ContainerSettings,
+  },
 };

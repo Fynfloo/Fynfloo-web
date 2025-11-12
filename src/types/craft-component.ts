@@ -1,6 +1,7 @@
 export type CraftComponent<TProps extends object = Record<string, unknown>> =
   React.FC<TProps> & {
     craft?: {
+      props?: TProps;
       rules?: {
         canDrag?: (node: Node & { data: { props: TProps } }) => boolean;
         canMoveIn?: (incomingNodes: Node[]) => boolean;
