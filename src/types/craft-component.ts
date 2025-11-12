@@ -6,7 +6,7 @@ export type CraftComponent<TProps extends object = Record<string, unknown>> =
         canMoveIn?: (incomingNodes: Node[]) => boolean;
         canMoveOut?: (outgoingNodes: Node[]) => boolean;
       };
-      related?: Record<string, React.ComponentType<any>>;
+      related?: Record<string, React.ComponentType<unknown>>;
     };
   };
 
