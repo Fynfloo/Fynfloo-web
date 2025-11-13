@@ -2,7 +2,8 @@
 
 import React from 'react';
 import AuthGuard from '@/components/auth-guard';
-import Fynfloo from '@/components/fynfloo';
+import App from '@/components/craft';
+import { Theme } from '@radix-ui/themes';
 
 export default function EditorPage() {
   return (
@@ -15,7 +16,9 @@ export default function EditorPage() {
 function EditorInner() {
   return (
     <main style={{ width: '100%' }}>
-      <Fynfloo />
+      <Theme>
+        <App />
+      </Theme>
     </main>
   );
 }

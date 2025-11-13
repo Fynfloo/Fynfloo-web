@@ -108,7 +108,7 @@ export function SignupForm({
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <h1 className="text-2xl font-bold">Create your account</h1>
-                <p className="text-muted-foreground text-sm text-balance">
+                <p className="text-foreground dark:text-foreground text-sm text-balance">
                   Enter your email below to create your account
                 </p>
               </div>
@@ -127,9 +127,17 @@ export function SignupForm({
                       aria-invalid={fieldState.invalid}
                       placeholder="Your full name"
                       autoComplete="name"
+                      className={cn(
+                        'border border-[var(--color-border)] bg-card text-foreground placeholder:text-gray-9 focus:border-primary focus:ring-2 focus:ring-primary dark:bg-gray-3 dark:text-gray-1 dark:placeholder-gray-7',
+                        fieldState.invalid &&
+                          'border-[var(--color-error-border)] text-[var(--color-error)] placeholder:[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]'
+                      )}
                     />
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError
+                        errors={[fieldState.error]}
+                        className="text-[var(--color-error)] mt-1 text-sm"
+                      />
                     )}
                   </Field>
                 )}
@@ -149,13 +157,21 @@ export function SignupForm({
                       aria-invalid={fieldState.invalid}
                       placeholder="m@example.com"
                       autoComplete="email"
+                      className={cn(
+                        'border border-[var(--color-border)] bg-card text-foreground placeholder:text-gray-9 focus:border-primary focus:ring-2 focus:ring-primary dark:bg-gray-3 dark:text-gray-1 dark:placeholder-gray-7',
+                        fieldState.invalid &&
+                          'border-[var(--color-error-border)] text-[var(--color-error)] placeholder:[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]'
+                      )}
                     />
                     <FieldDescription>
                       We&apos;ll use this to contact you. We will not share your
                       email with anyone else.
                     </FieldDescription>
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError
+                        errors={[fieldState.error]}
+                        className="text-[var(--color-error)] mt-1 text-sm"
+                      />
                     )}
                   </Field>
                 )}
@@ -177,9 +193,17 @@ export function SignupForm({
                           type="password"
                           aria-invalid={fieldState.invalid}
                           autoComplete="new-password"
+                          className={cn(
+                            'border border-[var(--color-border)] bg-card text-foreground placeholder:text-gray-9 focus:border-primary focus:ring-2 focus:ring-primary dark:bg-gray-3 dark:text-gray-1 dark:placeholder-gray-7',
+                            fieldState.invalid &&
+                              'border-[var(--color-error-border)] text-[var(--color-error)] placeholder:[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]'
+                          )}
                         />
                         {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
+                          <FieldError
+                            errors={[fieldState.error]}
+                            className="text-[var(--color-error)] mt-1 text-sm"
+                          />
                         )}
                       </Field>
                     )}
@@ -200,9 +224,17 @@ export function SignupForm({
                           type="password"
                           aria-invalid={fieldState.invalid}
                           autoComplete="new-password"
+                          className={cn(
+                            'border border-[var(--color-border)] bg-card text-foreground placeholder:text-gray-9 focus:border-primary focus:ring-2 focus:ring-primary dark:bg-gray-3 dark:text-gray-1 dark:placeholder-gray-7',
+                            fieldState.invalid &&
+                              'border-[var(--color-error-border)] text-[var(--color-error)] placeholder:[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]'
+                          )}
                         />
                         {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
+                          <FieldError
+                            errors={[fieldState.error]}
+                            className="text-[var(--color-error)] mt-1 text-sm"
+                          />
                         )}
                       </Field>
                     )}
@@ -212,7 +244,12 @@ export function SignupForm({
                   Must be at least 8 characters long.
                 </FieldDescription>
               </Field>
-              {errors.root && <FieldError errors={[errors.root]} />}
+              {errors.root && (
+                <FieldError
+                  errors={[errors.root]}
+                  className="text-[var(--color-error)] mt-1 text-sm"
+                />
+              )}
               <Field>
                 <Button
                   type="submit"
@@ -256,7 +293,10 @@ export function SignupForm({
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Already have an account? <a href="/login">Sign in</a>
+                Already have an account?{' '}
+                <a href="/login" className="text-primary hover:underline">
+                  Sign in
+                </a>
               </FieldDescription>
             </FieldGroup>
           </form>

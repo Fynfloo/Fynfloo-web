@@ -71,9 +71,9 @@ export function LoginForm({
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <FieldGroup>
-              <div className="flex flex-col items-center gap-2 text-center">
+              <div className="flex flex-col items-center gap-2 text-center mb-6">
                 <h1 className="text-2xl font-bold">Welcome back</h1>
-                <p className="text-muted-foreground text-balance">
+                <p className="text-foreground dark:text-foreground text-balance">
                   Login to your account
                 </p>
               </div>
@@ -92,9 +92,17 @@ export function LoginForm({
                       aria-invalid={fieldState.invalid}
                       placeholder="m@example.com"
                       autoComplete="email"
+                      className={cn(
+                        'border border-[var(--color-border)] bg-card text-foreground placeholder:text-gray-9 focus:border-primary focus:ring-2 focus:ring-primary dark:bg-gray-3 dark:text-gray-1 dark:placeholder-gray-7',
+                        fieldState.invalid &&
+                          'border-[var(--color-error-border)] text-[var(--color-error)] placeholder:[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]'
+                      )}
                     />
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError
+                        errors={[fieldState.error]}
+                        className="text-[var(--color-error)] mt-1 text-sm"
+                      />
                     )}
                   </Field>
                 )}
@@ -120,7 +128,7 @@ export function LoginForm({
                       <FieldLabel htmlFor="password">Password</FieldLabel>
                       <a
                         href="#"
-                        className="ml-auto text-sm underline-offset-2 hover:underline"
+                        className="ml-auto text-sm text-primary underline-offset-2 hover:underline"
                       >
                         Forgot your password?
                       </a>
@@ -131,9 +139,17 @@ export function LoginForm({
                       type="password"
                       aria-invalid={fieldState.invalid}
                       autoComplete="new-password"
+                      className={cn(
+                        'border border-[var(--color-border)] bg-card text-foreground placeholder:text-gray-9 focus:border-primary focus:ring-2 focus:ring-primary dark:bg-gray-3 dark:text-gray-1 dark:placeholder-gray-7',
+                        fieldState.invalid &&
+                          'border-[var(--color-error-border)] text-[var(--color-error)] placeholder:[var(--color-error)] focus:border-[var(--color-error)] focus:ring-[var(--color-error)]'
+                      )}
                     />
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError
+                        errors={[fieldState.error]}
+                        className="text-[var(--color-error)] mt-1 text-sm"
+                      />
                     )}
                   </Field>
                 )}
@@ -151,9 +167,19 @@ export function LoginForm({
                 </div>
                 <Input id="password" type="password" required />
               </Field> */}
-              {errors.root && <FieldError errors={[errors.root]} />}
+              {errors.root && (
+                <FieldError
+                  errors={[errors.root]}
+                  className="text-[var(--color-error)] mt-1 text-sm"
+                />
+              )}
               <Field>
-                <Button type="submit" form="login-form" disabled={isSubmitting}>
+                <Button
+                  type="submit"
+                  form="login-form"
+                  disabled={isSubmitting}
+                  className="w-full bg-primary text-primary-foreground hover:bg-violet-8 dark:bg-violet-10 dark:hover:bg-violet-9"
+                >
                   {isSubmitting ? 'Logging in...' : 'Login'}
                 </Button>
               </Field>
@@ -189,8 +215,11 @@ export function LoginForm({
                   <span className="sr-only">Login with Meta</span>
                 </Button>
               </Field>
-              <FieldDescription className="text-center">
-                Don&apos;t have an account? <a href="/signup">Sign up</a>
+              <FieldDescription className="text-center  mt-2 text-gray-500 dark:text-gray-400">
+                Don&apos;t have an account?{' '}
+                <a href="/signup" className="text-primary hover:underline">
+                  Sign up
+                </a>
               </FieldDescription>
             </FieldGroup>
           </form>
