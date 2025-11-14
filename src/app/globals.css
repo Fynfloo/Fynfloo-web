@@ -95,8 +95,10 @@
   /* Buttons / Branding */
   --color-primary: var(--violet-9);
   --color-primary-foreground: var(--violet-contrast);
+   --color-primary-hover: var(--violet-8);
   --color-secondary: var(--gray-4);
   --color-secondary-foreground: var(--gray-12);
+   --color-secondary-hover: var(--gray-3);
 
   /* Muted / Placeholder Text */
   --color-muted: var(--gray-9);
@@ -104,6 +106,7 @@
 
   /* Error / Destructive */
   --color-error: var(--red-9);
+   --color-error-hover: var(--red-8);
   --color-error-foreground: var(--red-contrast);
   --color-error-border: var(--red-6);
 
@@ -160,13 +163,13 @@
 
   /* Buttons */
   .btn-primary {
-    @apply bg-primary text-primary-foreground rounded-md px-4 py-2 font-semibold hover:bg-violet-8;
+    @apply bg-primary text-primary-foreground rounded-md px-4 py-2 font-semibold hover:bg-primary-hover;
   }
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground rounded-md px-4 py-2 font-medium hover:bg-gray-3;
+    @apply bg-secondary text-secondary-foreground rounded-md px-4 py-2 font-medium hover:bg-secondary-hover;
   }
   .btn-error {
-    @apply bg-error text-error-foreground rounded-md px-4 py-2 font-semibold hover:bg-red-8;
+    @apply bg-error text-error-foreground rounded-md px-4 py-2 font-semibold hover:bg-error-hover;
   }
 
   /* Inputs */
