@@ -11,7 +11,7 @@
 :root,
 .light,
 .light-theme {
-  /* Violet palette (primary branding) */
+  /* ——— Brand Colors ——— */
   --violet-1: #fdfdff;
   --violet-2: #f7f8ff;
   --violet-3: #eef1ff;
@@ -24,32 +24,31 @@
   --violet-10: #442fd9;
   --violet-11: #4f42eb;
   --violet-12: #252272;
+  --violet-contrast: #fff;
+  --violet-surface: #f5f6ffcc;
+  --violet-indicator: #4f39f6;
+  --violet-track: #4f39f6;
 
-  --violet-contrast: #fff; /* Text on violet */
-  --violet-surface: #f5f6ffcc; /* Hover & subtle surfaces */
-  --violet-indicator: #4f39f6; /* Active tabs, sliders, etc. */
-  --violet-track: #4f39f6; /* Progress bars, sliders track */
-
-  /* Gray palette (neutral & background) */
-  --gray-1: #fcfcfd; /* Background / body */
-  --gray-2: #f9f9fb; /* Card background */
-  --gray-3: #eff0f3; /* Input / form background */
+  /* ——— Gray Palette ——— */
+  --gray-1: #ffffff; /* Body background */
+  --gray-2: #f9f9fb; /* Cards */
+  --gray-3: #eff0f3; /* Inputs */
   --gray-4: #e7e8ec; /* Secondary surfaces */
   --gray-5: #e0e1e6;
   --gray-6: #d8d9e0; /* Borders */
   --gray-7: #cdced7;
   --gray-8: #b9bbc6;
-  --gray-9: #8b8d98; /* Text muted / indicators */
+  --gray-9: #8b8d98; /* Muted text / placeholders */
   --gray-10: #80828d;
   --gray-11: #62636c;
   --gray-12: #1e1f24; /* Foreground text */
 
-  --gray-contrast: #ffffff; /* Text on gray surfaces */
-  --gray-surface: #ffffffcc; /* Cards / hover surfaces */
-  --gray-indicator: #8b8d98; /* Small UI indicators */
-  --gray-track: #8b8d98; /* Sliders / progress bars */
+  --gray-contrast: #ffffff;
+  --gray-surface: #ffffffcc;
+  --gray-indicator: #8b8d98;
+  --gray-track: #8b8d98;
 
-  /* Red palette (for errors) */
+  /* ——— Red Palette (Errors) ——— */
   --red-1: #fff5f5;
   --red-2: #ffe3e3;
   --red-3: #ffc9c9;
@@ -58,14 +57,13 @@
   --red-6: #ff6b6b;
   --red-7: #fa5252;
   --red-8: #f03e3e;
-  --red-9: #e03131; /* Primary error color */
+  --red-9: #e03131;
   --red-10: #c92a2a;
   --red-11: #b02525;
   --red-12: #861515;
+  --red-contrast: #fff;
 
-  --red-contrast: #fff; /* Text on red surfaces */
-
-  /* Border radius & spacing */
+  /* ——— Border radius & spacing ——— */
   --radius: 0.625rem;
   --container-padding: 1rem;
   --container-padding-sm: 2rem;
@@ -75,144 +73,199 @@
 }
 
 /* ===================================
-   Tailwind theme mapping with comments
+   Tailwind theme mapping
    =================================== */
 @theme inline {
-  /* -------------------------
-     Background & Foreground
-     ------------------------- */
-  --color-background: var(--gray-1); /* Page / body background */
-  --color-foreground: var(--gray-12); /* Default text color */
+  /* Background / Text */
+  --color-background: var(--gray-1);
+  --color-foreground: var(--gray-12);
 
-  /* -------------------------
-     Primary colors (branding)
-     ------------------------- */
-  --color-primary: var(--violet-9); /* Buttons, links, highlights */
-  --color-primary-foreground: var(
-    --violet-contrast
-  ); /* Text/icons on primary backgrounds */
+  /* Cards / Panels */
+  --color-card: var(--gray-2);
+  --color-card-foreground: var(--gray-12);
 
-  /* -------------------------
-     Secondary colors
-     ------------------------- */
-  --color-secondary: var(
-    --gray-4
-  ); /* Secondary buttons, secondary surfaces, cards hover */
-  --color-secondary-foreground: var(
-    --gray-12
-  ); /* Text/icons on secondary backgrounds */
+  /* Popovers / Modals */
+  --color-popover: var(--gray-1);
+  --color-popover-foreground: var(--gray-12);
 
-  /* -------------------------
-     Card / surface colors
-     ------------------------- */
-  --color-card: var(--gray-2); /* Card background */
-  --color-card-foreground: var(--gray-12); /* Card text */
+  /* Inputs / Form Fields */
+  --color-input: var(--gray-3);
+  --color-border: var(--gray-6);
 
-  /* -------------------------
-     Border & input colors
-     ------------------------- */
-  --color-border: var(--gray-6); /* Borders on inputs, cards, containers */
-  --color-input: var(--gray-3); /* Input field background color */
+  /* Buttons / Branding */
+  --color-primary: var(--violet-9);
+  --color-primary-foreground: var(--violet-contrast);
+  --color-secondary: var(--gray-4);
+  --color-secondary-foreground: var(--gray-12);
 
-  /* -------------------------
-     Radii for consistent rounding
-     ------------------------- */
-  --radius-sm: calc(var(--radius) - 4px); /* Small rounded buttons or chips */
-  --radius-md: calc(var(--radius) - 2px); /* Default buttons / cards */
-  --radius-lg: var(--radius); /* Forms, popovers */
-  --radius-xl: calc(var(--radius) + 4px); /* Large modals, banners */
+  /* Muted / Placeholder Text */
+  --color-muted: var(--gray-9);
+  --color-muted-foreground: var(--gray-9);
 
-  /* -------------------------
-     Error / validation colors
-     ------------------------- */
-  --color-error: var(--red-9); /* Error text, icons, messages */
-  --color-error-background: var(--red-1); /* Subtle background for errors */
-  --color-error-border: var(--red-6); /* Border color on invalid input */
+  /* Error / Destructive */
+  --color-error: var(--red-9);
+  --color-error-foreground: var(--red-contrast);
+  --color-error-border: var(--red-6);
 
-  /* -------------------------
-     Container padding (responsive)
-     ------------------------- */
-  --container-padding: var(
-    --container-padding
-  ); /* Default padding for container */
-  --container-padding-sm: var(
-    --container-padding-sm
-  ); /* Small screens / mobile */
-  --container-padding-lg: var(
-    --container-padding-lg
-  ); /* Large screens / tablet */
-  --container-padding-xl: var(--container-padding-xl); /* Extra large screens */
-  --container-padding-2xl: var(
-    --container-padding-2xl
-  ); /* Full width layouts */
-
-  /* -------------------------
-     Notes for component usage
-     -------------------------
-     Use these variables consistently for:
-     - Buttons:
-       * Primary: --color-primary / --color-primary-foreground
-       * Secondary: --color-secondary / --color-secondary-foreground
-     - Inputs / forms:
-       * Background: --color-input
-       * Border: --color-border
-       * Text: --color-foreground
-       * Focus outline: use --color-primary or --color-primary-foreground
-     - Cards / panels:
-       * Background: --color-card
-       * Text: --color-card-foreground
-     - Modals / popovers:
-       * Background: --color-card
-       * Text: --color-card-foreground
-       * Accent actions: --color-primary
-     - Alerts / status indicators:
-       * Success / info / neutral: --color-secondary
-       * Highlight / warning / destructive: you can extend with --color-destructive (add new variable)
-     - Sliders / progress bars:
-       * Track: --violet-track
-       * Indicator: --violet-indicator
-     - Tabs / navigation indicators:
-       * Active: --violet-indicator
-       * Inactive: --gray-8 or --gray-9
-     - Text & headings:
-       * Primary text: --color-foreground
-       * Muted text / placeholder: --gray-9 / --gray-8
-       * Cards / secondary surfaces: --color-card-foreground
-  */
+  /* Misc */
+  --radius: var(--radius);
+  --ring: var(--violet-9);
 }
 
 /* ===================================
-   Dark theme (toggle with .dark)
+   Dark theme mapping
    =================================== */
 .dark,
 .dark-theme {
   --color-background: var(--gray-12);
   --color-foreground: var(--gray-1);
 
-  --color-primary: #442fd9; /* Dark violet */
+  --color-card: #25272c;
+  --color-card-foreground: #fdfdff;
+
+  --color-popover: #2e2f3a;
+  --color-popover-foreground: #fdfdff;
+
+  --color-input: #3b3b45;
+  --color-border: #4f4f5c;
+
+  --color-primary: #442fd9;
   --color-primary-foreground: #fdfdff;
 
   --color-secondary: #2e2f3a;
   --color-secondary-foreground: #f9f9fb;
 
-  --color-card: #25272c;
-  --color-card-foreground: #fdfdff;
+  --color-muted: #8b8d98;
+  --color-muted-foreground: #8b8d98;
 
-  --color-border: #4f4f5c;
-  --color-input: #3b3b45;
+  --color-error: #e03131;
+  --color-error-foreground: #fff;
+  --color-error-border: #ff6b6b;
+
+  --radius: var(--radius);
+  --ring: #442fd9;
 }
 
 /* ===================================
    Base Tailwind styles using tokens
    =================================== */
 @layer base {
-  * {
-    @apply border-border;
-  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
+
   .container {
     @apply mx-auto px-[var(--container-padding)];
   }
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground rounded-md px-4 py-2 font-semibold hover:bg-violet-8;
+  }
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground rounded-md px-4 py-2 font-medium hover:bg-gray-3;
+  }
+  .btn-error {
+    @apply bg-error text-error-foreground rounded-md px-4 py-2 font-semibold hover:bg-red-8;
+  }
+
+  /* Inputs */
+  input,
+  textarea,
+  select {
+    @apply bg-input border border-border text-foreground placeholder-muted-foreground rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary;
+  }
+
+  /* Cards / Panels */
+  .card {
+    @apply bg-card text-card-foreground border border-border rounded-md p-4 shadow-sm;
+  }
+
+  /* Alerts */
+  .alert {
+    @apply rounded-md px-4 py-3 text-sm font-medium;
+  }
+  .alert-error {
+    @apply bg-red-1 text-error border border-error-border;
+  }
+  .alert-success {
+    @apply bg-violet-1 text-primary border border-primary;
+  }
+  .alert-info {
+    @apply bg-gray-1 text-muted border border-gray-6;
+  }
+
+  /* Links */
+  a {
+    @apply text-primary hover:text-violet-8 underline;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-foreground font-semibold;
+  }
+  p {
+    @apply text-foreground text-base;
+  }
+
+  /* Placeholder text */
+  ::placeholder {
+    @apply text-muted-foreground;
+  }
+
+  /* Tables */
+  table {
+    @apply border border-border w-full text-foreground;
+  }
+  th, td {
+    @apply border border-border px-3 py-2;
+  }
+
+  /* Form validation errors */
+  .field-error {
+    @apply text-error text-sm mt-1;
+  }
+
+  /* Focus rings / outline */
+  :focus {
+    @apply outline-none ring-2 ring-ring;
+  }
+
+  /* Scrollbars (optional) */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-2 rounded;
+  }
 }
+
+/* ===================================
+   COMPONENT COLOR GUIDE
+   ===================================
+
+  • Body background: var(--color-background)
+  • Foreground text: var(--color-foreground)
+  • Card background: var(--color-card)
+  • Card text: var(--color-card-foreground)
+  • Popovers / Modals: var(--color-popover)
+  • Input background: var(--color-input)
+  • Input border: var(--color-border)
+  • Primary button: var(--color-primary) / --color-primary-foreground
+  • Secondary button: var(--color-secondary) / --color-secondary-foreground
+  • Error / Destructive: var(--color-error) / --color-error-foreground
+  • Muted / placeholder: var(--color-muted)
+  • Alerts:
+      - Error: bg-red-1 text-error border-error-border
+      - Success: bg-violet-1 text-primary border-primary
+      - Info / Neutral: bg-gray-1 text-muted border-gray-6
+  • Typography:
+      - Headings: text-foreground
+      - Paragraph: text-foreground
+      - Links: text-primary
+  • Focus / Ring: var(--ring)
+  • Radius / rounded corners: var(--radius)
+*/
