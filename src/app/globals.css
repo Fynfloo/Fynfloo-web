@@ -176,7 +176,7 @@
   input,
   textarea,
   select {
-    @apply bg-input border border-border text-foreground placeholder-muted-foreground rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary;
+    @apply bg-input border border-border text-foreground placeholder-muted-foreground rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary;
   }
 
   /* Cards / Panels */
@@ -231,7 +231,7 @@
 
   /* Focus rings / outline */
   :focus {
-    @apply outline-none ring-2 ring-ring;
+    @apply outline-none ring-2 ring-primary;
   }
 
   /* Scrollbars (optional) */
