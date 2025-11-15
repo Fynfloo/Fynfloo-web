@@ -16,11 +16,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from '@/components/ui/collapsible';
 
 const items = [
   {
@@ -50,11 +45,11 @@ const items = [
   },
 ];
 
-export function SidebarLeft() {
+export function SidebarRight() {
   return (
     <Sidebar
-      collapsible="icon"
-      className="bg-background top-(--header-height) h-[calc(100svh-var(--header-height))]"
+      collapsible="none"
+      className="sticky bg-background top-(--header-height) border-l h-[calc(100svh-var(--header-height))]"
     >
       <SidebarContent>
         {/* Group 1 */}
