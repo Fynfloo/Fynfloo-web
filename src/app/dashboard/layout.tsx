@@ -1,5 +1,8 @@
 import React from 'react';
-import Link from 'next/link';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/sidebar';
+import { DashboardHeader } from '@/components/dashboard-header';
+
 export default function DashboardLayout({
   children,
 }: {
@@ -7,11 +10,16 @@ export default function DashboardLayout({
 }) {
   return (
     <div>
-      <header style={{ padding: 12, borderBottom: '1px solid #eee' }}>
-        <Link href="/">Home</Link> | <Link href="/dashboard">Dashboard</Link> |{' '}
-        <Link href="/account">Account</Link>
-      </header>
-      <div>{children}</div>
+      <SidebarProvider className="flex flex-col">
+        <DashboardHeader />
+        <div className="flex flex-1">
+          <AppSidebar />
+          <main>
+            {/* <SidebarTrigger /> */}
+            {children}
+          </main>
+        </div>
+      </SidebarProvider>
     </div>
   );
 }
