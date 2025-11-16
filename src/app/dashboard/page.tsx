@@ -1,8 +1,26 @@
 'use client';
 
-import { useAuth } from '@/context/AuthContext';
-import AuthGuard from '@/components/auth-guard';
+import React from 'react';
+import Viewport from '@/components/viewport/viewport';
+import { Editor, Frame, Element } from '@craftjs/core';
+import { Container } from '@/components/craft/container';
+import { Text } from '@/components/selectors/text';
+import { Button } from '@/components/selectors/button';
 
-export default function DashboardPage() {
-  return <div> I am a child</div>;
+export default function Page() {
+  return (
+    <Editor
+      resolver={{
+        Container,
+        Text,
+        Button,
+      }}
+    >
+      <Viewport>
+        <Frame>
+          <Element canvas is={Container}></Element>
+        </Frame>
+      </Viewport>
+    </Editor>
+  );
 }

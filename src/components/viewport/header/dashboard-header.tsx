@@ -13,15 +13,15 @@ export function DashboardHeader() {
   return (
     <header className="bg-background sticky top-0 z-50 flex w-full items-center border-b">
       <div className="flex h-[var(--header-height)] w-full items-center gap-2 px-4">
-        <Button
+        {/* <Button
           className="h-8 w-[calc(var(--sidebar-width-icon)-(--spacing(6.2)))]"
           variant="ghost"
           onClick={toggleSidebar}
           size="icon"
         >
           <SidebarIcon />
-        </Button>
-        <Separator orientation="vertical" className="mr-2 h-4" />
+        </Button> */}
+        {/* <Separator orientation="vertical" className="mr-2 h-4" /> */}
         <SearchForm className="w-full sm:ml-auto sm:w-auto" />
       </div>
     </header>

@@ -14,6 +14,7 @@ export const Container = ({
   background,
   padding = 0,
   children,
+  ...props
 }: {
   background?: string;
   padding?: number;

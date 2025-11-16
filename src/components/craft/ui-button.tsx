@@ -10,9 +10,10 @@ export const UIButton = React.forwardRef<
     {...props}
     style={{
       borderRadius: 6,
-      padding: '8px 12px',
+      padding: '0.6rem',
+      textAlign: 'left',
       cursor: 'grab',
-      background: '#f4f4f4',
+      background: 'white',
       border: '1px solid #ddd',
     }}
   >
