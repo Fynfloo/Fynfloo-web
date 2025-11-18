@@ -3,7 +3,7 @@ import cn from 'classnames';
 import React from 'react';
 import { styled } from 'styled-components';
 import { ButtonSettings } from './button-settings';
-import { Text } from '../text';
+import { Text, TextProps } from '../text';
 
 type ButtonProps = {
   background?: Record<'r' | 'g' | 'b' | 'a', number>;
@@ -11,7 +11,7 @@ type ButtonProps = {
   buttonStyle?: string;
   margin?: string[];
   text?: string;
-  textComponent?: UserComponent<unknown> | unknown;
+  textComponent?: Partial<TextProps>;
 };
 
 type StyledButtonProps = {
@@ -56,7 +56,7 @@ export const Button: UserComponent<ButtonProps> = ({
         if (ref) connect(drag(ref));
       }}
       className={cn([
-        'rounded w-full px-4 py-2',
+        'rounded px-4 py-2',
         {
           'shadow-lg': buttonStyle === 'full',
         },
@@ -64,7 +64,9 @@ export const Button: UserComponent<ButtonProps> = ({
       $buttonStyle={buttonStyle}
       $background={background}
       $margin={margin}
-    ></StyleButton>
+    >
+      <Text {...textComponent} text={text || ''} color={color} />
+    </StyleButton>
   );
 };
 
@@ -78,6 +80,7 @@ Button.craft = {
     margin: ['5', '0', '5', '0'],
     textComponent: {
       ...Text.craft.props,
+      tagName: 'span',
       textAlign: 'center',
     },
   },
