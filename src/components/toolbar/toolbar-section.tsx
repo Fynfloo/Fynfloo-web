@@ -4,14 +4,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, JSX } from 'react';
 import { useNode } from '@craftjs/core';
 
 export type ToolbarSectionProps = {
-  title: string;
+  title?: string;
   props: string[];
-  summary: string[];
-  children: ReactNode;
+  summary: (props: Record<string, unknown>) => ReactNode;
+  children?: ReactNode;
 };
 
 export const ToolbarSection = ({
@@ -19,20 +19,15 @@ export const ToolbarSection = ({
   props,
   summary,
   children,
-}: Partial<ToolbarSectionProps>) => {
+}: ToolbarSectionProps) => {
   const { nodeProps } = useNode((node) => ({
     nodeProps:
       props &&
-      props.reduce((res: Record<string, string>, key) => {
+      props.reduce((res: Record<string, unknown>, key) => {
         res[key] = node.data.props[key] || null;
         return res;
       }, {}),
   }));
-
-  const summaryText =
-    summary && nodeProps
-      ? summary.map((key) => `${key}: ${nodeProps[key] ?? ''}`).join(' | ')
-      : '';
 
   return (
     <Accordion
@@ -43,12 +38,16 @@ export const ToolbarSection = ({
     >
       <AccordionItem value={title || 'section'}>
         <AccordionTrigger>
-          {title}{' '}
-          {summaryText && (
-            <span className="ml-2 text-muted-foreground text-sm">
-              {summaryText}
-            </span>
-          )}
+          <div>
+            <h5 className="text-sm text-foreground text-left font-medium">
+              {title}
+            </h5>
+          </div>
+          {props ? (
+            <h5 className="text-light-gray-2 text-sm text-right text-dark-blue">
+              {summary(nodeProps)}
+            </h5>
+          ) : null}
         </AccordionTrigger>
         <AccordionContent>{children}</AccordionContent>
       </AccordionItem>

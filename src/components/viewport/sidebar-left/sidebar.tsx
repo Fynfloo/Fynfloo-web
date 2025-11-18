@@ -1,3 +1,4 @@
+'use client';
 import {
   Sidebar,
   SidebarContent,
@@ -9,6 +10,8 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { UIButton } from '@/components/craft/ui-button';
+import { Element, useEditor } from '@craftjs/core';
+import { Button } from '@/components/selectors/button';
 
 const items = [
   {
@@ -35,6 +38,12 @@ const items = [
 ];
 
 export function SidebarLeft() {
+  const {
+    enabled,
+    connectors: { create },
+  } = useEditor((state) => ({
+    enabled: state.options.enabled,
+  }));
   return (
     <Sidebar
       collapsible="icon"
@@ -48,14 +57,14 @@ export function SidebarLeft() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <UIButton
-                  key={item.title}
-                  className="mb-2 w-full justify-start"
-                >
-                  {item.title}
-                </UIButton>
-              ))}
+              <UIButton
+                ref={(ref) => {
+                  if (ref) create(ref, <Button />);
+                }}
+                className="mb-4 w-full"
+              >
+                Button
+              </UIButton>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

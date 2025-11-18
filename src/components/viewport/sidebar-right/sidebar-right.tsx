@@ -15,7 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { Toolbar } from '@/components/toolbar';
+import { Toolbar } from '@/components/toolbar/index';
 import { SidebarItem } from './siderbar-item';
 
 // TODO : we might not need the margin-right

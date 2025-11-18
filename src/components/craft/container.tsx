@@ -3,23 +3,21 @@ import { useNode } from '@craftjs/core';
 import { HexColorPicker } from 'react-colorful';
 import { Label } from '@radix-ui/react-label';
 import { Slider } from '@radix-ui/themes';
+import cn from 'classnames';
 
 type ContainerProps = {
   background?: string;
   padding?: number;
   children?: React.ReactNode;
+  className?: string;
 };
 
 export const Container = ({
   background,
   padding = 0,
   children,
-  ...props
-}: {
-  background?: string;
-  padding?: number;
-  children?: React.ReactNode;
-}) => {
+  className,
+}: ContainerProps) => {
   const {
     connectors: { connect, drag },
   } = useNode();
@@ -32,8 +30,9 @@ export const Container = ({
         margin: '5px 0',
         background,
         padding: `${padding}px`,
-        width: '100%',
+        // width: '100%',
       }}
+      className={cn(className)}
     >
       {children}
     </div>
