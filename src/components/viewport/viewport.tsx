@@ -22,7 +22,10 @@ export default function Viewport({ children }: { children?: React.ReactNode }) {
       <SidebarProvider className="flex flex-col">
         <DashboardHeader />
         <div className="flex flex-1">
-          <SidebarLeft />
+          <div className="shrink-0">
+            <SidebarLeft />
+          </div>
+
           <Frame>
             <Element
               canvas
@@ -32,8 +35,9 @@ export default function Viewport({ children }: { children?: React.ReactNode }) {
               {children}
             </Element>
           </Frame>
-
-          <SidebarRight />
+          <div className="shrink-0">
+            <SidebarRight />
+          </div>
         </div>
       </SidebarProvider>
     </Editor>
