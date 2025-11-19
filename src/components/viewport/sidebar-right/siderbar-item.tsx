@@ -18,11 +18,6 @@ const SidebarItemDiv = styled.div<{ $visible?: boolean; $height?: string }>`
     props.$visible ? 'var(--border)' : 'transparent'};
 `;
 
-// TODO: add size
-// const Chevron = styled.a<{ $visible: boolean }>`
-//   transform: rotate(${(props) => (props.$visible ? 180 : 0)}deg);
-// `;
-
 export type SidebarItemProps = {
   title: string;
   height?: string;

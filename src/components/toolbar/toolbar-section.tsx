@@ -10,22 +10,22 @@ import { useNode } from '@craftjs/core';
 export type ToolbarSectionProps = {
   title?: string;
   props: string[];
-  summary: (props: Record<string, unknown>) => ReactNode;
+  //summary: (props: Record<string, unknown>) => ReactNode;
   children?: ReactNode;
 };
 
 export const ToolbarSection = ({
   title,
   props,
-  summary,
+  //summary,
   children,
 }: ToolbarSectionProps) => {
   const { nodeProps } = useNode((node) => ({
     nodeProps:
       props &&
-      props.reduce((res: Record<string, unknown>, key) => {
-        res[key] = node.data.props[key] || null;
-        return res;
+      props.reduce((acc: Record<string, unknown>, key) => {
+        acc[key] = node.data.props[key];
+        return acc;
       }, {}),
   }));
 
@@ -33,23 +33,20 @@ export const ToolbarSection = ({
     <Accordion
       type="single"
       collapsible
-      className="w-full"
-      defaultValue={title || 'section'}
+      className="w-full bg-card rounded-md shadow-sm"
     >
       <AccordionItem value={title || 'section'}>
-        <AccordionTrigger>
-          <div>
-            <h5 className="text-sm text-foreground text-left font-medium">
-              {title}
-            </h5>
-          </div>
-          {props ? (
-            <h5 className="text-light-gray-2 text-sm text-right text-dark-blue">
+        <AccordionTrigger className="flex justify-between items-center px-4 py-2 text-sm font-medium">
+          <span>{title}</span>
+          {/* {summary && (
+            <span className="text-xs text-muted-foreground">
               {summary(nodeProps)}
-            </h5>
-          ) : null}
+            </span>
+          )} */}
         </AccordionTrigger>
-        <AccordionContent>{children}</AccordionContent>
+        <AccordionContent className="px-4 py-2 space-y-2">
+          {children}
+        </AccordionContent>
       </AccordionItem>
     </Accordion>
   );

@@ -31,19 +31,20 @@ export const ToolbarItem = ({
   const value = Array.isArray(propValue) ? propValue[index] : propValue;
 
   return (
-    <div className="w-full">
+    <div className="w-full space-y-1">
       {['text', 'number', 'color', 'bg'].includes(type) && (
         <ToolbarTextInput
           {...props}
           type={type}
           value={value}
+          label={label}
           onChange={(value) => {
             setProp((props: Record<string, unknown>) => {
-              if (Array.isArray(propValue)) {
-                (props[propKey] as unknown[])[index!] = value;
-              } else {
-                props[propKey] = value;
-              }
+              // if (Array.isArray(propValue)) {
+              //   props[propKey][index] = onChange ? onChange(value) : value;
+              // } else {
+              props[propKey] = onChange ? onChange(value) : value;
+              // }
             }, 500);
           }}
         />

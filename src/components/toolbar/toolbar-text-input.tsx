@@ -17,7 +17,7 @@ import { Label } from '@/components/ui/label';
 export type ToolbarTextInputProps = {
   label?: string;
   type: 'text' | 'number' | 'color' | 'bg';
-  value: string | { r: number; g: number; b: number; a: number };
+  value: string | RGBA;
   onChange?: (value: RGBA) => void;
 };
 
@@ -62,7 +62,7 @@ export const ToolbarTextInput = ({
               />
             </div>
           </PopoverTrigger>
-          <PopoverContent className="p-0">
+          <PopoverContent className="p-0 w-[223px] flex justify-center">
             <SketchPicker
               color={value as RGBA}
               onChange={(color: ColorResult) => {
