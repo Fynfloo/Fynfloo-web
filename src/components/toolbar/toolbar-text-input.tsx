@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { SketchPicker, ColorResult } from 'react-color';
+import { RGBA } from '@/types/selector-type';
+import { rgbaToCss, cssToRgba } from '@/lib/helper';
 
 import {
   Popover,
@@ -16,7 +18,7 @@ export type ToolbarTextInputProps = {
   label?: string;
   type: 'text' | 'number' | 'color' | 'bg';
   value: string | { r: number; g: number; b: number; a: number };
-  onChange?: (value: string) => void;
+  onChange?: (value: RGBA) => void;
 };
 
 export const ToolbarTextInput = ({
@@ -62,11 +64,18 @@ export const ToolbarTextInput = ({
           </PopoverTrigger>
           <PopoverContent className="p-0">
             <SketchPicker
-              color={value as string}
+              color={value as RGBA}
               onChange={(color: ColorResult) => {
-                const rgbaString = `rgba(${color.rgb.r}, ${color.rgb.g}, ${color.rgb.b}, ${color.rgb.a})`;
-                setInternalValue(rgbaString);
-                onChange?.(rgbaString);
+                const rgbaObj = {
+                  r: color.rgb.r,
+                  g: color.rgb.g,
+                  b: color.rgb.b,
+                  a: color.rgb.a,
+                };
+                setInternalValue(
+                  `rgba(${rgbaObj.r}, ${rgbaObj.g}, ${rgbaObj.b}, ${rgbaObj.a})`
+                );
+                onChange?.(rgbaObj);
               }}
             />
           </PopoverContent>
@@ -78,7 +87,7 @@ export const ToolbarTextInput = ({
           value={internalValue}
           onChange={(e) => {
             setInternalValue(e.target.value);
-            onChange?.(e.target.value);
+            onChange?.(cssToRgba(e.target.value)!);
           }}
         />
       )}

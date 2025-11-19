@@ -1,13 +1,14 @@
 import { useNode, useEditor } from '@craftjs/core';
 import React, { JSX } from 'react';
 import ContentEditable from 'react-contenteditable';
+import { RGBA } from '@/types/selector-type';
 
 export type TextProps = {
   tagName?: keyof JSX.IntrinsicElements;
   fontSize?: string | number;
   textAlign?: string;
   fontWeight?: string;
-  color?: Record<'r' | 'g' | 'b' | 'a', number>;
+  color?: RGBA;
   shadow?: number;
   text: string;
   margin?: string[] | number[];

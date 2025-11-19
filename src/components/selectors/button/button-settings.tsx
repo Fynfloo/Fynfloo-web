@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { ToolbarSection, ToolbarItem } from '@/components/toolbar';
-
-export type RGBA = Record<'r' | 'g' | 'b' | 'a', number>;
+import { RGBA } from '@/types/selector-type';
 
 export const ButtonSettings = () => {
   return (

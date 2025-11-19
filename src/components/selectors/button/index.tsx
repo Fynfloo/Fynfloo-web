@@ -4,10 +4,12 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { ButtonSettings } from './button-settings';
 import { Text, TextProps } from '../text';
+import { RGBA } from '@/types/selector-type';
+import { rgbaToCss } from '@/lib/helper';
 
 type ButtonProps = {
-  background?: Record<'r' | 'g' | 'b' | 'a', number>;
-  color?: Record<'r' | 'g' | 'b' | 'a', number>;
+  background?: RGBA;
+  color?: RGBA;
   buttonStyle?: string;
   margin?: string[];
   text?: string;
@@ -15,20 +17,20 @@ type ButtonProps = {
 };
 
 type StyledButtonProps = {
-  $background?: Record<'r' | 'g' | 'b' | 'a', number>;
+  $background?: RGBA;
   $buttonStyle?: string;
   $margin?: string[];
 };
 
 const StyleButton = styled.button<StyledButtonProps>`
   background: ${(props) =>
-    props.$buttonStyle === 'full'
-      ? `rgba(${props.$background?.r}, ${props.$background?.g}, ${props.$background?.b}, ${props.$background?.a})`
+    props.$buttonStyle === 'full' && props.$background
+      ? rgbaToCss(props.$background!)
       : 'transparent'};
   border: 2px solid transparent;
   border-color: ${(props) =>
-    props.$buttonStyle === 'outline'
-      ? `rgba(${props.$background?.r}, ${props.$background?.g}, ${props.$background?.b}, ${props.$background?.a})`
+    props.$buttonStyle === 'outline' && props.$background
+      ? rgbaToCss(props.$background!)
       : 'transparent'};
   margin: ${({ $margin }) =>
     `${$margin?.[0] || 0}px ${$margin?.[1] || 0}px ${$margin?.[2] || 0}px ${

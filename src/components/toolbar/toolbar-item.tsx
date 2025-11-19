@@ -1,7 +1,7 @@
 import { useNode } from '@craftjs/core';
 import * as React from 'react';
-
 import { ToolbarTextInput } from './toolbar-text-input';
+import { RGBA } from '@/types/selector-type';
 
 export type ToolbarItemProps = {
   label?: string;
@@ -9,7 +9,7 @@ export type ToolbarItemProps = {
   index?: number;
   children?: React.ReactNode;
   type: 'text' | 'number' | 'color' | 'bg';
-  onChange?: (value: string) => void;
+  onChange?: (value: RGBA) => void;
 };
 
 export const ToolbarItem = ({
