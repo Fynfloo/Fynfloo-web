@@ -8,6 +8,7 @@ import { Editor, Frame, Element } from '@craftjs/core';
 import { Container } from '@/components/craft/container';
 import { Text } from '@/components/selectors/text/index';
 import { Button } from '@/components/selectors/button/index';
+import { RenderNode } from './render-node';
 
 export default function Viewport({ children }: { children?: React.ReactNode }) {
   return (
@@ -18,6 +19,7 @@ export default function Viewport({ children }: { children?: React.ReactNode }) {
         Button,
       }}
       enabled={true}
+      onRender={RenderNode}
     >
       <SidebarProvider className="flex flex-col">
         <DashboardHeader />
@@ -25,16 +27,17 @@ export default function Viewport({ children }: { children?: React.ReactNode }) {
           <div className="shrink-0">
             <SidebarLeft />
           </div>
-
-          <Frame>
-            <Element
-              canvas
-              is={Container}
-              className="grow p-6 md:overflow-y-auto md:p-12 "
-            >
-              {children}
-            </Element>
-          </Frame>
+          <div className="page-container flex-grow h-full flex flex-col md:h-screen ">
+            <Frame>
+              <Element
+                canvas
+                is={Container}
+                className="grow p-6 md:overflow-y-auto md:p-12 craftjs-renderer "
+              >
+                {children}
+              </Element>
+            </Frame>
+          </div>
           <div className="shrink-0">
             <SidebarRight />
           </div>

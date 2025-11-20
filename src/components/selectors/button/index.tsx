@@ -47,15 +47,15 @@ export const Button: UserComponent<ButtonProps> = ({
   margin,
 }: ButtonProps) => {
   const {
-    connectors: { connect, drag },
+    connectors: { connect },
   } = useNode((node) => ({
     selected: node.events.selected,
   }));
 
   return (
     <StyleButton
-      ref={(ref) => {
-        if (ref) connect(drag(ref));
+      ref={(dom) => {
+        if (dom) connect(dom);
       }}
       className={cn([
         'rounded px-4 py-2',

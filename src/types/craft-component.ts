@@ -14,3 +14,5 @@ export type CraftComponent<TProps extends object = Record<string, unknown>> =
 export type ContentEditableEvent = {
   target: EventTarget & { value: string };
 };
+
+export const ROOT_NODE = 'ROOT';
