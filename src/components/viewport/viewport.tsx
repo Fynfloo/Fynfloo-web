@@ -27,12 +27,12 @@ export default function Viewport({ children }: { children?: React.ReactNode }) {
           <div className="shrink-0">
             <SidebarLeft />
           </div>
-          <div className="page-container flex-grow h-full flex flex-col md:h-screen ">
+          <div className="page-container grow h-full flex flex-col md:h-screen">
             <Frame>
               <Element
                 canvas
                 is={Container}
-                className="grow p-6 md:overflow-y-auto md:p-12 craftjs-renderer "
+                className="grow p-6 md:overflow-y-auto md:p-12 craftjs-renderer"
               >
                 {children}
               </Element>

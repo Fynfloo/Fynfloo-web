@@ -75,6 +75,7 @@ export const ContainerDefaultProps: ContainerProps = {
 };
 
 Container.craft = {
+  displayName: 'Container',
   props: ContainerDefaultProps,
   related: {
     settings: ContainerSettings,
