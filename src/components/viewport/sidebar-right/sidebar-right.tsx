@@ -47,9 +47,9 @@ export function SidebarRight() {
   return (
     <Sidebar
       collapsible="none"
-      className="sticky bg-background top-(--header-height) border-l h-[calc(100svh-var(--header-height))]"
+      className="sticky bg-background top-(--header-height) border-l h-[calc(100svh-var(--header-height))] overflow-auto"
     >
-      <SidebarContent className="p-2 overflow-auto space-y-4">
+      <SidebarContent className=" overflow-auto space-y-4">
         {selected ? <Toolbar /> : <InactiveMessage />}
       </SidebarContent>
     </Sidebar>

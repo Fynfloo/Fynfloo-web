@@ -33,18 +33,19 @@ export const ToolbarSection = ({
     <Accordion
       type="single"
       collapsible
-      className="w-full bg-card rounded-md shadow-sm"
+      className="w-full border-b px-2"
+      defaultValue={title || 'section'}
     >
       <AccordionItem value={title || 'section'}>
-        <AccordionTrigger className="flex justify-between items-center px-4 py-2 text-sm font-medium">
-          <span>{title}</span>
+        <AccordionTrigger className="text-foreground font-medium text-md decorative-none">
+          {title}
           {/* {summary && (
             <span className="text-xs text-muted-foreground">
               {summary(nodeProps)}
             </span>
           )} */}
         </AccordionTrigger>
-        <AccordionContent className="px-4 py-2 space-y-2">
+        <AccordionContent className="flex flex-col gap-4 text-balance">
           {children}
         </AccordionContent>
       </AccordionItem>

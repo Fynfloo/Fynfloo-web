@@ -16,7 +16,7 @@ import { Label } from '@/components/ui/label';
 
 export type ToolbarTextInputProps = {
   label?: string;
-  type: 'text' | 'number' | 'color' | 'bg';
+  type: string;
   value: string | RGBA;
   onChange?: (value: RGBA) => void;
 };
@@ -44,12 +44,12 @@ export const ToolbarTextInput = ({
 
   return (
     <div className="w-full space-y-1">
-      {label && <Label className="text-sm font-medium">{label}</Label>}
+      {label && <Label className="text-xs font-normal">{label}</Label>}
 
       {isColor ? (
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <div className="relative w-full">
+            <div className="relative w-full px-1">
               <Input
                 {...props}
                 value={internalValue}
