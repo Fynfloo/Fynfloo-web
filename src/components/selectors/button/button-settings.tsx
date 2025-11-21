@@ -1,44 +1,36 @@
 import React from 'react';
 import { useNode } from '@craftjs/core';
 import { ToolbarSection, ToolbarItem } from '@/components/toolbar';
-import { ButtonVariant, ButtonStyle } from '.';
+import { ButtonVariant, ButtonSize } from '.';
 
 export const ButtonSettings = () => {
   const variants: ButtonVariant[] = [
-    'primary',
+    'default',
+    'destructive',
+    'outline',
     'secondary',
-    'success',
-    'danger',
-    'warning',
-    'dark',
-    'light',
+    'ghost',
+    'link',
   ];
-  const styles: ButtonStyle[] = ['full', 'outline', 'ghost', 'link'];
+  // TODO: Support icons in button later
+  const sizes: ButtonSize[] = [
+    'default',
+    'sm',
+    'lg',
+    // 'icon',
+    // 'icon-sm',
+    // 'icon-lg',
+  ];
   return (
     <div className="">
-      {/* Colors */}
-      {/* <ToolbarSection
-        title="Colors"
-        props={['background', 'color', 'hoverBackground', 'hoverColor']}
-      >
-        <ToolbarItem propKey="background" type="bg" label="Background" />
-        <ToolbarItem propKey="color" type="color" label="Text Color" />
+      {/* Size */}
+      <ToolbarSection title="Size" props={['size']}>
         <ToolbarItem
-          propKey="hoverBackground"
-          type="bg"
-          label="Hover Background"
-        />
-        <ToolbarItem propKey="hoverColor" type="color" label="Hover Text" />
-      </ToolbarSection> */}
-
-      {/* Button Style */}
-      <ToolbarSection title="Button Style" props={['buttonStyle']}>
-        <ToolbarItem
-          propKey="buttonStyle"
+          propKey="size"
           type="select"
-          label="Style"
-          placeholder="full"
-          options={styles.map((style) => ({ label: style, value: style }))}
+          label="Size"
+          placeholder="default"
+          options={sizes.map((size) => ({ label: size, value: size }))}
         />
       </ToolbarSection>
 
@@ -48,7 +40,7 @@ export const ButtonSettings = () => {
           propKey="variant"
           type="select"
           label="Variant"
-          placeholder="primary"
+          placeholder="default"
           options={variants.map((variant) => ({
             label: variant,
             value: variant,
@@ -56,39 +48,19 @@ export const ButtonSettings = () => {
         />
       </ToolbarSection>
 
-      {/* Size / Layout Section */}
-      <ToolbarSection
-        title="Layout"
-        props={['width', 'padding', 'margin', 'radius', 'shadow']}
-      >
-        <ToolbarItem propKey="width" type="text" label="Width (auto/full)" />
-        <ToolbarItem
-          propKey="padding"
-          type="text"
-          label="Padding [top, right]"
-        />
-        <ToolbarItem
-          propKey="margin"
-          type="text"
-          label="Margin [top, right, bottom, left]"
-        />
-        <ToolbarItem propKey="radius" type="number" label="Border Radius" />
-        <ToolbarItem propKey="shadow" type="number" label="Shadow Depth" />
-      </ToolbarSection>
-
-      {/* Link Section */}
+      {/* URL */}
       <ToolbarSection title="Link" props={['url', 'openInNewTab']}>
-        <ToolbarItem propKey="url" type="text" label="URL" />
+        <ToolbarItem
+          propKey="url"
+          type="text"
+          label="URL"
+          placeholder="https://example.com"
+        />
         <ToolbarItem
           propKey="openInNewTab"
-          type="text"
+          type="checkbox"
           label="Open in new tab"
         />
-      </ToolbarSection>
-
-      {/* Text Section */}
-      <ToolbarSection title="Text" props={['text', 'textComponent']}>
-        <ToolbarItem propKey="text" type="text" label="Button Text" />
       </ToolbarSection>
     </div>
   );

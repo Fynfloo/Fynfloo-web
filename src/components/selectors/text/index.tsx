@@ -46,9 +46,9 @@ export const Text = ({
         margin: `${margin?.[0] || 0}px ${margin?.[1] || 0}px ${
           margin?.[2] || 0
         }px ${margin?.[3] || 0}px`,
-        color: `rgba(${color?.r || 0}, ${color?.g || 0}, ${color?.b || 0}, ${
-          color?.a || 1
-        })`,
+        // color: `rgba(${color?.r || 0}, ${color?.g || 0}, ${color?.b || 0}, ${
+        //   color?.a || 1
+        // })`,
         fontSize: `${fontSize}px`,
         textShadow: `0px 0px 2px rgba(0,0,0,${(shadow || 0) / 100})`,
         fontWeight,

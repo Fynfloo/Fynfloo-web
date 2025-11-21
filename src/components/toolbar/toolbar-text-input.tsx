@@ -18,7 +18,7 @@ export type ToolbarTextInputProps = {
   label?: string;
   type: string;
   value: string | RGBA;
-  onChange?: (value: RGBA) => void;
+  onChange?: (value: RGBA | string) => void;
 };
 
 export const ToolbarTextInput = ({
@@ -87,7 +87,7 @@ export const ToolbarTextInput = ({
           value={internalValue}
           onChange={(e) => {
             setInternalValue(e.target.value);
-            onChange?.(cssToRgba(e.target.value)!);
+            onChange?.(e.target.value as string);
           }}
         />
       )}

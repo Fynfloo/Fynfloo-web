@@ -48,7 +48,7 @@ export const ToolbarItem = ({
               // if (Array.isArray(propValue)) {
               //   props[propKey][index] = onChange ? onChange(value) : value;
               // } else {
-              props[propKey] = onChange ? onChange(value) : value;
+              props[propKey] = onChange ? onChange(value as RGBA) : value;
               // }
             }, 500);
           }}

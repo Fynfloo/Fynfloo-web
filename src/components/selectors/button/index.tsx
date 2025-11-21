@@ -1,214 +1,158 @@
 import { UserComponent, useNode } from '@craftjs/core';
 import cn from 'classnames';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { styled } from 'styled-components';
 import { ButtonSettings } from './button-settings';
 import { Text, TextProps } from '../text';
-import { RGBA } from '@/types/selector-type';
-import { rgbaToCss } from '@/lib/helper';
-import { useMemo } from 'react';
 
 export type ButtonVariant =
-  | 'primary'
+  | 'default'
+  | 'destructive'
+  | 'outline'
   | 'secondary'
-  | 'success'
-  | 'danger'
-  | 'warning'
-  | 'dark'
-  | 'light';
+  | 'ghost'
+  | 'link';
 
-export type ButtonStyle = 'full' | 'outline' | 'ghost' | 'link';
+// TODO: Support icons in button later
+export type ButtonSize =
+  | 'default'
+  | 'sm'
+  | 'lg'
+  | 'icon'
+  | 'icon-sm'
+  | 'icon-lg';
 
-type ButtonProps = {
+interface StyledButtonProps {
+  $variant?: ButtonVariant;
+  $size?: ButtonSize;
+}
+
+interface ButtonProps {
+  text?: string;
   variant?: ButtonVariant;
-  buttonStyle?: ButtonStyle;
-  margin?: string[];
-  padding?: string[];
-  radius?: number;
-  shadow?: number;
-  width?: 'auto' | 'full';
+  size?: ButtonSize;
+  textComponent?: TextProps;
   url?: string;
   openInNewTab?: boolean;
-  text?: string;
-  textComponent?: Partial<TextProps>;
-};
+}
 
-type StyledButtonProps = {
-  $background?: RGBA;
-  $hoverBackground?: RGBA;
-  $hoverColor?: RGBA;
-  $color?: RGBA;
-  $buttonStyle?: ButtonStyle;
-  $margin?: string[];
-  $padding?: string[];
-  $radius?: number;
-  $shadow?: number;
-  $width?: string;
-};
+const StyleButton = styled.a<StyledButtonProps>`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  cursor: pointer;
 
-const ButtonThemes: Record<
-  ButtonVariant,
-  { background: RGBA; color: RGBA; hoverBackground: RGBA; hoverColor: RGBA }
-> = {
-  primary: {
-    background: { r: 0, g: 122, b: 255, a: 1 },
-    color: { r: 255, g: 255, b: 255, a: 1 },
-    hoverBackground: { r: 0, g: 105, b: 220, a: 1 },
-    hoverColor: { r: 255, g: 255, b: 255, a: 1 },
-  },
-  secondary: {
-    background: { r: 108, g: 117, b: 125, a: 1 },
-    color: { r: 255, g: 255, b: 255, a: 1 },
-    hoverBackground: { r: 90, g: 98, b: 104, a: 1 },
-    hoverColor: { r: 255, g: 255, b: 255, a: 1 },
-  },
-  success: {
-    background: { r: 40, g: 167, b: 69, a: 1 },
-    color: { r: 255, g: 255, b: 255, a: 1 },
-    hoverBackground: { r: 33, g: 138, b: 57, a: 1 },
-    hoverColor: { r: 255, g: 255, b: 255, a: 1 },
-  },
-  danger: {
-    background: { r: 220, g: 53, b: 69, a: 1 },
-    color: { r: 255, g: 255, b: 255, a: 1 },
-    hoverBackground: { r: 200, g: 45, b: 58, a: 1 },
-    hoverColor: { r: 255, g: 255, b: 255, a: 1 },
-  },
-  warning: {
-    background: { r: 255, g: 193, b: 7, a: 1 },
-    color: { r: 0, g: 0, b: 0, a: 1 },
-    hoverBackground: { r: 220, g: 170, b: 0, a: 1 },
-    hoverColor: { r: 0, g: 0, b: 0, a: 1 },
-  },
-  dark: {
-    background: { r: 52, g: 58, b: 64, a: 1 },
-    color: { r: 255, g: 255, b: 255, a: 1 },
-    hoverBackground: { r: 35, g: 40, b: 44, a: 1 },
-    hoverColor: { r: 255, g: 255, b: 255, a: 1 },
-  },
-  light: {
-    background: { r: 248, g: 249, b: 250, a: 1 },
-    color: { r: 0, g: 0, b: 0, a: 1 },
-    hoverBackground: { r: 225, g: 226, b: 228, a: 1 },
-    hoverColor: { r: 0, g: 0, b: 0, a: 1 },
-  },
-};
+  ${({ $variant }) => {
+    switch ($variant) {
+      case 'default':
+        return `
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      &:hover {
+      background-color: oklch(from var(--primary) l c h / 0.9);
+      }
+      `;
 
-const StyleButton = styled.button<StyledButtonProps>`
-  background: ${({ $buttonStyle, $background }) =>
-    $buttonStyle === 'full' && $background
-      ? rgbaToCss($background)
-      : 'transparent'};
-  color: ${({ $color }) => ($color ? rgbaToCss($color) : 'inherit')};
-  border: 2px solid
-    ${({ $buttonStyle, $background }) =>
-      $buttonStyle === 'outline' && $background
-        ? rgbaToCss($background)
-        : 'transparent'};
-  width: ${({ $width }) => ($width === 'full' ? '100%' : 'auto')};
-  margin: ${({ $margin }) =>
-    `${$margin?.[0] || 0}px ${$margin?.[1] || 0}px ${$margin?.[2] || 0}px ${
-      $margin?.[3] || 0
-    }px`};
-  padding: ${({ $padding }) =>
-    `${$padding?.[0] || 10}px ${$padding?.[1] || 20}px`};
-  border-radius: ${({ $radius }) => `${$radius || 4}px`};
-  box-shadow: ${({ $shadow }) =>
-    $shadow ? `0px 2px ${$shadow}px rgba(0,0,0,0.2)` : 'none'};
-  transition: all 0.15s ease-in-out;
+      case 'destructive':
+        return `
+        background-color: var(--destructive);
+        color: white;
+        &:hover {
+          background-color: oklch(from var(--destructive) l c h / 0.9);
+          }
+          &:focus-visible {
+          box-shadow: 0 0 0 3px oklch(from var(--destructive) l c h / 0.2);
+          }`;
 
-  &:hover {
-    background: ${({ $buttonStyle, $hoverBackground, $background }) =>
-      $hoverBackground
-        ? rgbaToCss($hoverBackground)
-        : $buttonStyle === 'outline' || $buttonStyle === 'ghost'
-        ? rgbaToCss({ ...$background!, a: 0.1 })
-        : undefined};
-    color: ${({ $hoverColor }) =>
-      $hoverColor ? rgbaToCss($hoverColor) : undefined};
-  }
+      case 'outline':
+        return `
+        border: 1px solid var(--border);
+        background-color: var(--background);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        &:hover {
+          background-color: var(--accent);
+          color: var(--accent-foreground);
+        }`;
+      case 'secondary':
+        return `
+        background-color: var(--secondary);
+        color: var(--secondary-foreground);
+        &:hover {
+          background-color: oklch(from var(--secondary) l c h / 0.8);
+        }`;
+      case 'ghost':
+        return `
+        background-color: transparent;
+        &:hover {
+          background-color: var(--accent);
+          color: var(--accent-foreground);
+        }`;
+      case 'link':
+        return `
+        background-color: transparent;
+        color: var(--primary);
+        text-decoration: underline;
+        &:hover {
+        text-decoration: underline;
+        }`;
+      default:
+        return ``;
+    }
+  }}
+
+  ${({ $size }) => {
+    switch ($size) {
+      case 'default':
+        return 'height: 2.25rem; padding: 0 1rem;';
+      case 'sm':
+        return 'height: 2rem; padding: 0 0.75rem; gap: 0.375rem;';
+      case 'lg':
+        return 'height: 2.5rem; padding: 0 1.5rem;';
+      // case 'icon':
+      //   return 'width: 2.25rem; height: 2.25rem;';
+      // case 'icon-sm':
+      //   return 'width: 2rem; height: 2rem;';
+      // case 'icon-lg':
+      //   return 'width: 2.5rem; height: 2.5rem;';
+      default:
+        return '';
+    }
+  }}
 `;
 
 export const Button: UserComponent<ButtonProps> = ({
-  variant = 'primary',
-  buttonStyle = 'full',
-  margin,
-  padding,
-  radius,
-  shadow,
-  width,
-  url,
-  openInNewTab,
   text,
+  variant = 'default',
+  size = 'default',
   textComponent,
-}: ButtonProps) => {
+  url,
+  openInNewTab = false,
+}) => {
   const {
     connectors: { connect },
   } = useNode((node) => ({ selected: node.events.selected }));
 
-  // Automatically derive colors from variant + buttonStyle
-  const { background, color, hoverBackground, hoverColor } = useMemo(() => {
-    const theme = ButtonThemes[variant];
-    switch (buttonStyle) {
-      case 'full':
-        return theme;
-      case 'outline':
-        return {
-          background: { r: 0, g: 0, b: 0, a: 0 },
-          color: theme.background,
-          hoverBackground: { ...theme.background, a: 0.1 },
-          hoverColor: theme.background,
-        };
-      case 'ghost':
-        return {
-          background: { r: 0, g: 0, b: 0, a: 0 },
-          color: theme.background,
-          hoverBackground: { ...theme.background, a: 0.05 },
-          hoverColor: theme.background,
-        };
-      case 'link':
-        return {
-          background: { r: 0, g: 0, b: 0, a: 0 },
-          color: theme.background,
-          hoverBackground: { r: 0, g: 0, b: 0, a: 0 },
-          hoverColor: { ...theme.background, a: 0.3 },
-        };
-      default:
-        return theme;
-    }
-  }, [variant, buttonStyle]);
-
-  const content = (
+  return (
     <StyleButton
-      ref={(dom) => {
-        if (dom) connect(dom);
+      ref={(dom: unknown) => {
+        if (dom) connect(dom as HTMLElement);
       }}
-      className={cn(['font-medium'])}
-      $buttonStyle={buttonStyle}
-      $background={background}
-      $hoverBackground={hoverBackground}
-      $hoverColor={hoverColor}
-      $color={color}
-      $margin={margin}
-      $padding={padding}
-      $radius={radius}
-      $shadow={shadow}
-      $width={width}
+      href={url || undefined}
+      target={url && openInNewTab ? '_blank' : undefined}
+      rel={url && openInNewTab ? 'noopener noreferrer' : undefined}
+      as={url ? 'a' : 'button'}
+      $variant={variant}
+      $size={size}
     >
-      <Text {...textComponent} text={text || ''} color={color} />
+      <Text {...textComponent} text={text || ''} />
     </StyleButton>
-  );
-
-  return url ? (
-    <a
-      href={url}
-      target={openInNewTab ? '_blank' : '_self'}
-      rel="noopener noreferrer"
-    >
-      {content}
-    </a>
-  ) : (
-    content
   );
 };
 
@@ -216,13 +160,8 @@ Button.craft = {
   displayName: 'Button',
   props: {
     text: 'Button',
-    variant: 'primary',
-    buttonStyle: 'full',
-    margin: ['5', '0', '5', '0'],
-    padding: ['10', '20'],
-    radius: 6,
-    shadow: 8,
-    width: 'auto',
+    variant: 'default',
+    size: 'default',
     url: '',
     openInNewTab: false,
     textComponent: {
