@@ -7,7 +7,7 @@ import { SectionSettings } from './section-settings';
 export type SectionProps = {
   padding?: 'none' | 'sm' | 'md' | 'lg';
   bg?: RGBA;
-  center?: string;
+  center?: 'center' | 'left';
   children?: React.ReactNode;
 };
 
@@ -30,7 +30,7 @@ const StyledSection = styled.section<StyledSectionProps>`
   padding: ${({ $padding }) => paddingMap[$padding || 'md']};
   background: ${({ $bg }) =>
     $bg ? `rgba(${$bg.r}, ${$bg.g}, ${$bg.b}, ${$bg.a})` : 'transparent'};
-  text-align: ${({ $center }) => ($center === 'true' ? 'center' : 'left')};
+  text-align: ${({ $center }) => ($center === 'center' ? 'center' : 'left')};
 `;
 
 export const Section: UserComponent<SectionProps> = (props) => {
@@ -59,7 +59,7 @@ Section.craft = {
   props: {
     padding: 'md',
     bg: { r: 127, g: 34, b: 254, a: 0.05 },
-    center: 'false',
+    center: 'left',
   },
   related: { toolbar: SectionSettings },
 };

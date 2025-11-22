@@ -4,7 +4,7 @@ import { ToolbarSection, ToolbarItem } from '@/components/toolbar';
 export const SectionSettings = () => {
   return (
     <div className="">
-      <ToolbarSection title="Padding" props={['padding']}>
+      <ToolbarSection title="Section" props={['padding', 'bg', 'center']}>
         <ToolbarItem
           propKey="padding"
           type="select"
@@ -17,17 +17,22 @@ export const SectionSettings = () => {
             { label: 'lg', value: 'lg' },
           ]}
         />
-      </ToolbarSection>
-      <ToolbarSection title="Background Color" props={['bg']}>
         <ToolbarItem
           propKey="bg"
           type="color"
           label="Background Color"
-          placeholder="rgba(255, 255, 255, 1)"
+          placeholder="rgba(127, 34, 254, 0.05)"
         />
-      </ToolbarSection>
-      <ToolbarSection title="Text Alignment" props={['center']}>
-        <ToolbarItem propKey="center" type="toggle" label="Center Align Text" />
+        <ToolbarItem
+          propKey="center"
+          type="select"
+          label="Text Align"
+          placeholder="left"
+          options={[
+            { label: 'Left', value: 'left' },
+            { label: 'Center', value: 'center' },
+          ]}
+        />
       </ToolbarSection>
     </div>
   );

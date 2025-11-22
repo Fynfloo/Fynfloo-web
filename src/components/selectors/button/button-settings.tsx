@@ -24,7 +24,10 @@ export const ButtonSettings = () => {
   return (
     <div className="">
       {/* Size */}
-      <ToolbarSection title="Size" props={['size']}>
+      <ToolbarSection
+        title="Size"
+        props={['size', 'variant', 'url', 'openInNewTab']}
+      >
         <ToolbarItem
           propKey="size"
           type="select"
@@ -32,10 +35,6 @@ export const ButtonSettings = () => {
           placeholder="default"
           options={sizes.map((size) => ({ label: size, value: size }))}
         />
-      </ToolbarSection>
-
-      {/* Variant */}
-      <ToolbarSection title="Variant" props={['variant']}>
         <ToolbarItem
           propKey="variant"
           type="select"
@@ -46,10 +45,6 @@ export const ButtonSettings = () => {
             value: variant,
           }))}
         />
-      </ToolbarSection>
-
-      {/* URL */}
-      <ToolbarSection title="Link" props={['url', 'openInNewTab']}>
         <ToolbarItem
           propKey="url"
           type="text"
