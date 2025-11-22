@@ -5,16 +5,19 @@ import { SidebarLeft } from '@/components/viewport/sidebar-left/sidebar';
 import { SidebarRight } from '@/components/viewport/sidebar-right/sidebar-right';
 import { DashboardHeader } from '@/components/viewport/header/dashboard-header';
 import { Editor, Frame, Element } from '@craftjs/core';
-import { Container } from '@/components/craft/container';
+//import { Container } from '@/components/craft/container';
 import { Text } from '@/components/selectors/text/index';
 import { Button } from '@/components/selectors/button/index';
 import { Section } from '@/components/selectors/section/index';
 import { RenderNode } from './render-node';
+import { Canvas } from '@/components/selectors/canvas/canvas';
+import { Container } from '@/components/selectors/container/index';
 
 export default function Viewport({ children }: { children?: React.ReactNode }) {
   return (
     <Editor
       resolver={{
+        Canvas,
         Container,
         Text,
         Button,
@@ -33,7 +36,7 @@ export default function Viewport({ children }: { children?: React.ReactNode }) {
             <Frame>
               <Element
                 canvas
-                is={Container}
+                is={Canvas}
                 className="grow p-6 md:overflow-y-auto md:p-12 craftjs-renderer"
               >
                 {children}

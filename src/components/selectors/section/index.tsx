@@ -31,19 +31,19 @@ const StyledSection = styled.section<StyledSectionProps>`
   background: ${({ $bg }) =>
     $bg ? `rgba(${$bg.r}, ${$bg.g}, ${$bg.b}, ${$bg.a})` : 'transparent'};
   text-align: ${({ $center }) => ($center === 'center' ? 'center' : 'left')};
+  min-height: 20px;
 `;
 
 export const Section: UserComponent<SectionProps> = (props) => {
   const {
-    connectors: { connect, drag },
+    connectors: { connect },
   } = useNode();
-
   const { padding, bg, center, children } = props;
 
   return (
     <StyledSection
       ref={(dom: HTMLDivElement) => {
-        if (dom) connect(drag(dom));
+        if (dom) connect(dom);
       }}
       $padding={padding}
       $bg={bg}

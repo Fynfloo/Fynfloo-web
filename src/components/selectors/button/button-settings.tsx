@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNode } from '@craftjs/core';
 import { ToolbarSection, ToolbarItem } from '@/components/toolbar';
 import { ButtonVariant, ButtonSize } from '.';
 
