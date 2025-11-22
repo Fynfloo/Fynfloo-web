@@ -8,6 +8,7 @@ import { Editor, Frame, Element } from '@craftjs/core';
 import { Container } from '@/components/craft/container';
 import { Text } from '@/components/selectors/text/index';
 import { Button } from '@/components/selectors/button/index';
+import { Section } from '@/components/selectors/section/index';
 import { RenderNode } from './render-node';
 
 export default function Viewport({ children }: { children?: React.ReactNode }) {
@@ -17,6 +18,7 @@ export default function Viewport({ children }: { children?: React.ReactNode }) {
         Container,
         Text,
         Button,
+        Section,
       }}
       enabled={true}
       onRender={RenderNode}
