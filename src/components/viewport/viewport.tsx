@@ -12,6 +12,7 @@ import { Section } from '@/components/selectors/section/index';
 import { RenderNode } from './render-node';
 import { Canvas } from '@/components/selectors/canvas/canvas';
 import { Container } from '@/components/selectors/container/index';
+import { Layout } from '@/components/selectors/layout/index';
 
 export default function Viewport({ children }: { children?: React.ReactNode }) {
   return (
@@ -22,6 +23,7 @@ export default function Viewport({ children }: { children?: React.ReactNode }) {
         Text,
         Button,
         Section,
+        Layout,
       }}
       enabled={true}
       onRender={RenderNode}

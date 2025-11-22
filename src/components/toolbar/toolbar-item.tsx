@@ -1,6 +1,7 @@
 import { useNode } from '@craftjs/core';
 import * as React from 'react';
 import { ToolbarTextInput } from './toolbar-text-input';
+import { ToolbarNumberInput } from './toolbar-number-input';
 import { RGBA } from '@/types/selector-type';
 import { ToolbarSelect } from './toolbar-select';
 
@@ -11,6 +12,9 @@ export type ToolbarItemProps = {
   options?: { label: string; value: string }[];
   placeholder?: string;
   children?: React.ReactNode;
+  min?: number;
+  max?: number;
+  value?: string | number | RGBA;
   type: string;
   onChange?: (value: RGBA) => void;
 };
@@ -21,6 +25,8 @@ export const ToolbarItem = ({
   options,
   placeholder,
   index = 0,
+  min,
+  max,
   children,
   type,
   onChange,
@@ -61,6 +67,18 @@ export const ToolbarItem = ({
           options={options || []}
           label={label}
           onChange={(value: string) => {
+            setProp((props: Record<string, unknown>) => {
+              props[propKey] = value;
+            }, 500);
+          }}
+        />
+      ) : type === 'number' ? (
+        <ToolbarNumberInput
+          {...props}
+          type={type}
+          value={value as number}
+          label={label}
+          onChange={(value: number) => {
             setProp((props: Record<string, unknown>) => {
               props[propKey] = value;
             }, 500);

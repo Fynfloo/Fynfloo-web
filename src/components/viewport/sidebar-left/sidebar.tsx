@@ -12,6 +12,7 @@ import { Element, useEditor } from '@craftjs/core';
 import { Button } from '@/components/selectors/button';
 import { Section } from '@/components/selectors/section';
 import { Container } from '@/components/selectors/container';
+import { Layout } from '@/components/selectors/layout';
 //import { Container } from '@/components/craft/container';
 
 export function SidebarLeft() {
@@ -57,6 +58,14 @@ export function SidebarLeft() {
                 className="mb-4 w-full"
               >
                 Container
+              </UIButton>
+              <UIButton
+                ref={(ref) => {
+                  if (ref) create(ref, <Element is={Layout} canvas />);
+                }}
+                className="mb-4 w-full"
+              >
+                Layout
               </UIButton>
             </SidebarMenu>
           </SidebarGroupContent>

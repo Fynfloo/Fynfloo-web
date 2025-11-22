@@ -10,9 +10,9 @@ export const ContainerSettings = () => {
         label="Mode"
         placeholder="boxed"
         options={[
-          { label: 'Boxed', value: 'boxed' },
-          { label: 'Wide', value: 'wide' },
-          { label: 'Full', value: 'full' },
+          { label: 'Boxed (1200px)', value: 'boxed' },
+          { label: 'Wide (1600px)', value: 'wide' },
+          { label: 'Full Width', value: 'full' },
         ]}
       />
       <ToolbarItem
