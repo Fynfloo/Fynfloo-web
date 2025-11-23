@@ -1,6 +1,6 @@
 import React from 'react';
-import Viewport from '@/components/viewport/viewport';
+import App from '@/components/viewport/index';
 
 export default function Page() {
-  return <Viewport />;
+  return <App />;
 }

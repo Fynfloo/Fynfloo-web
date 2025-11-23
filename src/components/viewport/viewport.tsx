@@ -4,52 +4,49 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { SidebarLeft } from '@/components/viewport/sidebar-left/sidebar';
 import { SidebarRight } from '@/components/viewport/sidebar-right/sidebar-right';
 import { DashboardHeader } from '@/components/viewport/header/dashboard-header';
-import { Editor, Frame, Element } from '@craftjs/core';
-//import { Container } from '@/components/craft/container';
-import { Text } from '@/components/selectors/text/index';
-import { Button } from '@/components/selectors/button/index';
-import { Section } from '@/components/selectors/section/index';
-import { RenderNode } from './render-node';
-import { Canvas } from '@/components/selectors/canvas/canvas';
-import { Container } from '@/components/selectors/container/index';
-import { Layout } from '@/components/selectors/layout/index';
+import { useEditor } from '@craftjs/core';
+import cn from 'classnames';
 
 export default function Viewport({ children }: { children?: React.ReactNode }) {
+  const {
+    enabled,
+    connectors,
+    actions: { setOptions },
+  } = useEditor((state) => ({
+    enabled: state.options.enabled,
+  }));
   return (
-    <Editor
-      resolver={{
-        Canvas,
-        Container,
-        Text,
-        Button,
-        Section,
-        Layout,
-      }}
-      enabled={true}
-      onRender={RenderNode}
-    >
+    <>
       <SidebarProvider className="flex flex-col">
         <DashboardHeader />
         <div className="flex flex-1">
           <div className="shrink-0">
             <SidebarLeft />
           </div>
-          <div className="page-container grow h-full flex flex-col md:h-screen">
-            <Frame>
-              <Element
-                canvas
-                is={Canvas}
-                className="grow p-6 md:overflow-y-auto md:p-12 craftjs-renderer"
-              >
+          <div className="page-container overflow-auto grow h-full flex flex-col md:h-screen">
+            <div
+              className={cn([
+                'craftjs-renderer flex-1 h-full w-full transition overflow-y-hidden overflow-x-hidden p-2 max-width: 100%',
+                {
+                  'bg-renderer-gray': enabled,
+                },
+              ])}
+              ref={(ref) => {
+                if (ref) {
+                  connectors.select(connectors.hover(ref, ''), '');
+                }
+              }}
+            >
+              <div className="relative flex-col flex items-center pt-8">
                 {children}
-              </Element>
-            </Frame>
+              </div>
+            </div>
           </div>
           <div className="shrink-0">
             <SidebarRight />
           </div>
         </div>
       </SidebarProvider>
-    </Editor>
+    </>
   );
 }

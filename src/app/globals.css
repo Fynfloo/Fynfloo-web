@@ -41,6 +41,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --canvas-background: var(--canvas-background);
+  --canvas-inner: var(--canvas-inner);
   --header-height: var(--header-height);
 }
 
@@ -77,6 +79,8 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.702 0.183 293.541);
+  --canvas-inner: oklch(0.702 0.183 293.541 / 0.1);
+  --canvas-background: oklch(0.92 0.004 286.32 / 0.5);
   --header-height: 3rem;
 }
 

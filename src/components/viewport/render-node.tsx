@@ -1,3 +1,5 @@
+'use client';
+
 import { useNode, useEditor } from '@craftjs/core';
 import React from 'react';
 import { useEffect, useCallback } from 'react';

@@ -6,6 +6,7 @@ import { SearchForm } from '@/components/search-form';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useSidebar } from '@/components/ui/sidebar';
+//import { HeaderViewportControls } from './header-viewport-controls';
 
 export function DashboardHeader() {
   const { toggleSidebar } = useSidebar();
@@ -13,6 +14,7 @@ export function DashboardHeader() {
   return (
     <header className="bg-background sticky top-0 z-50 flex w-full items-center border-b">
       <div className="flex h-[var(--header-height)] w-full items-center gap-2 px-4">
+        {/* <HeaderViewportControls /> */}
         {/* <Button
           className="h-8 w-[calc(var(--sidebar-width-icon)-(--spacing(6.2)))]"
           variant="ghost"
