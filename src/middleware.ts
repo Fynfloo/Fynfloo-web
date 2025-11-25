@@ -2,7 +2,13 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { rootDomain } from './lib/utils';
 
-const PROTECTED_PATHS = ['/dashboard', '/settings', '/account', '/admin'];
+const PROTECTED_PATHS = [
+  '/dashboard',
+  '/settings',
+  '/account',
+  '/editor',
+  '/admin',
+];
 
 function extractSubdomain(request: NextRequest): string | null {
   const url = request.url;
@@ -88,6 +94,6 @@ export async function middleware(req: NextRequest) {
 export const config = {
   // Match all paths except static assets
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };

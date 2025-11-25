@@ -1,21 +1,6 @@
-'use client';
-
 import React from 'react';
-import AuthGuard from '@/components/auth-guard';
-import Fynfloo from '@/components/fynfloo';
+import App from '@/components/viewport/index';
 
-export default function EditorPage() {
-  return (
-    <AuthGuard>
-      <EditorInner />
-    </AuthGuard>
-  );
-}
-
-function EditorInner() {
-  return (
-    <main style={{ width: '100%' }}>
-      <Fynfloo />
-    </main>
-  );
+export default function Page() {
+  return <App />;
 }
