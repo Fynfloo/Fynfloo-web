@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'FynFloo — Build, Launch, and Grow Your Online Business with Ease',
+  title: 'FynFloo: Build, Launch, and Grow Your Online Business with Ease',
   description:
     'FynFloo is an AI-powered no-code platform that empowers entrepreneurs and small businesses to create stunning websites, manage products, and handle payments — all without technical skills. Build and scale your digital presence effortlessly with FynFloo.',
 };

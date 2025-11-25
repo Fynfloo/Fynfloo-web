@@ -9,11 +9,7 @@ import cn from 'classnames';
 import { ViewportProvider } from './context/viewport-context';
 
 export default function Viewport({ children }: { children?: React.ReactNode }) {
-  const {
-    enabled,
-    connectors,
-    actions: { setOptions },
-  } = useEditor((state) => ({
+  const { enabled, connectors } = useEditor((state) => ({
     enabled: state.options.enabled,
   }));
   return (

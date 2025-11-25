@@ -5,7 +5,6 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { SketchPicker, ColorResult } from 'react-color';
 import { RGBA } from '@/types/selector-type';
-import { rgbaToCss, cssToRgba } from '@/lib/helper';
 
 import {
   Popover,

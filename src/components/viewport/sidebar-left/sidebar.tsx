@@ -13,11 +13,9 @@ import { Button } from '@/components/selectors/button';
 import { Section } from '@/components/selectors/section';
 import { Container } from '@/components/selectors/container';
 import { Layout } from '@/components/selectors/layout';
-//import { Container } from '@/components/craft/container';
 
 export function SidebarLeft() {
   const {
-    enabled,
     connectors: { create },
   } = useEditor((state) => ({
     enabled: state.options.enabled,

@@ -15,10 +15,7 @@ export const SidebarDiv = styled.div<{ $enabled: boolean }>`
 `;
 
 export function SidebarRight() {
-  const [toolbarVisible, setToolbarVisible] = useState(true);
-  const [layersVisible, setLayerVisible] = useState(true);
-
-  const { actions, selected, enabled } = useEditor((state, query) => {
+  const { selected } = useEditor((state, query) => {
     const enabled = state.options.enabled;
     const [currentNodeId] = state.events.selected;
     let selected;
