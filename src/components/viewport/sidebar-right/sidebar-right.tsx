@@ -3,17 +3,9 @@
 import { useEditor } from '@craftjs/core';
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { Pencil } from 'lucide-react';
 
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-} from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent } from '@/components/ui/sidebar';
 import { Toolbar } from '@/components/toolbar/index';
-import { SidebarItem } from './siderbar-item';
 
 // TODO : we might not need the margin-right
 export const SidebarDiv = styled.div<{ $enabled: boolean }>`
