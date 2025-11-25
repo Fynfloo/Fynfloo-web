@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import AuthGuard from '@/components/auth-guard';
+import AuthGuard from '@/components/auth/auth-guard';
 import App from '@/components/craft';
 import { Theme } from '@radix-ui/themes';
 

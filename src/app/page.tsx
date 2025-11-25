@@ -1,12 +1,10 @@
-'use client';
-
-import { Navbar } from '@/components/navbar';
-import { Hero } from '@/components/Hero';
-import { BentoGrid } from '@/components/bento-grid';
-import { Features } from '@/components/features';
-import { Pricing } from '@/components/pricing';
-import { CallToAction } from '@/components/call-to-action';
-import { Footer } from '@/components/footer';
+import { Navbar } from '@/components/home/navbar';
+import { Hero } from '@/components/home/Hero';
+import { BentoGrid } from '@/components/home/bento-grid';
+import { Features } from '@/components/home/features';
+import { Pricing } from '@/components/home/pricing';
+import { CallToAction } from '@/components/home/call-to-action';
+import { Footer } from '@/components/home/footer';
 
 export default function Home() {
   return (
