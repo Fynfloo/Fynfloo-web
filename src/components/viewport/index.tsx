@@ -7,7 +7,7 @@ import { Text } from '@/components/selectors/text/index';
 import { Button } from '@/components/selectors/button/index';
 import { Section } from '@/components/selectors/section/index';
 import { RenderNode } from './render-node';
-import { Canvas } from '@/components/selectors/canvas/canvas';
+import { Canvas } from '@/components/viewport/canvas';
 import { Container } from '@/components/selectors/container/index';
 import { Layout } from '@/components/selectors/layout/index';
 
