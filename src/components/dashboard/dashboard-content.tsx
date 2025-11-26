@@ -10,6 +10,7 @@ import {
 import { PlusCircle, Store } from 'lucide-react';
 import { Button } from '../ui/button';
 import { CreateStoreModal } from './create-store-modal';
+import { rootDomain } from '@/lib/utils';
 
 type StoreType = {
   id: string;
@@ -63,13 +64,15 @@ export function DashboardContent() {
                 <CardTitle>{store.name}</CardTitle>
                 <CardDescription>
                   {' '}
-                  {store.subdomain}.fynfloo.com
+                  {store.subdomain}.{rootDomain}.com
                 </CardDescription>
               </CardHeader>
 
               <CardContent>
                 <Button asChild>
-                  <a href={`https://${store.subdomain}.fynfloo.com/dashboard`}>
+                  <a
+                    href={`https://${store.subdomain}.${rootDomain}/dashboard`}
+                  >
                     Go to Dashboard
                   </a>
                 </Button>

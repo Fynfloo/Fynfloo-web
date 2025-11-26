@@ -55,7 +55,7 @@ interface NavbarProps {
 const Navbar = ({
   logo = {
     url: '/',
-    src: '/fynfloo.logo.JPG',
+    src: '/fynfloo.svg',
     alt: 'logo',
     title: 'Fynfloo',
   },
@@ -149,9 +149,6 @@ const Navbar = ({
                 className="max-h-8 dark:invert"
                 alt={logo.alt}
               />
-              <span className="text-lg font-semibold tracking-tighter">
-                {logo.title}
-              </span>
             </Link>
             <div className="flex items-center">
               <NavigationMenu>

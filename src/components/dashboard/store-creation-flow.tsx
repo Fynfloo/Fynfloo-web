@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { rootDomain } from '@/lib/utils';
 
 const steps = [
   { id: 1, title: 'Store Details' },
@@ -88,7 +89,7 @@ export default function StoreCreationFlow() {
               Your store will live at:
               <span className="font-medium">
                 {' '}
-                {formData.subdomain || 'yourstore'}.yourdomain.com
+                {formData.subdomain || 'yourstore'}.{rootDomain}.com
               </span>
             </p>
           </div>
@@ -127,7 +128,7 @@ export default function StoreCreationFlow() {
                   key={tpl}
                   onClick={() => setFormData({ ...formData, template: tpl })}
                   className={`cursor-pointer border p-4 text-center transition ${
-                    formData.template === tpl ? 'ring-2 ring-purple-500' : ''
+                    formData.template === tpl ? 'ring-2 ring-ring' : ''
                   }`}
                 >
                   <LayoutDashboard className="mx-auto mb-2" />
@@ -141,11 +142,16 @@ export default function StoreCreationFlow() {
       case 4:
         return (
           <div className="space-y-6 text-center py-10">
-            <Check className="h-12 w-12 mx-auto text-green-600" />
+            <Check className="h-12 w-12 mx-auto text-primary" />
             <h2 className="text-xl font-semibold">Store Created!</h2>
             <p>Your store has been set up successfully.</p>
 
-            <Button className="mt-4 w-full">Go to your Dashboard</Button>
+            <Button asChild className="mt-4">
+              <a href={`https://${formData.subdomain}.${rootDomain}/dashboard`}>
+                <Store className="mr-2 h-4 w-4" />
+                Go to Dashboard
+              </a>
+            </Button>
           </div>
         );
     }
