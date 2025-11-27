@@ -21,7 +21,7 @@ export function SidebarLeft() {
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                <a href="/dashbaord">
+                <a href="/dashboard">
                   <Home className="h-4 w-4" />
                   <span>Home</span>
                 </a>

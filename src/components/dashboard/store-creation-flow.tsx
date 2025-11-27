@@ -20,8 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { cn } from '@/lib/utils';
-import { rootDomain } from '@/lib/utils';
+import { cn, rootDomain, protocol } from '@/lib/utils';
 
 const steps = [
   { id: 1, title: 'Store Details' },
@@ -42,6 +41,7 @@ const categories = [
 // TODO: Review the steps and their content
 export default function StoreCreationFlow() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [createdSlug, setCreatedSlug] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     storeName: '',
@@ -50,16 +50,132 @@ export default function StoreCreationFlow() {
     template: 'default',
   });
 
+  const [subdomainStatus, setSubdomainStatus] = useState<{
+    checking: boolean;
+    available: boolean | null;
+    error: string | null;
+  }>({
+    checking: false,
+    available: null,
+    error: null,
+  });
+
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+
   // Auto-generate subdomain from store name
   useEffect(() => {
-    if (formData.storeName) {
-      const clean = formData.storeName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    if (formData.storeName && !createdSlug) {
+      const clean = formData.storeName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
       setFormData((prev) => ({ ...prev, subdomain: clean }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData.storeName]);
 
-  const next = () => currentStep < 4 && setCurrentStep(currentStep + 1);
-  const prev = () => currentStep > 1 && setCurrentStep(currentStep - 1);
+  // Check subdomain availability (debounced)
+  useEffect(() => {
+    if (!formData.subdomain) {
+      setSubdomainStatus({ checking: false, available: null, error: null });
+      return;
+    }
+
+    setSubdomainStatus((prev) => ({
+      ...prev,
+      checking: true,
+      error: null,
+    }));
+
+    const handle = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/tenant/check-subdomain?subdomain=${encodeURIComponent(
+            formData.subdomain
+          )}`
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          setSubdomainStatus({
+            checking: false,
+            available: null,
+            error: data.error || 'Error checking subdomain',
+          });
+        } else {
+          setSubdomainStatus({
+            checking: false,
+            available: data.available,
+            error: null,
+          });
+        }
+      } catch (err) {
+        console.error(err);
+        setSubdomainStatus({
+          checking: false,
+          available: null,
+          error: 'Failed to check subdomain',
+        });
+      }
+    }, 400);
+
+    return () => clearTimeout(handle);
+  }, [formData.subdomain]);
+
+  // const next = () => currentStep < 4 && setCurrentStep(currentStep + 1);
+  // const prev = () => currentStep > 1 && setCurrentStep(currentStep - 1);
+
+  const canGoNextFromStep1 =
+    formData.storeName.trim().length > 0 &&
+    formData.subdomain.trim().length > 0 &&
+    subdomainStatus.available === true &&
+    !subdomainStatus.checking;
+
+  const next = async () => {
+    setCreateError(null);
+
+    if (currentStep === 1 && !canGoNextFromStep1) {
+      return;
+    }
+
+    if (currentStep === 3) {
+      // Create tenant
+      try {
+        setCreating(true);
+        const res = await fetch('/api/tenant/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            storeName: formData.storeName,
+            subdomain: formData.subdomain,
+            category: formData.category,
+            template: formData.template,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          setCreateError(data.error || 'Failed to create store');
+          setCreating(false);
+          return;
+        }
+        setCreatedSlug(data.slug);
+        setCreating(false);
+      } catch (err) {
+        console.error(err);
+        setCreateError('Unexpected error creating store');
+        setCreating(false);
+        return;
+      }
+    }
+
+    if (currentStep < 4) {
+      setCurrentStep((prev) => prev + 1);
+    }
+  };
+
+  const prev = () => {
+    currentStep > 1 && setCurrentStep((prev) => prev - 1);
+  };
 
   // Render steps
   const renderStep = () => {
@@ -67,37 +183,63 @@ export default function StoreCreationFlow() {
       case 1:
         return (
           <div className="space-y-6">
-            <Label>Store Name</Label>
-            <Input
-              placeholder="e.g. Mike Fashion Hub"
-              value={formData.storeName}
-              onChange={(e) =>
-                setFormData({ ...formData, storeName: e.target.value })
-              }
-            />
+            <div className="space-y-2">
+              <Label>Store Name</Label>
+              <Input
+                placeholder="e.g. Mike Fashion Hub"
+                value={formData.storeName}
+                onChange={(e) =>
+                  setFormData({ ...formData, storeName: e.target.value })
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Subdomain</Label>
+              <Input
+                placeholder="mike-fashion-hub"
+                value={formData.subdomain}
+                onChange={(e) =>
+                  setFormData({ ...formData, subdomain: e.target.value })
+                }
+              />
 
-            <Label>Subdomain</Label>
-            <Input
-              placeholder="mike-fashion-hub"
-              value={formData.subdomain}
-              onChange={(e) =>
-                setFormData({ ...formData, subdomain: e.target.value })
-              }
-            />
+              <p className="mt-1 text-sm text-muted-foreground">
+                Your store will live at:
+                <span className="font-medium">
+                  {' '}
+                  {formData.subdomain || 'yourstore'}.{rootDomain}
+                </span>
+              </p>
 
-            <p className="text-sm text-muted-foreground">
-              Your store will live at:
-              <span className="font-medium">
-                {' '}
-                {formData.subdomain || 'yourstore'}.{rootDomain}.com
-              </span>
-            </p>
+              <p className="mt-1 text-xs">
+                {subdomainStatus.checking && (
+                  <span className="text-muted-foreground">
+                    checking availability...
+                  </span>
+                )}
+                {!subdomainStatus.checking &&
+                  subdomainStatus.available === true && (
+                    <span className="text-primary">Subdomain available</span>
+                  )}
+                {!subdomainStatus.checking &&
+                  subdomainStatus.available === false && (
+                    <span className="text-destructive">
+                      This subdomain is already taken
+                    </span>
+                  )}
+                {subdomainStatus.error && (
+                  <span className="text-destructive">
+                    {subdomainStatus.error}
+                  </span>
+                )}
+              </p>
+            </div>
           </div>
         );
 
       case 2:
         return (
-          <div className="space-y-6">
+          <div className="space-y-2">
             <Label>Store Category</Label>
             <Select
               value={formData.category}
@@ -136,6 +278,9 @@ export default function StoreCreationFlow() {
                 </Card>
               ))}
             </div>
+            {createError && (
+              <p className="text-sm text-destructive">{createError}</p>
+            )}
           </div>
         );
 
@@ -144,14 +289,19 @@ export default function StoreCreationFlow() {
           <div className="space-y-6 text-center py-10">
             <Check className="h-12 w-12 mx-auto text-primary" />
             <h2 className="text-xl font-semibold">Store Created!</h2>
-            <p>Your store has been set up successfully.</p>
-
-            <Button asChild className="mt-4">
-              <a href={`https://${formData.subdomain}.${rootDomain}/dashboard`}>
-                <Store className="mr-2 h-4 w-4" />
-                Go to Dashboard
-              </a>
-            </Button>
+            <p className="text-muted-foreground">
+              Your store has been set up successfully.
+            </p>
+            {createdSlug && (
+              <Button asChild className="mt-4">
+                <a
+                  href={`${protocol}://${createdSlug}.${rootDomain}/dashboard`}
+                >
+                  <Store className="mr-2 h-4 w-4" />
+                  Go to Dashboard
+                </a>
+              </Button>
+            )}
           </div>
         );
     }
@@ -167,8 +317,8 @@ export default function StoreCreationFlow() {
               className={cn(
                 'mx-auto flex h-8 w-8 items-center justify-center rounded-full text-sm',
                 currentStep >= step.id
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-300 text-gray-600'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary text-secondary-foreground'
               )}
             >
               {step.id}
