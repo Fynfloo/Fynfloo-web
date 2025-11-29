@@ -65,21 +65,21 @@ export default async function TenantDashboardPage({
   const { tenant } = await params;
 
   const currentTenant = await fetchTenant(tenant);
-  if (!tenant) {
+  if (!currentTenant) {
     notFound();
   }
 
-  const data = await fetchMetrics(currentTenant?.id!);
+  const data = await fetchMetrics(currentTenant.id);
 
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold">
-            {currentTenant?.name} Dashboard
+            {currentTenant.name} Dashboard
           </h1>
           <p className="text-sm text-muted-foreground">
-            Store: {currentTenant?.slug}.{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
+            Store: {currentTenant.slug}.{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
           </p>
         </div>
       </header>
