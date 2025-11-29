@@ -1,61 +1,8 @@
 // app/s/[tenant]/dashboard/page.tsx
-import { cookies } from 'next/headers';
-import { notFound, redirect } from 'next/navigation';
 
-type Tenant = {
-  id: string;
-  name: string;
-  slug: string;
-  category: string | null;
-  template: string | null;
-};
-
-type DashboardMetrics = {
-  metrics: {
-    ordersCount: number;
-    usersCount: number;
-    revenue: number;
-  };
-};
-
-async function fetchTenant(tenantSlug: string): Promise<Tenant | null> {
-  const cookieHeader = cookies().toString();
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/tenant/by-slug/${tenantSlug}`,
-    {
-      headers: { cookie: cookieHeader },
-      cache: 'no-store',
-    }
-  );
-
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error('Failed to load tenant');
-  return res.json();
-}
-
-async function fetchMetrics(tenantId: string): Promise<DashboardMetrics> {
-  const cookieHeader = cookies().toString();
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/tenant/${tenantId}/dashboard`,
-    {
-      headers: { cookie: cookieHeader },
-      cache: 'no-store',
-    }
-  );
-
-  if (res.status === 401) {
-    // not logged in → send back to login
-    redirect('/login');
-  }
-
-  if (!res.ok) {
-    throw new Error('Failed to load metrics');
-  }
-
-  return res.json();
-}
+import { fetchMetrics } from '@/lib/fetchMetrics';
+import { fetchTenant } from '@/lib/fetchTenant';
+import { notFound } from 'next/navigation';
 
 export default async function TenantDashboardPage({
   params,
