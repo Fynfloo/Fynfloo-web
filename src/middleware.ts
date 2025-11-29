@@ -54,7 +54,7 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const subdomain = extractSubdomain(req);
 
-  const TENANT_ONLY = ['/dashboard', '/settings', '/editor'];
+  //const TENANT_ONLY = ['/dashboard', '/settings', '/editor'];
 
   if (subdomain) {
     // Block access to admin page for subdomains
@@ -67,20 +67,20 @@ export async function middleware(req: NextRequest) {
       return NextResponse.rewrite(new URL(`/s/${subdomain}`, req.url));
     }
 
-    // Tenant dashboard on subdomain
-    // if (pathname.startsWith('/dashboard')) {
-    //   return NextResponse.rewrite(
-    //     new URL(`/s/${subdomain}/dashboard`, req.url)
-    //   );
-    // }
-
-    for (const p of TENANT_ONLY) {
-      if (pathname.startsWith(p)) {
-        return NextResponse.rewrite(
-          new URL(`/s/${subdomain}${pathname}`, req.url)
-        );
-      }
+    //Tenant dashboard on subdomain
+    if (pathname == '/dashboard') {
+      return NextResponse.rewrite(
+        new URL(`/s/${subdomain}/dashboard`, req.url)
+      );
     }
+
+    // for (const p of TENANT_ONLY) {
+    //   if (pathname.startsWith(p)) {
+    //     return NextResponse.rewrite(
+    //       new URL(`/s/${subdomain}${pathname}`, req.url)
+    //     );
+    //   }
+    // }
   }
 
   const isAuthPage =
