@@ -60,24 +60,26 @@ async function fetchMetrics(tenantId: string): Promise<DashboardMetrics> {
 export default async function TenantDashboardPage({
   params,
 }: {
-  params: { tenant: string };
+  params: Promise<{ tenant: string }>;
 }) {
-  const tenantSlug = params.tenant;
+  const { tenant } = await params;
 
-  const tenant = await fetchTenant(tenantSlug);
+  const currentTenant = await fetchTenant(tenant);
   if (!tenant) {
     notFound();
   }
 
-  const data = await fetchMetrics(tenant.id);
+  const data = await fetchMetrics(currentTenant?.id!);
 
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">{tenant.name} Dashboard</h1>
+          <h1 className="text-2xl font-semibold">
+            {currentTenant?.name} Dashboard
+          </h1>
           <p className="text-sm text-muted-foreground">
-            Store: {tenant.slug}.{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
+            Store: {currentTenant?.slug}.{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
           </p>
         </div>
       </header>

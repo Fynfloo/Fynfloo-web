@@ -5,10 +5,10 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL! || 'http://localhost:8080';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   const cookieHeader = req.headers.get('cookie') || '';
-  const slug = params.slug;
+  const { slug } = await params;
 
   const res = await fetch(
     `${API_BASE}/api/tenant/by-slug/${encodeURIComponent(slug)}`,
