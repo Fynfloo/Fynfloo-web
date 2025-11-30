@@ -10,6 +10,38 @@ const PROTECTED_PATHS = [
   '/admin',
 ];
 
+// -----------------------------------
+// SILENT REFRESH FUNCTIONALITY
+// -----------------------------------
+
+async function attemptSilentRefresh(req: NextRequest) {
+  const refresUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`;
+
+  const backendRes = await fetch(refresUrl, {
+    method: 'POST',
+    headers: {
+      cookie: req.headers.get('cookie') ?? '',
+      'User-Agent': req.headers.get('user-agent') ?? '',
+    },
+    credentials: 'include',
+  });
+
+  if (!backendRes.ok) return null;
+
+  // Extract Set-Cookie headers from the backend response
+  const cookies = backendRes.headers.getSetCookie();
+  if (!cookies || cookies.length === 0) {
+    return null;
+  }
+
+  // Continue reuest with updated cookies
+  const next = NextResponse.next();
+  for (const cookie of cookies) {
+    next.headers.append('set-cookie', cookie);
+  }
+  return next;
+}
+
 function extractSubdomain(request: NextRequest): string | null {
   const url = request.url;
   const host = request.headers.get('host') || '';
@@ -98,6 +130,13 @@ export async function middleware(req: NextRequest) {
   // Protected pages only
   if (PROTECTED_PATHS.some((path) => pathname.startsWith(path))) {
     if (!token) {
+      // Try to refresh from backend
+      const refreshed = await attemptSilentRefresh(req);
+      if (refreshed) {
+        return refreshed;
+      }
+
+      // Not logged in - redirect to login
       const loginUrl = new URL('/login', req.url);
       loginUrl.searchParams.set('from', pathname);
       return NextResponse.redirect(loginUrl);
