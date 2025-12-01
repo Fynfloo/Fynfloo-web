@@ -9,10 +9,10 @@ import { DashboardContent } from './dashboard-content';
 export function DashboardShell() {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen bg-muted/30 w-full">
-        <SidebarLeft />
-        <div className="flex flex-1 flex-col">
-          <DashboardHeader />
+      <div className="flex min-h-screen flex-col bg-muted/30 w-full">
+        <DashboardHeader />
+        <div className="flex flex-1">
+          <SidebarLeft />
           <main className="flex-1 p-6 md:p-8">
             <DashboardContent />
           </main>
