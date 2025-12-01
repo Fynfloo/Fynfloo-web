@@ -20,12 +20,49 @@ type StoreType = {
 
 export function DashboardContent() {
   const [stores, setStores] = useState<StoreType[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [openCreateModal, setOpenCreateModal] = useState(false);
 
-  // TODO: Replace with API call to fetch stores
   useEffect(() => {
-    // fetch('/api/stores').then()
-    setStores([]);
+    let cancelled = false;
+
+    async function loadStores() {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await fetch('/api/stores', {
+          credentials: 'include',
+        });
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            setError('You are not logged in.');
+          } else {
+            setError('Failed to load stores.');
+          }
+          return;
+        }
+
+        const data = await res.json();
+        if (!cancelled) {
+          setStores(data.stores || []);
+        }
+      } catch (err) {
+        console.error(err);
+        if (!cancelled) {
+          setError('An unexpected error occurred.');
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+    loadStores();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
@@ -37,7 +74,15 @@ export function DashboardContent() {
           Manage your stores and settings.{' '}
         </p>
       </div>
-      {stores.length === 0 ? (
+      {loading ? (
+        <Card className="p-8">
+          <p className="text-muted-foreground">Loading your stores…</p>
+        </Card>
+      ) : error ? (
+        <Card className="p-8">
+          <p className="text-destructive text-sm">{error}</p>
+        </Card>
+      ) : stores.length === 0 ? (
         <Card className="p-12 flex flex-col items-center text-center space-y-6 shadow-sm">
           <Store className="h-12 w-12 text-muted-foreground" />
           <h2 className="text-2xl font-semibold">
@@ -64,7 +109,7 @@ export function DashboardContent() {
                 <CardTitle>{store.name}</CardTitle>
                 <CardDescription>
                   {' '}
-                  {store.subdomain}.{rootDomain}.com
+                  {store.subdomain}.{rootDomain}
                 </CardDescription>
               </CardHeader>
 
