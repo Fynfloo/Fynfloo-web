@@ -1,9 +1,5 @@
-import Dashboard from '@/components/dashboard';
+import { DashboardShell } from '@/components/dashboard/dashboard-shell';
 
 export default function Page() {
-  return (
-    <div>
-      <Dashboard />
-    </div>
-  );
+  return <DashboardShell />;
 }
