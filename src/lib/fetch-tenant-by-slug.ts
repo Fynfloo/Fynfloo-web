@@ -2,7 +2,17 @@ import { cookies } from 'next/headers';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL! || 'http://localhost:8080';
 
-export async function fetchTenant(tenantSlug: string) {
+export type Tenant = {
+  id: string;
+  name: string;
+  slug: string;
+  category: string | null;
+  template: string | null;
+};
+
+export async function fetchTenantBySlug(
+  tenantSlug: string
+): Promise<Tenant | null> {
   const cookieStore = await cookies();
   const cookieHeader = cookieStore
     .getAll()
@@ -14,6 +24,7 @@ export async function fetchTenant(tenantSlug: string) {
     {
       headers: { cookie: cookieHeader },
       cache: 'no-store',
+      credentials: 'include',
     }
   );
 

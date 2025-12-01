@@ -3,7 +3,17 @@ import { redirect } from 'next/navigation';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL! || 'http://localhost:8080';
 
-export async function fetchMetrics(tenantId: string) {
+export type DashboardMetrics = {
+  metrics: {
+    ordersCount: number;
+    usersCount: number;
+    revenue: number;
+  };
+};
+
+export async function fetchTenantMetrics(
+  tenantId: string
+): Promise<DashboardMetrics> {
   const cookieStore = await cookies();
   const cookieHeader = cookieStore
     .getAll()
@@ -13,6 +23,7 @@ export async function fetchMetrics(tenantId: string) {
   const res = await fetch(`${API_BASE}/api/tenant/${tenantId}/dashboard`, {
     headers: { cookie: cookieHeader },
     cache: 'no-store',
+    credentials: 'include',
   });
 
   if (res.status === 401) {
