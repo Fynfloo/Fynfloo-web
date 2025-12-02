@@ -83,7 +83,7 @@ export function UserMenu() {
         </DropdownMenuItem>
         <DropdownMenuItem disabled={!user}>
           <UserIcon className="h-4 w-4 mr-2" />
-          <span>Profile (comming soon)</span>
+          <span>Profile (coming soon)</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="text-destructive">
