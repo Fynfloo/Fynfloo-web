@@ -102,9 +102,15 @@ export async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
+// export const config = {
+//   // Match all paths except static assets
+//   matcher: [
+//     '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+//   ],
+// };
 export const config = {
-  // Match all paths except static assets
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!api|_next/static|_next/image|tenant/images|storefront|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };
+
