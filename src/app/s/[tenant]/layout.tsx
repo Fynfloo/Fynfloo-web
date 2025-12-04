@@ -7,9 +7,10 @@ export default async function TenantLayout({
   params,
 }: {
   children: ReactNode;
-  params: { tenant: string };
+  params: Promise<{ tenant: string }>;
 }) {
-  const data = await getStorefrontData(params.tenant);
+  const { tenant } = await params;
+  const data = await getStorefrontData(tenant);
 
   return <StoreShell tenant={data.tenant}>{children}</StoreShell>;
 }

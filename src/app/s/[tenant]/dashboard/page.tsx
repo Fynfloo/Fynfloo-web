@@ -9,14 +9,14 @@ import { BarChart2, ShoppingBag, Users } from 'lucide-react';
 export default async function TenantDashboardPage({
   params,
 }: {
-  params: { tenant: string };
+  params: Promise<{ tenant: string }>;
 }) {
-  const tenantSlug = params.tenant;
-  const tenant = await fetchTenantBySlug(tenantSlug);
+  const { tenant } = await params;
+  const currentTenant = await fetchTenantBySlug(tenant);
 
-  if (!tenant) notFound();
+  if (!currentTenant) notFound();
 
-  const metrics = await fetchTenantMetrics(tenant.id);
+  const metrics = await fetchTenantMetrics(currentTenant.id);
 
   return (
     <div className="space-y-8">
