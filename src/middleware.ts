@@ -2,117 +2,77 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { rootDomain } from './lib/utils';
 
-const PROTECTED_PATHS = [
-  '/dashboard',
-  '/settings',
-  '/account',
-  '/editor',
-  '/admin',
-];
+const PROTECTED = ['/dashboard', '/settings', '/account', '/editor', '/admin'];
 
-// -----------------------------------
-// SILENT REFRESH FUNCTIONALITY
-// -----------------------------------
+// ---------------------------
+// Silent Refresh
+// ---------------------------
 
 async function attemptSilentRefresh(req: NextRequest) {
-  const refresUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`;
+  const refreshUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`;
 
-  const backendRes = await fetch(refresUrl, {
+  const backendRes = await fetch(refreshUrl, {
     method: 'POST',
     headers: {
       cookie: req.headers.get('cookie') ?? '',
       'User-Agent': req.headers.get('user-agent') ?? '',
     },
     credentials: 'include',
+    cache: 'no-store',
   });
 
   if (!backendRes.ok) return null;
 
-  // Extract Set-Cookie headers from the backend response
   const cookies = backendRes.headers.getSetCookie();
-  if (!cookies || cookies.length === 0) {
-    return null;
-  }
+  if (!cookies.length) return null;
 
-  // Continue reuest with updated cookies
-  const next = NextResponse.next();
-  for (const cookie of cookies) {
-    next.headers.append('set-cookie', cookie);
-  }
-  return next;
+  const redirectUrl = new URL(req.url);
+  const resp = NextResponse.redirect(redirectUrl);
+
+  cookies.forEach((c) => resp.headers.append('set-cookie', c));
+
+  return resp;
 }
 
-function extractSubdomain(request: NextRequest): string | null {
-  const url = request.url;
-  const host = request.headers.get('host') || '';
-  const hostname = host.split(':')[0];
+// ---------------------------
+// Subdomain extraction
+// ---------------------------
 
-  // Local development environment
-  if (url.includes('localhost') || url.includes('127.0.0.1')) {
-    // Try to extract subdomain from the full URL
-    const fullUrlMatch = url.match(/http:\/\/([^.]+)\.localhost/);
-    if (fullUrlMatch && fullUrlMatch[1]) {
-      return fullUrlMatch[1];
-    }
+function extractSubdomain(req: NextRequest): string | null {
+  const hostname = req.headers.get('host')?.split(':')[0] || '';
 
-    // Fallback to host header approach
-    if (hostname.includes('.localhost')) {
-      return hostname.split('.')[0];
-    }
-
-    return null;
+  // LOCAL DEV (lvh.me)
+  if (hostname.endsWith('.lvh.me')) {
+    const sub = hostname.replace('.lvh.me', '');
+    return sub === 'app' ? null : sub;
   }
 
-  // Production environment
-  const rootDomainFormatted = rootDomain.split(':')[0];
+  // PROD
+  const root = rootDomain.replace(/^www\./, '');
+  if (hostname === root || hostname === `www.${root}`) return null;
 
-  // Handle preview deployment URLs (tenant---branch-name.vercel.app)
-  if (hostname.includes('---') && hostname.endsWith('.vercel.app')) {
-    const parts = hostname.split('---');
-    return parts.length > 0 ? parts[0] : null;
+  if (hostname.endsWith(`.${root}`)) {
+    return hostname.replace(`.${root}`, '');
   }
 
-  // Regular subdomain detection
-  const isSubdomain =
-    hostname !== rootDomainFormatted &&
-    hostname !== `www.${rootDomainFormatted}` &&
-    hostname.endsWith(`.${rootDomainFormatted}`);
-
-  return isSubdomain ? hostname.replace(`.${rootDomainFormatted}`, '') : null;
+  return null;
 }
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get('access_token')?.value;
   const { pathname } = req.nextUrl;
-  const subdomain = extractSubdomain(req);
+  const sub = extractSubdomain(req);
 
-  //const TENANT_ONLY = ['/dashboard', '/settings', '/editor'];
-
-  if (subdomain) {
-    // Block access to admin page for subdomains
+  if (sub) {
+    if (pathname === '/') {
+      return NextResponse.rewrite(new URL(`/s/${sub}`, req.url));
+    }
+    if (pathname.startsWith('/dashboard')) {
+      return NextResponse.rewrite(new URL(`/s/${sub}/dashboard`, req.url));
+    }
     if (pathname.startsWith('/admin')) {
       return NextResponse.redirect(new URL('/', req.url));
     }
-
-    // For the root path on a subdomain, rewrite to the subdomain page
-    if (pathname == '/') {
-      return NextResponse.rewrite(new URL(`/s/${subdomain}`, req.url));
-    }
-
-    //Tenant dashboard on subdomain
-    if (pathname == '/dashboard') {
-      return NextResponse.rewrite(
-        new URL(`/s/${subdomain}/dashboard`, req.url)
-      );
-    }
-
-    // for (const p of TENANT_ONLY) {
-    //   if (pathname.startsWith(p)) {
-    //     return NextResponse.rewrite(
-    //       new URL(`/s/${subdomain}${pathname}`, req.url)
-    //     );
-    //   }
-    // }
   }
 
   const isAuthPage =
@@ -123,20 +83,15 @@ export async function middleware(req: NextRequest) {
     pathname.startsWith('/confirm-email');
 
   if (token && isAuthPage) {
-    const dashboardUrl = new URL('/dashboard', req.url);
-    return NextResponse.redirect(dashboardUrl);
+    return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
-  // Protected pages only
-  if (PROTECTED_PATHS.some((path) => pathname.startsWith(path))) {
+  // Protected routes → require token
+  if (PROTECTED.some((p) => pathname.startsWith(p))) {
     if (!token) {
-      // Try to refresh from backend
       const refreshed = await attemptSilentRefresh(req);
-      if (refreshed) {
-        return refreshed;
-      }
+      if (refreshed) return refreshed;
 
-      // Not logged in - redirect to login
       const loginUrl = new URL('/login', req.url);
       loginUrl.searchParams.set('from', pathname);
       return NextResponse.redirect(loginUrl);
