@@ -183,7 +183,7 @@ export function getMockStorefrontData(slug: string): StorefrontData {
   const tenant = { ...defaultTenant, slug };
   return {
     tenant,
-    featuredProducts: baseProducts.slice(0, 2),
+    featuredProducts: baseProducts,
     allProducts: baseProducts,
     testimonials: baseTestimonials,
     featureRows: baseFeatureRows,
