@@ -3,6 +3,7 @@ import { getStorefrontData } from '@/lib/storefront/get-storefront-data';
 import { StoreHero } from '@/components/tenant/storefront/hero';
 import { Section } from '@/components/tenant/storefront/section';
 import { ProductGrid } from '@/components/tenant/storefront/product-grid';
+import { FeatureRow } from '@/components/tenant/storefront/feature-row';
 
 export default async function StorefrontHome({
   params,
@@ -23,6 +24,14 @@ export default async function StorefrontHome({
           products={data.featuredProducts}
           baseHref={`/s/${tenant}/products`}
         />
+      </Section>
+
+      <Section eyebrow="Why this store" title="Considered by design">
+        <div className="flex flex-col gap-10 mt-4">
+          {data.featureRows.map((row) => (
+            <FeatureRow key={row.id} row={row} />
+          ))}
+        </div>
       </Section>
     </div>
   );
