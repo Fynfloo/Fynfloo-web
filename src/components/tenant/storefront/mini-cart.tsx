@@ -30,7 +30,7 @@ export function MiniCart({ open, onOpenChange }: MiniCartProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex">
+    <div className="fixed top-0 right-0 z-50 flex h-screen">
       <div className="flex-1 bg-black/50" onClick={() => onOpenChange(false)} />
       <aside className="w-full max-w-sm bg-slate-950 border-l border-slate-800 p-4 flex flex-col gap-4">
         <header className="flex items-center justify-between">
