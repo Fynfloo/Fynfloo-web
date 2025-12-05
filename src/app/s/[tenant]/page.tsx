@@ -9,7 +9,9 @@ export default async function StorefrontHome({
 }) {
   const { tenant } = await params;
   const data = await getStorefrontData(tenant);
-  <div className="mx-auto max-w-6xl px-4 py-8 flex flex-col gap-10">
-    <StoreHero tenant={data.tenant} />
-  </div>;
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-8 flex flex-col gap-10">
+      <StoreHero tenant={data.tenant} />
+    </div>
+  );
 }
