@@ -134,6 +134,14 @@ const baseTestimonials: Testimonial[] = [
       'The unboxing felt like opening a new phone. The products live on my desk; the packaging lives in my moodboard folder.',
     avatarInitials: 'SO',
   },
+  {
+    id: 't4',
+    name: 'Jordan Blake',
+    role: 'Developer & Writer',
+    quote:
+      'My desk finally matches the way I want to feel when I sit down to work. Calm, focused, and a little bit fancy.',
+    avatarInitials: 'JB',
+  },
 ];
 
 const baseFeatureRows: FeatureRow[] = [
