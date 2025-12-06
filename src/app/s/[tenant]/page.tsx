@@ -4,6 +4,7 @@ import { StoreHero } from '@/components/tenant/storefront/hero';
 import { Section } from '@/components/tenant/storefront/section';
 import { ProductGrid } from '@/components/tenant/storefront/product-grid';
 import { FeatureRow } from '@/components/tenant/storefront/feature-row';
+import { TestimonialStrip } from '@/components/tenant/storefront/testimonial-strip';
 
 export default async function StorefrontHome({
   params,
@@ -32,6 +33,13 @@ export default async function StorefrontHome({
             <FeatureRow key={row.id} row={row} />
           ))}
         </div>
+      </Section>
+
+      <Section
+        eyebrow="What people say"
+        title="Loved by people who stare at their desk all day."
+      >
+        <TestimonialStrip items={data.testimonials} />
       </Section>
     </div>
   );
