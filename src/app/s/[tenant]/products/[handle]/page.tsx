@@ -4,6 +4,7 @@ import {
   getStorefrontData,
 } from '@/lib/storefront/get-storefront-data';
 import { ProductBadgePill } from '@/components/tenant/storefront/badges';
+import Link from 'next/link';
 
 export default async function ProductDetailPage({
   params,
@@ -56,9 +57,12 @@ export default async function ProductDetailPage({
         <p className="text-xl font-semibold text-slate-50">
           £{product.price.toFixed(2)}
         </p>
-        <button className="rounded-full bg-slate-50 text-slate-950 px-5 py-3 text-sm font-medium hover:bg-slate-200">
+        <Link
+          href={`/s/${tenant}/cart`}
+          className="rounded-full text-center bg-slate-50 text-slate-950 px-5 py-3 text-sm font-medium hover:bg-slate-200"
+        >
           Add to cart
-        </button>
+        </Link>
         <div className="text-sm text-slate-300 space-y-3">
           <p>{product.description}</p>
           <ul className="text-xs text-slate-400 list-disc list-inside space-y-1">
