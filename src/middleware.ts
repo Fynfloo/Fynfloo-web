@@ -39,15 +39,8 @@ export async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// export const config = {
-//   // Match all paths except static assets
-//   matcher: [
-//     '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
-//   ],
-// };
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
   ],
 };
-

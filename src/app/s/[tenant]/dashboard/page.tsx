@@ -2,7 +2,6 @@
 import { notFound } from 'next/navigation';
 import { fetchTenantBySlug } from '@/lib/fetch-tenant-by-slug';
 import { fetchTenantMetrics } from '@/lib/fetch-tenant-metrics';
-import { rootDomain } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart2, ShoppingBag, Users } from 'lucide-react';
 
