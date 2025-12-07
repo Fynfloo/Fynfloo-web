@@ -1,7 +1,3 @@
-import { cookies } from 'next/headers';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL! || 'http://localhost:8080';
-
 export type Tenant = {
   id: string;
   name: string;
@@ -11,22 +7,11 @@ export type Tenant = {
 };
 
 export async function fetchTenantBySlug(
-  tenantSlug: string
+  tenant: string
 ): Promise<Tenant | null> {
-  const cookieStore = await cookies();
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ');
-
-  const res = await fetch(
-    `${API_BASE}/api/tenant/by-slug/${encodeURIComponent(tenantSlug)}`,
-    {
-      headers: { cookie: cookieHeader },
-      cache: 'no-store',
-      credentials: 'include',
-    }
-  );
+  const res = await fetch(`/api/tenant/by-slug/${encodeURIComponent(tenant)}`, {
+    credentials: 'include',
+  });
 
   if (res.status === 404) return null;
   if (!res.ok) throw new Error('Failed to load tenant');
