@@ -1,104 +1,41 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { rootDomain } from './lib/utils';
 
-const PROTECTED = ['/dashboard', '/settings', '/account', '/editor', '/admin'];
-
-// ---------------------------
-// Silent Refresh
-// ---------------------------
-
-async function attemptSilentRefresh(req: NextRequest) {
-  const refreshUrl = `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`;
-
-  const backendRes = await fetch(refreshUrl, {
-    method: 'POST',
-    headers: {
-      cookie: req.headers.get('cookie') ?? '',
-      'User-Agent': req.headers.get('user-agent') ?? '',
-    },
-    credentials: 'include',
-    cache: 'no-store',
-  });
-
-  if (!backendRes.ok) return null;
-
-  const cookies = backendRes.headers.getSetCookie();
-  if (!cookies.length) return null;
-
-  const redirectUrl = new URL(req.url);
-  const resp = NextResponse.redirect(redirectUrl);
-
-  cookies.forEach((c) => resp.headers.append('set-cookie', c));
-
-  return resp;
-}
-
-// ---------------------------
-// Subdomain extraction
-// ---------------------------
-
-function extractSubdomain(req: NextRequest): string | null {
-  const hostname = req.headers.get('host')?.split(':')[0] || '';
-
-  // LOCAL DEV (lvh.me)
-  if (hostname.endsWith('.lvh.me')) {
-    const sub = hostname.replace('.lvh.me', '');
-    return sub === 'app' ? null : sub;
-  }
-
-  // PROD
-  const root = rootDomain.replace(/^www\./, '');
-  if (hostname === root || hostname === `www.${root}`) return null;
-
-  if (hostname.endsWith(`.${root}`)) {
-    return hostname.replace(`.${root}`, '');
-  }
-
-  return null;
-}
+const PUBLIC_FILE = /\.(.*)$/;
 
 export async function middleware(req: NextRequest) {
-  const token = req.cookies.get('access_token')?.value;
   const { pathname } = req.nextUrl;
-  const sub = extractSubdomain(req);
+  const host = req.headers.get('host') || '';
+  const hostname = host.split(':')[0];
 
-  if (sub) {
-    if (pathname === '/') {
-      return NextResponse.rewrite(new URL(`/s/${sub}`, req.url));
-    }
-    if (pathname.startsWith('/dashboard')) {
-      return NextResponse.rewrite(new URL(`/s/${sub}/dashboard`, req.url));
-    }
-    if (pathname.startsWith('/admin')) {
-      return NextResponse.redirect(new URL('/', req.url));
-    }
+  // Ignore static files and API
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/api') ||
+    PUBLIC_FILE.test(pathname)
+  ) {
+    return NextResponse.next();
   }
 
-  const isAuthPage =
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/signup') ||
-    pathname.startsWith('/check-email') ||
-    pathname.startsWith('/confirmed') ||
-    pathname.startsWith('/confirm-email');
-
-  if (token && isAuthPage) {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
+  // Root domain or localhost: treat as platform app
+  if (
+    hostname === rootDomain ||
+    hostname === `www.${rootDomain}` ||
+    hostname === 'localhost'
+  ) {
+    return NextResponse.next();
   }
 
-  // Protected routes → require token
-  if (PROTECTED.some((p) => pathname.startsWith(p))) {
-    if (!token) {
-      const refreshed = await attemptSilentRefresh(req);
-      if (refreshed) return refreshed;
+  // Subdomain: tenant.fynfloo.com → /s/[tenant]/*
+  if (hostname.endsWith(`.${rootDomain}`)) {
+    const tenant = hostname.replace(`.${rootDomain}`, '');
+    const url = req.nextUrl.clone();
 
-      const loginUrl = new URL('/login', req.url);
-      loginUrl.searchParams.set('from', pathname);
-      return NextResponse.redirect(loginUrl);
+    if (!url.pathname.startsWith(`/s/${tenant}`)) {
+      url.pathname = `/s/${tenant}${pathname === '/' ? '' : pathname}`;
+      return NextResponse.rewrite(url);
     }
   }
-
-  // Allow the request to proceed
   return NextResponse.next();
 }
 
@@ -110,7 +47,7 @@ export async function middleware(req: NextRequest) {
 // };
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|tenant/images|storefront|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
   ],
 };
 

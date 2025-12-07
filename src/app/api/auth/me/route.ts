@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL!;
+import { apiUrl } from '@/lib/utils';
 
 export async function GET(req: NextRequest) {
-  const cookieHeader = req.headers.get('cookie') || '';
-
-  const res = await fetch(`${API_BASE}/auth/me`, {
+  const backendRes = await fetch(`${apiUrl}/auth/me`, {
     method: 'GET',
-    headers: { cookie: cookieHeader },
+    headers: {
+      cookie: req.headers.get('cookie') ?? '',
+    },
     credentials: 'include',
-    cache: 'no-store',
   });
-  const data = await res.json();
-  return NextResponse.json(data, { status: res.status });
+  const data = await backendRes.json();
+  return NextResponse.json(data, { status: backendRes.status });
 }
