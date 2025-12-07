@@ -4,8 +4,6 @@ import React, { createContext, useContext, useState } from 'react';
 import { User } from '../types/user';
 import { AuthContextValue } from '../types/authcontext';
 
-const API = process.env.NEXT_PUBLIC_API_URL;
-
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -24,14 +22,10 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
-  // Client-side user state is optional, not authoritative
   const [user, setUser] = useState<User | null>(null);
 
-  /* ------------------------------------------
-   * LOGIN — backend sets cookies
-   * ------------------------------------------ */
   async function login(email: string, password: string) {
-    const res = await fetch(`${API}/auth/login`, {
+    const res = await fetch('api/auth/login', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -43,19 +37,15 @@ function useProvideAuth() {
       throw new Error(err.error || err.message || 'Login failed');
     }
 
-    // optional: load user into client state (for UI only)
-    const me = await fetch(`${API}/auth/me`, { credentials: 'include' });
+    const me = await fetch('api/auth/me', { credentials: 'include' });
     if (me.ok) {
       const data = await me.json();
       setUser(data);
     }
   }
 
-  /* ------------------------------------------
-   * LOGOUT — backend clears cookies
-   * ------------------------------------------ */
   async function logout() {
-    await fetch(`${API}/auth/logout`, {
+    await fetch('api/auth/logout', {
       method: 'POST',
       credentials: 'include',
     });
@@ -63,7 +53,7 @@ function useProvideAuth() {
   }
 
   return {
-    user, // UI-level user info (not SSR)
+    user,
     login,
     logout,
   };

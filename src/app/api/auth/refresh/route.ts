@@ -1,8 +1,8 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { apiUrl } from '@/lib/utils';
 
 export async function POST(req: NextRequest) {
-  const backendRes = await fetch(`${apiUrl}/auth/logout`, {
+  const backendRes = await fetch(`${apiUrl}/auth/refresh`, {
     method: 'POST',
     headers: {
       cookie: req.headers.get('cookie') ?? '',

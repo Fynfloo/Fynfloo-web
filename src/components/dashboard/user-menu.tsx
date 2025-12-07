@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { use, useMemo } from 'react';
 import { LogOut, Settings, User as UserIcon } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -12,10 +12,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useCurrentUser } from '@/app/hooks/use-current-user';
 import { Button } from '@/components/ui/button';
 import { createAvatar } from '@dicebear/core';
 import { funEmoji } from '@dicebear/collection';
+import { useCurrentUser } from '@/app/hooks/use-current-user';
 
 function getInitials(email?: string) {
   if (!email) return '?';
