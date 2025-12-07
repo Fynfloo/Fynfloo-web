@@ -17,13 +17,8 @@ import { Button } from '../ui/button';
 import { CreateStoreModal } from './create-store-modal';
 import { rootDomain } from '@/lib/utils';
 import { useUserStores } from '@/app/hooks/use-user-stores';
-
-type StoreType = {
-  id: string;
-  name: string;
-  subdomain?: string;
-  category?: string;
-};
+import { protocol } from '@/lib/utils';
+import Link from 'next/link';
 
 export function DashboardContent() {
   const { stores, loading } = useUserStores();
@@ -137,11 +132,11 @@ export function DashboardContent() {
                   {store.category || 'Uncategorized'}
                 </div>
                 <Button asChild size="sm">
-                  <a
-                    href={`https://${store.subdomain}.${rootDomain}/dashboard`}
+                  <Link
+                    href={`${protocol}://${store.subdomain}.${rootDomain}/dashboard`}
                   >
                     Go to dashboard
-                  </a>
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
