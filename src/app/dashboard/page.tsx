@@ -1,7 +1,5 @@
-import { DashboardShell } from '@/components/dashboard/dashboard-shell';
-import { requireAuth } from '@/lib/require-auth';
+import { DashboardContent } from '@/components/dashboard/dashboard-content';
 
 export default async function Page() {
-  const user = await requireAuth();
-  return <DashboardShell />;
+  return <DashboardContent />;
 }
