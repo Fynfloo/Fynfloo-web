@@ -61,9 +61,7 @@ export function StoreList({
               {store.category || 'Uncategorized'}
             </div>
             <Button asChild size="sm">
-              <Link href={`/dashboard/stores/${store.id}`}>
-                Go to dashboard
-              </Link>
+              <Link href={`/dashboard/stores/${store.id}`}>Manage Store</Link>
             </Button>
           </CardContent>
         </Card>
