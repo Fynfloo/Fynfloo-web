@@ -83,3 +83,5 @@ registerSection({
   component: ServicesList,
   getDefaultData,
 });
+
+export default ServicesList;
