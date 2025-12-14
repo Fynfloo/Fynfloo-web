@@ -11,7 +11,7 @@ import { useStoreContext } from '@/lib/storefront/store-context';
 import { use } from 'react';
 import { fetchProductsForListing } from '@/lib/storefront/fetch-storefront-data';
 
-// TODO: fetch products
+// TODO: fetch productsb
 // NOTE: For now, we hack data fetching using use() to await a promise passed as prop.
 // For a cleaner approach, you can prefetch products server-side and pass as context.
 // To keep copy-paste simple, we inline a minimal pattern.
