@@ -3,11 +3,11 @@ import { nanoid } from 'nanoid';
 
 export const generalTemplate: Template = {
   key: 'general-01',
-  name: 'Modern general',
+  name: 'Modern Store',
   businessType: 'general',
   defaultTheme: {
     primaryColor: '#1F2937',
-    accentColor: '#EC4899',
+    accentColor: '#3B82F6',
   },
   pages: [
     {
@@ -18,11 +18,11 @@ export const generalTemplate: Template = {
           id: nanoid(),
           type: 'hero.basic',
           data: {
-            eyebrow: 'Self care essentials',
-            title: 'Beauty that feels as good as it looks.',
+            eyebrow: 'Welcome',
+            title: 'Everything you need, all in one place.',
             subtitle:
-              'Thoughtfully curated skincare and beauty products designed for everyday rituals.',
-            primaryCtaLabel: 'Shop bestsellers',
+              'A simple, flexible storefront built to support your business.',
+            primaryCtaLabel: 'Browse products',
             primaryCtaHref: '/products',
           },
         },
@@ -30,9 +30,9 @@ export const generalTemplate: Template = {
           id: nanoid(),
           type: 'commerce.productGrid',
           data: {
-            heading: 'Customer favourites',
-            subheading: 'Loved for a reason.',
-            collectionHandle: 'bestsellers',
+            heading: 'Featured products',
+            subheading: '',
+            collectionHandle: 'featured',
             layout: 'grid',
             columns: 3,
           },
@@ -45,20 +45,9 @@ export const generalTemplate: Template = {
       layout: [
         {
           id: nanoid(),
-          type: 'hero.basic',
-          data: {
-            eyebrow: 'Shop',
-            title: 'Explore our full range.',
-            subtitle: 'Skincare, beauty and everyday essentials.',
-            primaryCtaLabel: '',
-            primaryCtaHref: '',
-          },
-        },
-        {
-          id: nanoid(),
           type: 'commerce.productGrid',
           data: {
-            heading: '',
+            heading: 'All products',
             subheading: '',
             collectionHandle: null,
             layout: 'grid',
@@ -76,7 +65,7 @@ export const generalTemplate: Template = {
           type: 'commerce.productHero',
           data: {
             showBreadcrumbs: true,
-            showBadges: true,
+            showBadges: false,
           },
         },
         {
@@ -84,14 +73,7 @@ export const generalTemplate: Template = {
           type: 'commerce.productSpecs',
           data: {
             showDescription: true,
-            showDetailsList: true,
-          },
-        },
-        {
-          id: nanoid(),
-          type: 'commerce.relatedProducts',
-          data: {
-            heading: 'Pairs well with',
+            showDetailsList: false,
           },
         },
       ],
@@ -111,7 +93,9 @@ export const generalTemplate: Template = {
         {
           id: nanoid(),
           type: 'checkout.cartSummary',
-          data: { showDiscountCode: true },
+          data: {
+            showDiscountCode: true,
+          },
         },
       ],
     },
@@ -127,11 +111,6 @@ export const generalTemplate: Template = {
             showBillingSection: false,
             showNotesField: true,
           },
-        },
-        {
-          id: nanoid(),
-          type: 'checkout.cartSummary',
-          data: { showDiscountCode: false },
         },
       ],
     },

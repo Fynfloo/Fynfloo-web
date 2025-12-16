@@ -18,12 +18,14 @@ export const beautyTemplate: Template = {
           id: nanoid(),
           type: 'hero.basic',
           data: {
-            eyebrow: 'Self care essentials',
-            title: 'Beauty that feels as good as it looks.',
+            eyebrow: 'Everyday self-care',
+            title: 'Beauty routines made beautifully simple.',
             subtitle:
-              'Thoughtfully curated skincare and beauty products designed for everyday rituals.',
+              'Skincare and beauty essentials designed to fit effortlessly into your daily rituals.',
             primaryCtaLabel: 'Shop bestsellers',
             primaryCtaHref: '/products',
+            secondaryCtaLabel: 'Learn more',
+            secondaryCtaHref: '#about',
           },
         },
         {
@@ -31,10 +33,44 @@ export const beautyTemplate: Template = {
           type: 'commerce.productGrid',
           data: {
             heading: 'Customer favourites',
-            subheading: 'Loved for a reason.',
+            subheading: 'Loved, tried and trusted.',
             collectionHandle: 'bestsellers',
             layout: 'grid',
             columns: 3,
+          },
+        },
+        {
+          id: nanoid(),
+          type: 'content.textWithMedia',
+          data: {
+            eyebrow: 'Our philosophy',
+            title: 'Thoughtful ingredients. Honest formulations.',
+            body: 'We focus on quality ingredients and simple formulations that work with your skin, not against it.',
+            image: {
+              url: '/placeholder/800x600.png',
+            },
+            imagePosition: 'right',
+          },
+        },
+        {
+          id: nanoid(),
+          type: 'content.testimonialsBasic',
+          data: {
+            heading: 'Why customers keep coming back',
+            testimonials: [
+              {
+                quote: 'My skin has never felt better.',
+                name: 'Amelia R.',
+              },
+              {
+                quote: 'Simple, effective and beautifully packaged.',
+                name: 'Sophie L.',
+              },
+              {
+                quote: 'I love how gentle everything feels.',
+                name: 'Nina K.',
+              },
+            ],
           },
         },
       ],
@@ -48,8 +84,9 @@ export const beautyTemplate: Template = {
           type: 'hero.basic',
           data: {
             eyebrow: 'Shop',
-            title: 'Explore our full range.',
-            subtitle: 'Skincare, beauty and everyday essentials.',
+            title: 'All beauty products',
+            subtitle:
+              'Explore skincare, beauty and everyday essentials designed to support your routine.',
             primaryCtaLabel: '',
             primaryCtaHref: '',
           },
@@ -58,7 +95,7 @@ export const beautyTemplate: Template = {
           id: nanoid(),
           type: 'commerce.productGrid',
           data: {
-            heading: '',
+            heading: 'All products',
             subheading: '',
             collectionHandle: null,
             layout: 'grid',
@@ -84,7 +121,7 @@ export const beautyTemplate: Template = {
           type: 'commerce.productSpecs',
           data: {
             showDescription: true,
-            showDetailsList: true,
+            showDetailsList: false,
           },
         },
         {
