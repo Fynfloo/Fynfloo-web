@@ -3,11 +3,11 @@ import { nanoid } from 'nanoid';
 
 export const foodTemplate: Template = {
   key: 'food-01',
-  name: 'Modern food',
+  name: 'Modern Food',
   businessType: 'food',
   defaultTheme: {
-    primaryColor: '#1F2937',
-    accentColor: '#EC4899',
+    primaryColor: '#065F46',
+    accentColor: '#F59E0B',
   },
   pages: [
     {
@@ -18,100 +18,58 @@ export const foodTemplate: Template = {
           id: nanoid(),
           type: 'hero.basic',
           data: {
-            eyebrow: 'Self care essentials',
-            title: 'Beauty that feels as good as it looks.',
+            eyebrow: 'Freshly prepared',
+            title: 'Food you’ll look forward to ordering.',
             subtitle:
-              'Thoughtfully curated skincare and beauty products designed for everyday rituals.',
-            primaryCtaLabel: 'Shop bestsellers',
-            primaryCtaHref: '/products',
+              'Comforting favourites and seasonal specials made with care.',
+            primaryCtaLabel: 'View menu',
+            primaryCtaHref: '/menu',
           },
         },
         {
           id: nanoid(),
-          type: 'commerce.productGrid',
+          type: 'food.menuList',
           data: {
-            heading: 'Customer favourites',
-            subheading: 'Loved for a reason.',
-            collectionHandle: 'bestsellers',
-            layout: 'grid',
-            columns: 3,
+            heading: 'Popular dishes',
+            sections: [
+              {
+                name: 'Most ordered',
+                items: [
+                  { name: 'House special', price: '£12.00' },
+                  { name: 'Chef’s pasta', price: '£10.50' },
+                ],
+              },
+            ],
           },
         },
       ],
     },
     {
-      kind: 'products',
-      path: '/products',
+      kind: 'menu',
+      path: '/menu',
       layout: [
         {
           id: nanoid(),
-          type: 'hero.basic',
+          type: 'food.menuList',
           data: {
-            eyebrow: 'Shop',
-            title: 'Explore our full range.',
-            subtitle: 'Skincare, beauty and everyday essentials.',
-            primaryCtaLabel: '',
-            primaryCtaHref: '',
+            heading: 'Full menu',
+            sections: [
+              {
+                name: 'Starters',
+                items: [
+                  { name: 'Garlic bread', price: '£4.50' },
+                  { name: 'Soup of the day', price: '£5.00' },
+                ],
+              },
+              {
+                name: 'Mains',
+                items: [
+                  { name: 'Grilled chicken', price: '£13.00' },
+                  { name: 'Vegetarian curry', price: '£11.50' },
+                ],
+              },
+            ],
           },
-        },
-        {
-          id: nanoid(),
-          type: 'commerce.productGrid',
-          data: {
-            heading: '',
-            subheading: '',
-            collectionHandle: null,
-            layout: 'grid',
-            columns: 3,
-          },
-        },
-      ],
-    },
-    {
-      kind: 'product',
-      path: '/product/[handle]',
-      layout: [
-        {
-          id: nanoid(),
-          type: 'commerce.productHero',
-          data: {
-            showBreadcrumbs: true,
-            showBadges: true,
-          },
-        },
-        {
-          id: nanoid(),
-          type: 'commerce.productSpecs',
-          data: {
-            showDescription: true,
-            showDetailsList: true,
-          },
-        },
-        {
-          id: nanoid(),
-          type: 'commerce.relatedProducts',
-          data: {
-            heading: 'Pairs well with',
-          },
-        },
-      ],
-    },
-    {
-      kind: 'cart',
-      path: '/cart',
-      layout: [
-        {
-          id: nanoid(),
-          type: 'checkout.cartItems',
-          data: {
-            showThumbnails: true,
-            showLineTotals: true,
-          },
-        },
-        {
-          id: nanoid(),
-          type: 'checkout.cartSummary',
-          data: { showDiscountCode: true },
         },
       ],
     },
@@ -121,17 +79,19 @@ export const foodTemplate: Template = {
       layout: [
         {
           id: nanoid(),
+          type: 'checkout.deliveryTimeSelector',
+          data: {
+            heading: 'Choose delivery or collection time',
+          },
+        },
+        {
+          id: nanoid(),
           type: 'checkout.checkoutForm',
           data: {
             showShippingSection: true,
             showBillingSection: false,
             showNotesField: true,
           },
-        },
-        {
-          id: nanoid(),
-          type: 'checkout.cartSummary',
-          data: { showDiscountCode: false },
         },
       ],
     },

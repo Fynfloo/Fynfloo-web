@@ -3,11 +3,11 @@ import { nanoid } from 'nanoid';
 
 export const eventsTemplate: Template = {
   key: 'events-01',
-  name: 'Modern events',
+  name: 'Modern Events',
   businessType: 'events',
   defaultTheme: {
-    primaryColor: '#1F2937',
-    accentColor: '#EC4899',
+    primaryColor: '#111827',
+    accentColor: '#7C3AED',
   },
   pages: [
     {
@@ -18,100 +18,97 @@ export const eventsTemplate: Template = {
           id: nanoid(),
           type: 'hero.basic',
           data: {
-            eyebrow: 'Self care essentials',
-            title: 'Beauty that feels as good as it looks.',
+            eyebrow: 'Event styling & rentals',
+            title: 'Turn special moments into unforgettable experiences.',
             subtitle:
-              'Thoughtfully curated skincare and beauty products designed for everyday rituals.',
-            primaryCtaLabel: 'Shop bestsellers',
-            primaryCtaHref: '/products',
+              'From intimate gatherings to large celebrations, we design and deliver beautifully styled events.',
+            primaryCtaLabel: 'View services',
+            primaryCtaHref: '/services',
+            secondaryCtaLabel: 'See gallery',
+            secondaryCtaHref: '#gallery',
           },
         },
         {
           id: nanoid(),
-          type: 'commerce.productGrid',
+          type: 'events.servicesList',
           data: {
-            heading: 'Customer favourites',
-            subheading: 'Loved for a reason.',
-            collectionHandle: 'bestsellers',
-            layout: 'grid',
-            columns: 3,
+            heading: 'Our services',
+            subheading: 'Choose the level of support that fits your event.',
+            services: [
+              {
+                name: 'Full event styling',
+                description:
+                  'Complete design, setup and teardown for your event.',
+                priceLabel: 'From £800',
+                badge: 'Most popular',
+              },
+              {
+                name: 'Decor & props hire',
+                description: 'Hire selected pieces to elevate your own setup.',
+                priceLabel: 'From £200',
+              },
+              {
+                name: 'On-the-day coordination',
+                description:
+                  'We handle everything so you can enjoy your event.',
+                priceLabel: 'From £400',
+              },
+            ],
+          },
+        },
+        {
+          id: nanoid(),
+          type: 'events.gallery',
+          data: {
+            heading: 'Recent events',
+            images: [
+              { url: '/placeholder/600x600.png' },
+              { url: '/placeholder/600x600.png' },
+              { url: '/placeholder/600x600.png' },
+              { url: '/placeholder/600x600.png' },
+            ],
+          },
+        },
+        {
+          id: nanoid(),
+          type: 'events.enquiryCta',
+          data: {
+            heading: 'Let’s plan your event',
+            body: 'Tell us about your event and we’ll help bring your vision to life.',
+            primaryLabel: 'Make an enquiry',
+            primaryHref: '/checkout',
           },
         },
       ],
     },
     {
-      kind: 'products',
-      path: '/products',
+      kind: 'services',
+      path: '/services',
       layout: [
         {
           id: nanoid(),
-          type: 'hero.basic',
+          type: 'events.servicesList',
           data: {
-            eyebrow: 'Shop',
-            title: 'Explore our full range.',
-            subtitle: 'Skincare, beauty and everyday essentials.',
-            primaryCtaLabel: '',
-            primaryCtaHref: '',
+            heading: 'Services & packages',
+            subheading: 'Flexible options designed around your needs.',
+            services: [
+              {
+                name: 'Weddings',
+                description: 'Full styling and coordination for weddings.',
+                priceLabel: 'Custom pricing',
+              },
+              {
+                name: 'Corporate events',
+                description: 'Professional styling for launches and events.',
+                priceLabel: 'Custom pricing',
+              },
+              {
+                name: 'Private parties',
+                description: 'Birthdays, celebrations and intimate gatherings.',
+                priceLabel: 'From £500',
+              },
+            ],
           },
-        },
-        {
-          id: nanoid(),
-          type: 'commerce.productGrid',
-          data: {
-            heading: '',
-            subheading: '',
-            collectionHandle: null,
-            layout: 'grid',
-            columns: 3,
-          },
-        },
-      ],
-    },
-    {
-      kind: 'product',
-      path: '/product/[handle]',
-      layout: [
-        {
-          id: nanoid(),
-          type: 'commerce.productHero',
-          data: {
-            showBreadcrumbs: true,
-            showBadges: true,
-          },
-        },
-        {
-          id: nanoid(),
-          type: 'commerce.productSpecs',
-          data: {
-            showDescription: true,
-            showDetailsList: true,
-          },
-        },
-        {
-          id: nanoid(),
-          type: 'commerce.relatedProducts',
-          data: {
-            heading: 'Pairs well with',
-          },
-        },
-      ],
-    },
-    {
-      kind: 'cart',
-      path: '/cart',
-      layout: [
-        {
-          id: nanoid(),
-          type: 'checkout.cartItems',
-          data: {
-            showThumbnails: true,
-            showLineTotals: true,
-          },
-        },
-        {
-          id: nanoid(),
-          type: 'checkout.cartSummary',
-          data: { showDiscountCode: true },
         },
       ],
     },
@@ -121,17 +118,19 @@ export const eventsTemplate: Template = {
       layout: [
         {
           id: nanoid(),
-          type: 'checkout.checkoutForm',
+          type: 'checkout.eventDateSelector',
           data: {
-            showShippingSection: true,
-            showBillingSection: false,
-            showNotesField: true,
+            heading: 'Select your event date',
           },
         },
         {
           id: nanoid(),
-          type: 'checkout.cartSummary',
-          data: { showDiscountCode: false },
+          type: 'checkout.checkoutForm',
+          data: {
+            showShippingSection: false,
+            showBillingSection: false,
+            showNotesField: true,
+          },
         },
       ],
     },
