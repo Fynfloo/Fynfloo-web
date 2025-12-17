@@ -122,8 +122,6 @@ export default function StoreCreationFlow() {
     return () => clearTimeout(handle);
   }, [formData.subdomain]);
 
-  // const next = () => currentStep < 4 && setCurrentStep(currentStep + 1);
-  // const prev = () => currentStep > 1 && setCurrentStep(currentStep - 1);
 
   const canGoNextFromStep1 =
     formData.storeName.trim().length > 0 &&
