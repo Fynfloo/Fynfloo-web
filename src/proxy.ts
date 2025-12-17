@@ -50,8 +50,11 @@ export default async function proxy(request: NextRequest) {
     }
 
     // For the root path on a subdomain, rewrite to the subdomain page
+    // if (pathname === '/') {
+    //   return NextResponse.rewrite(new URL(`/s/${subdomain}`, request.url));
+    // }
     if (pathname === '/') {
-      return NextResponse.rewrite(new URL(`/s/${subdomain}`, request.url));
+      return NextResponse.rewrite(new URL(`/c/${subdomain}`, request.url));
     }
   }
   return NextResponse.next();
