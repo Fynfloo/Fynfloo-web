@@ -187,17 +187,3 @@ export type SectionDefaultContext = {
   businessType: BusinessType;
   pageKind: PageKind;
 };
-
-//text-with-Media.tsx
-//testimonials-basic.tsx
-//faq-accordion.tsx
-//product-hero.tsx
-//product-specs.tsx
-//related-products.tsx
-//menu-list.tsx
-//gallery.tsx
-//packages-pricing.tsx
-//enquiry-cta.tsx
-//delivery-time-selector.tsx
-//event-date-selector.tsx
-//get-page-layout.ts

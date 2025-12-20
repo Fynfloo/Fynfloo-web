@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -22,32 +22,338 @@ import {
 } from '@/components/ui/select';
 import { cn, rootDomain, protocol } from '@/lib/utils';
 
+import { TEMPLATE_REGISTRY } from '@/lib/templates/registry';
+import { BusinessType } from '@/lib/storefront/types';
+import { set } from 'zod';
+
+type Step = 1 | 2 | 3 | 4;
+
 const steps = [
-  { id: 1, title: 'Store Details' },
-  { id: 2, title: 'Choose Category' },
+  { id: 1, title: 'Store details' },
+  { id: 2, title: 'Business type' },
   { id: 3, title: 'Template' },
   { id: 4, title: 'Done' },
 ];
 
-const categories = [
-  'Fashion',
-  'Food & Drinks',
-  'Education',
-  'Technology',
-  'Beauty',
-  'General Store',
-];
+// export default function StoreCreationFlow() {
+//   const [currentStep, setCurrentStep] = useState(1);
+//   const [createdSlug, setCreatedSlug] = useState<string | null>(null);
 
-// TODO: Review the steps and their content
+//   const [formData, setFormData] = useState({
+//     storeName: '',
+//     subdomain: '',
+//     category: '',
+//     template: 'default',
+//   });
+
+//   const [subdomainStatus, setSubdomainStatus] = useState<{
+//     checking: boolean;
+//     available: boolean | null;
+//     error: string | null;
+//   }>({
+//     checking: false,
+//     available: null,
+//     error: null,
+//   });
+
+//   const [creating, setCreating] = useState(false);
+//   const [createError, setCreateError] = useState<string | null>(null);
+
+//   // Auto-generate subdomain from store name
+//   useEffect(() => {
+//     if (formData.storeName && !createdSlug) {
+//       const clean = formData.storeName
+//         .toLowerCase()
+//         .replace(/[^a-z0-9]+/g, '-')
+//         .replace(/^-+|-+$/g, '');
+//       setFormData((prev) => ({ ...prev, subdomain: clean }));
+//     }
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [formData.storeName]);
+
+//   // Check subdomain availability (debounced)
+//   useEffect(() => {
+//     if (!formData.subdomain) {
+//       setSubdomainStatus({ checking: false, available: null, error: null });
+//       return;
+//     }
+
+//     setSubdomainStatus((prev) => ({
+//       ...prev,
+//       checking: true,
+//       error: null,
+//     }));
+
+//     const handle = setTimeout(async () => {
+//       try {
+//         const res = await fetch(
+//           `/api/tenant/check-subdomain?subdomain=${encodeURIComponent(
+//             formData.subdomain
+//           )}`
+//         );
+//         const data = await res.json();
+//         if (!res.ok) {
+//           setSubdomainStatus({
+//             checking: false,
+//             available: null,
+//             error: data.error || 'Error checking subdomain',
+//           });
+//         } else {
+//           setSubdomainStatus({
+//             checking: false,
+//             available: data.available,
+//             error: null,
+//           });
+//         }
+//       } catch (err) {
+//         console.error(err);
+//         setSubdomainStatus({
+//           checking: false,
+//           available: null,
+//           error: 'Failed to check subdomain',
+//         });
+//       }
+//     }, 400);
+
+//     return () => clearTimeout(handle);
+//   }, [formData.subdomain]);
+
+//   const canGoNextFromStep1 =
+//     formData.storeName.trim().length > 0 &&
+//     formData.subdomain.trim().length > 0 &&
+//     subdomainStatus.available === true &&
+//     !subdomainStatus.checking;
+
+//   const next = async () => {
+//     setCreateError(null);
+
+//     if (currentStep === 1 && !canGoNextFromStep1) {
+//       return;
+//     }
+
+//     if (currentStep === 3) {
+//       // Create tenant
+//       try {
+//         setCreating(true);
+//         const res = await fetch('/api/tenant/create', {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify({
+//             storeName: formData.storeName,
+//             subdomain: formData.subdomain,
+//             category: formData.category,
+//             template: formData.template,
+//           }),
+//         });
+//         const data = await res.json();
+//         if (!res.ok || !data.ok) {
+//           setCreateError(data.error || 'Failed to create store');
+//           setCreating(false);
+//           return;
+//         }
+//         setCreatedSlug(data.slug);
+//         setCreating(false);
+//       } catch (err) {
+//         console.error(err);
+//         setCreateError('Unexpected error creating store');
+//         setCreating(false);
+//         return;
+//       }
+//     }
+
+//     if (currentStep < 4) {
+//       setCurrentStep((prev) => prev + 1);
+//     }
+//   };
+
+//   const prev = () => {
+//     currentStep > 1 && setCurrentStep((prev) => prev - 1);
+//   };
+
+//   // Render steps
+//   const renderStep = () => {
+//     switch (currentStep) {
+//       case 1:
+//         return (
+//           <div className="space-y-6">
+//             <div className="space-y-2">
+//               <Label>Store Name</Label>
+//               <Input
+//                 placeholder="e.g. Mike Fashion Hub"
+//                 value={formData.storeName}
+//                 onChange={(e) =>
+//                   setFormData({ ...formData, storeName: e.target.value })
+//                 }
+//               />
+//             </div>
+//             <div className="space-y-2">
+//               <Label>Subdomain</Label>
+//               <Input
+//                 placeholder="mike-fashion-hub"
+//                 value={formData.subdomain}
+//                 onChange={(e) =>
+//                   setFormData({ ...formData, subdomain: e.target.value })
+//                 }
+//               />
+
+//               <p className="mt-1 text-sm text-muted-foreground">
+//                 Your store will live at:
+//                 <span className="font-medium">
+//                   {' '}
+//                   {formData.subdomain || 'yourstore'}.{rootDomain}
+//                 </span>
+//               </p>
+
+//               <p className="mt-1 text-xs">
+//                 {subdomainStatus.checking && (
+//                   <span className="text-muted-foreground">
+//                     checking availability...
+//                   </span>
+//                 )}
+//                 {!subdomainStatus.checking &&
+//                   subdomainStatus.available === true && (
+//                     <span className="text-primary">Subdomain available</span>
+//                   )}
+//                 {!subdomainStatus.checking &&
+//                   subdomainStatus.available === false && (
+//                     <span className="text-destructive">
+//                       This subdomain is already taken
+//                     </span>
+//                   )}
+//                 {subdomainStatus.error && (
+//                   <span className="text-destructive">
+//                     {subdomainStatus.error}
+//                   </span>
+//                 )}
+//               </p>
+//             </div>
+//           </div>
+//         );
+
+//       case 2:
+//         return (
+//           <div className="space-y-2">
+//             <Label>Store Category</Label>
+//             <Select
+//               value={formData.category}
+//               onValueChange={(v) => setFormData({ ...formData, category: v })}
+//             >
+//               <SelectTrigger>
+//                 <SelectValue placeholder="Select a category" />
+//               </SelectTrigger>
+//               <SelectContent>
+//                 {categories.map((cat) => (
+//                   <SelectItem key={cat} value={cat}>
+//                     {cat}
+//                   </SelectItem>
+//                 ))}
+//               </SelectContent>
+//             </Select>
+//           </div>
+//         );
+
+//       case 3:
+//         return (
+//           <div className="space-y-6">
+//             <Label>Choose Template</Label>
+
+//             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+//               {['default', 'hero', 'minimal'].map((tpl) => (
+//                 <Card
+//                   key={tpl}
+//                   onClick={() => setFormData({ ...formData, template: tpl })}
+//                   className={`cursor-pointer border p-4 text-center transition ${
+//                     formData.template === tpl ? 'ring-2 ring-ring' : ''
+//                   }`}
+//                 >
+//                   <LayoutDashboard className="mx-auto mb-2" />
+//                   <p className="capitalize">{tpl} template</p>
+//                 </Card>
+//               ))}
+//             </div>
+//             {createError && (
+//               <p className="text-sm text-destructive">{createError}</p>
+//             )}
+//           </div>
+//         );
+
+//       case 4:
+//         return (
+//           <div className="space-y-6 text-center py-10">
+//             <Check className="h-12 w-12 mx-auto text-primary" />
+//             <h2 className="text-xl font-semibold">Store Created!</h2>
+//             <p className="text-muted-foreground">
+//               Your store has been set up successfully.
+//             </p>
+//             {createdSlug && (
+//               <Button asChild className="mt-4">
+//                 <a
+//                   href={`${protocol}://${createdSlug}.${rootDomain}/dashboard`}
+//                 >
+//                   <Store className="mr-2 h-4 w-4" />
+//                   Go to Dashboard
+//                 </a>
+//               </Button>
+//             )}
+//           </div>
+//         );
+//     }
+//   };
+
+//   return (
+//     <div className="w-full p-6">
+//       {/* Step indicators */}
+//       <div className="mb-6 flex items-center justify-between">
+//         {steps.map((step) => (
+//           <div key={step.id} className="flex-1 text-center">
+//             <div
+//               className={cn(
+//                 'mx-auto flex h-8 w-8 items-center justify-center rounded-full text-sm',
+//                 currentStep >= step.id
+//                   ? 'bg-primary text-primary-foreground'
+//                   : 'bg-secondary text-secondary-foreground'
+//               )}
+//             >
+//               {step.id}
+//             </div>
+//             <p className="mt-1 text-xs">{step.title}</p>
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* Step content */}
+//       <Card>
+//         <CardContent className="p-6">{renderStep()}</CardContent>
+//       </Card>
+
+//       {/* Navigation */}
+//       <div className="mt-6 flex justify-between">
+//         <Button variant="outline" onClick={prev} disabled={currentStep === 1}>
+//           <ChevronLeft className="h-4 w-4" /> Previous
+//         </Button>
+
+//         {currentStep < 4 && (
+//           <Button onClick={next}>
+//             Continue <ChevronRight className="h-4 w-4" />
+//           </Button>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
 export default function StoreCreationFlow() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [step, setStep] = useState<Step>(1);
+  const [creating, setCreating] = useState<boolean>(false);
   const [createdSlug, setCreatedSlug] = useState<string | null>(null);
+  const [createdStoreId, setCreatedStoreId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
+  const [form, setForm] = useState({
     storeName: '',
     subdomain: '',
-    category: '',
-    template: 'default',
+    businessType: '' as BusinessType | '',
+    templateKey: '',
   });
 
   const [subdomainStatus, setSubdomainStatus] = useState<{
@@ -60,286 +366,319 @@ export default function StoreCreationFlow() {
     error: null,
   });
 
-  const [creating, setCreating] = useState(false);
-  const [createError, setCreateError] = useState<string | null>(null);
-
-  // Auto-generate subdomain from store name
+  /* --------------------------------------------
+   Auto-generate slug
+  --------------------------------------------- */
   useEffect(() => {
-    if (formData.storeName && !createdSlug) {
-      const clean = formData.storeName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-      setFormData((prev) => ({ ...prev, subdomain: clean }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.storeName]);
+    if (createdSlug) return;
 
-  // Check subdomain availability (debounced)
-  useEffect(() => {
-    if (!formData.subdomain) {
-      setSubdomainStatus({ checking: false, available: null, error: null });
+    const rawName = form.storeName.trim();
+
+    if (!rawName) {
+      setForm((f) => ({ ...f, subdomain: '' }));
       return;
     }
 
-    setSubdomainStatus((prev) => ({
-      ...prev,
-      checking: true,
-      error: null,
-    }));
+    const slug = rawName
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
 
-    const handle = setTimeout(async () => {
+    setForm((f) => ({ ...f, subdomain: slug }));
+  }, [form.storeName, createdSlug]);
+
+  /* --------------------------------------------
+   Check subdomain availability
+  --------------------------------------------- */
+
+  useEffect(() => {
+    if (!form.subdomain) {
+      setSubdomainStatus({ checking: false, available: null, error: null });
+      return;
+    }
+    setSubdomainStatus({
+      checking: true,
+      available: null,
+      error: null,
+    });
+
+    const t = setTimeout(async () => {
       try {
         const res = await fetch(
           `/api/tenant/check-subdomain?subdomain=${encodeURIComponent(
-            formData.subdomain
+            form.subdomain
           )}`
         );
         const data = await res.json();
-        if (!res.ok) {
-          setSubdomainStatus({
-            checking: false,
-            available: null,
-            error: data.error || 'Error checking subdomain',
-          });
-        } else {
-          setSubdomainStatus({
-            checking: false,
-            available: data.available,
-            error: null,
-          });
-        }
-      } catch (err) {
-        console.error(err);
+        setSubdomainStatus({
+          checking: false,
+          available: !!data.available,
+          error: res.ok ? null : data.error,
+        });
+      } catch {
         setSubdomainStatus({
           checking: false,
           available: null,
-          error: 'Failed to check subdomain',
+          error: 'Error checking subdomain',
         });
       }
     }, 400);
 
-    return () => clearTimeout(handle);
-  }, [formData.subdomain]);
+    return () => clearTimeout(t);
+  }, [form.subdomain]);
 
+  /* --------------------------------------------
+   Filter templates (HARD FILTER)
+  --------------------------------------------- */
+  const availableTemplates = useMemo(() => {
+    if (!form.businessType) return [];
+    return TEMPLATE_REGISTRY.filter(
+      (t) => t.businessType === form.businessType
+    );
+  }, [form.businessType]);
 
-  const canGoNextFromStep1 =
-    formData.storeName.trim().length > 0 &&
-    formData.subdomain.trim().length > 0 &&
+  /* --------------------------------------------
+   Step validation guards
+  --------------------------------------------- */
+
+  const canGoStep1 =
+    form.storeName.trim() &&
+    form.subdomain.trim() &&
     subdomainStatus.available === true &&
     !subdomainStatus.checking;
 
-  const next = async () => {
-    setCreateError(null);
+  const canGoStep2 = !!form.businessType;
+  const canGoStep3 = !!form.templateKey;
 
-    if (currentStep === 1 && !canGoNextFromStep1) {
+  const canContinue =
+    (step === 1 && canGoStep1) ||
+    (step === 2 && canGoStep2) ||
+    (step === 3 && canGoStep3);
+
+  /* --------------------------------------------
+   Navigation
+  --------------------------------------------- */
+
+  const next = async () => {
+    setError(null);
+
+    if (
+      (step === 1 && !canGoStep1) ||
+      (step === 2 && !canGoStep2) ||
+      (step === 3 && !canGoStep3)
+    ) {
       return;
     }
 
-    if (currentStep === 3) {
-      // Create tenant
+    if (step === 3) {
       try {
         setCreating(true);
         const res = await fetch('/api/tenant/create', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            storeName: formData.storeName,
-            subdomain: formData.subdomain,
-            category: formData.category,
-            template: formData.template,
+            storeName: form.storeName,
+            subdomain: form.subdomain,
+            businessType: form.businessType,
+            templateKey: form.templateKey,
           }),
         });
+
         const data = await res.json();
         if (!res.ok || !data.ok) {
-          setCreateError(data.error || 'Failed to create store');
+          setError(data.error || 'Error creating store');
           setCreating(false);
           return;
         }
         setCreatedSlug(data.slug);
+        setCreatedStoreId(data.storeId);
         setCreating(false);
-      } catch (err) {
-        console.error(err);
-        setCreateError('Unexpected error creating store');
+        setStep(4);
+        return;
+      } catch {
+        setError('Unexpected error creating store');
         setCreating(false);
         return;
       }
     }
-
-    if (currentStep < 4) {
-      setCurrentStep((prev) => prev + 1);
-    }
+    setStep((s) => (s + 1) as Step);
   };
 
-  const prev = () => {
-    currentStep > 1 && setCurrentStep((prev) => prev - 1);
-  };
+  const prev = () => step > 1 && setStep((s) => (s - 1) as Step);
 
-  // Render steps
-  const renderStep = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label>Store Name</Label>
-              <Input
-                placeholder="e.g. Mike Fashion Hub"
-                value={formData.storeName}
-                onChange={(e) =>
-                  setFormData({ ...formData, storeName: e.target.value })
-                }
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Subdomain</Label>
-              <Input
-                placeholder="mike-fashion-hub"
-                value={formData.subdomain}
-                onChange={(e) =>
-                  setFormData({ ...formData, subdomain: e.target.value })
-                }
-              />
-
-              <p className="mt-1 text-sm text-muted-foreground">
-                Your store will live at:
-                <span className="font-medium">
-                  {' '}
-                  {formData.subdomain || 'yourstore'}.{rootDomain}
-                </span>
-              </p>
-
-              <p className="mt-1 text-xs">
-                {subdomainStatus.checking && (
-                  <span className="text-muted-foreground">
-                    checking availability...
-                  </span>
-                )}
-                {!subdomainStatus.checking &&
-                  subdomainStatus.available === true && (
-                    <span className="text-primary">Subdomain available</span>
-                  )}
-                {!subdomainStatus.checking &&
-                  subdomainStatus.available === false && (
-                    <span className="text-destructive">
-                      This subdomain is already taken
-                    </span>
-                  )}
-                {subdomainStatus.error && (
-                  <span className="text-destructive">
-                    {subdomainStatus.error}
-                  </span>
-                )}
-              </p>
-            </div>
-          </div>
-        );
-
-      case 2:
-        return (
-          <div className="space-y-2">
-            <Label>Store Category</Label>
-            <Select
-              value={formData.category}
-              onValueChange={(v) => setFormData({ ...formData, category: v })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem key={cat} value={cat}>
-                    {cat}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="space-y-6">
-            <Label>Choose Template</Label>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {['default', 'hero', 'minimal'].map((tpl) => (
-                <Card
-                  key={tpl}
-                  onClick={() => setFormData({ ...formData, template: tpl })}
-                  className={`cursor-pointer border p-4 text-center transition ${
-                    formData.template === tpl ? 'ring-2 ring-ring' : ''
-                  }`}
-                >
-                  <LayoutDashboard className="mx-auto mb-2" />
-                  <p className="capitalize">{tpl} template</p>
-                </Card>
-              ))}
-            </div>
-            {createError && (
-              <p className="text-sm text-destructive">{createError}</p>
-            )}
-          </div>
-        );
-
-      case 4:
-        return (
-          <div className="space-y-6 text-center py-10">
-            <Check className="h-12 w-12 mx-auto text-primary" />
-            <h2 className="text-xl font-semibold">Store Created!</h2>
-            <p className="text-muted-foreground">
-              Your store has been set up successfully.
-            </p>
-            {createdSlug && (
-              <Button asChild className="mt-4">
-                <a
-                  href={`${protocol}://${createdSlug}.${rootDomain}/dashboard`}
-                >
-                  <Store className="mr-2 h-4 w-4" />
-                  Go to Dashboard
-                </a>
-              </Button>
-            )}
-          </div>
-        );
-    }
-  };
+  /* --------------------------------------------
+   Render
+  --------------------------------------------- */
 
   return (
-    <div className="w-full p-6">
+    <div className="w-full space-y-6">
       {/* Step indicators */}
-      <div className="mb-6 flex items-center justify-between">
-        {steps.map((step) => (
-          <div key={step.id} className="flex-1 text-center">
+      <div className="flex justify-between">
+        {steps.map((s) => (
+          <div key={s.id} className="flex-1 text-center">
             <div
               className={cn(
                 'mx-auto flex h-8 w-8 items-center justify-center rounded-full text-sm',
-                currentStep >= step.id
+                step >= s.id
                   ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary text-secondary-foreground'
+                  : 'bg-secondary'
               )}
             >
-              {step.id}
+              {s.id}
             </div>
-            <p className="mt-1 text-xs">{step.title}</p>
+            <p className="mt-1 text-xs">{s.title}</p>
           </div>
         ))}
       </div>
-
-      {/* Step content */}
       <Card>
-        <CardContent className="p-6">{renderStep()}</CardContent>
-      </Card>
+        <CardContent className="p-6 space-y-6">
+          {step === 1 && (
+            <div className="space-y-6">
+              {/* Store name */}
+              <div className="space-y-1">
+                <Label>Store name</Label>
+                <Input
+                  placeholder="e.g. Mike Fashion Hub"
+                  value={form.storeName}
+                  onChange={(e) =>
+                    setForm((f) => ({
+                      ...f,
+                      storeName: e.target.value,
+                    }))
+                  }
+                />
+                <p className="text-xs text-muted-foreground">
+                  This is the name customers will see.
+                </p>
+              </div>
+              {/* Derived subdomain */}
+              <div className="space-y-1">
+                <Label>Your store address</Label>
+                <div className="flex items-center justify-between rounded-md border px-3 py-2 text-sm bg-muted">
+                  <span className="font-mono">
+                    {form.subdomain || 'your-store'}.{rootDomain}
+                  </span>
+                  {subdomainStatus.checking && (
+                    <span className="text-muted-foreground text-xs">
+                      Checking...
+                    </span>
+                  )}
+                  {subdomainStatus.available === true && (
+                    <span className="text-primary text-xs">Available</span>
+                  )}
+                  {subdomainStatus.available === false && (
+                    <span className="text-destructive text-xs">
+                      Unavailable
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  This address is generated automatically and can’t include
+                  spaces or symbols.
+                </p>
+              </div>
+            </div>
+          )}
+          {step === 2 && (
+            <div>
+              <Label>Business Type</Label>
+              <Select
+                value={form.businessType}
+                onValueChange={(v) =>
+                  setForm({
+                    ...form,
+                    businessType: v as BusinessType,
+                    templateKey: '',
+                  })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select business type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="fashion">Fashion</SelectItem>
+                  <SelectItem value="beauty">Beauty</SelectItem>
+                  <SelectItem value="food">Food</SelectItem>
+                  <SelectItem value="events">Events</SelectItem>
+                  <SelectItem value="general">General</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
-      {/* Navigation */}
-      <div className="mt-6 flex justify-between">
-        <Button variant="outline" onClick={prev} disabled={currentStep === 1}>
-          <ChevronLeft className="h-4 w-4" /> Previous
+          {step === 3 && (
+            <>
+              <Label>Choose Template</Label>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {availableTemplates.map((tpl) => (
+                  <Card
+                    key={tpl.key}
+                    onClick={() => setForm({ ...form, templateKey: tpl.key })}
+                    className={cn(
+                      'cursor-pointer p-4 transition',
+                      form.templateKey === tpl.key && 'ring-2 ring-primary'
+                    )}
+                  >
+                    <LayoutDashboard className=" mb-2" />
+                    <p className="font-medium">{tpl.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {tpl.description}
+                    </p>
+                  </Card>
+                ))}
+              </div>
+            </>
+          )}
+          {step === 4 && (
+            <div className="text-center space-y-4 py-6">
+              <Check className="h-12 w-12 mx-auto text-primary" />
+              <h2 className="text-xl font-semibold">Your store is ready</h2>
+              <p className="text-sm text-muted-foreground">
+                You can manage your store, customise pages, and add products
+                from your dashboard.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button asChild>
+                  <a href={`/dashboard/stores/${createdStoreId}`}>
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    Go to Dashboard
+                  </a>
+                </Button>
+                {createdSlug && (
+                  <Button variant="outline" asChild>
+                    <a
+                      href={`${protocol}://${createdSlug}.${rootDomain}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Globe className="mr-2 h-4 w-4" />
+                      View Store
+                    </a>
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+          {error && (
+            <p className="text-sm text-destructive text-center">{error}</p>
+          )}
+        </CardContent>
+      </Card>
+      <div className="flex justify-between">
+        <Button variant="outline" onClick={prev} disabled={step === 1}>
+          <ChevronLeft className="h-4 w-4" /> Back
         </Button>
 
-        {currentStep < 4 && (
-          <Button onClick={next}>
-            Continue <ChevronRight className="h-4 w-4" />
+        {step < 4 && (
+          <Button
+            onClick={next}
+            disabled={!canContinue || creating}
+            className={cn(
+              'transition',
+              (!canContinue || creating) && 'cursor-not-allowed opacity-50'
+            )}
+          >
+            Continue <ChevronRight className="h-4 w-4 ml-1" />
           </Button>
         )}
       </div>
