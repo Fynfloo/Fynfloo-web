@@ -23,7 +23,7 @@ import { cn, rootDomain, protocol } from '@/lib/utils';
 
 import { TEMPLATE_REGISTRY } from '@/lib/templates/registry';
 import { BusinessType } from '@/lib/storefront/types';
-import { set } from 'zod';
+import Link from 'next/link';
 
 type Step = 1 | 2 | 3 | 4;
 
@@ -183,7 +183,7 @@ export default function StoreCreationFlow() {
           return;
         }
         setCreatedSlug(data.slug);
-        setCreatedStoreId(data.storeId);
+        setCreatedStoreId(data.tenantId);
         setCreating(false);
         setStep(4);
         return;
@@ -231,7 +231,6 @@ export default function StoreCreationFlow() {
                 <Label>Store name</Label>
                 <Input
                   placeholder="e.g. Mike Fashion Hub"
-                  className="w-full md:w-[50%]"
                   value={form.storeName}
                   onChange={(e) =>
                     setForm((f) => ({
@@ -247,7 +246,7 @@ export default function StoreCreationFlow() {
               {/* Derived subdomain */}
               <div className="space-y-1">
                 <Label>Your store address</Label>
-                <div className="flex items-center justify-between rounded-md border px-3 py-2 text-sm bg-muted w-full md:w-[50%]">
+                <div className="flex items-center justify-between rounded-md border px-3 py-2 text-sm bg-muted">
                   <span className="font-mono">
                     {form.subdomain || 'your-store'}.{rootDomain}
                   </span>
@@ -332,10 +331,10 @@ export default function StoreCreationFlow() {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button asChild>
-                  <a href={`/dashboard/stores/${createdStoreId}`}>
+                  <Link href={`/dashboard/stores/${createdStoreId}`}>
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     Go to Dashboard
-                  </a>
+                  </Link>
                 </Button>
                 {createdSlug && (
                   <Button variant="outline" asChild>
