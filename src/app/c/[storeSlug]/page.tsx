@@ -22,7 +22,7 @@ export default async function StoreHome({
   const [allProducts, ...collectionResults] = await Promise.all([
     fetchProductsForListing(ctx.store.id),
     ...collectionHandles.map((handle) =>
-      fetchProductsForListing(ctx.store.id, { collectionHandle: handle })
+      fetchProductsForListing(ctx.store.id, { collection: handle })
     ),
   ]);
 
