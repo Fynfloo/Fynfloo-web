@@ -53,9 +53,16 @@ export default async function proxy(request: NextRequest) {
     // if (pathname === '/') {
     //   return NextResponse.rewrite(new URL(`/s/${subdomain}`, request.url));
     // }
-    if (pathname === '/') {
-      return NextResponse.rewrite(new URL(`/c/${subdomain}`, request.url));
+
+    // Prevent infinite rewrites
+    if (pathname.startsWith('/c/')) {
+      return NextResponse.next();
     }
+
+    // Rewrite All tenant routes
+    return NextResponse.rewrite(
+      new URL(`/c/${subdomain}${pathname}`, request.url)
+    );
   }
   return NextResponse.next();
 }
