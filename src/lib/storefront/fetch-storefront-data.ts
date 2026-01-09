@@ -56,6 +56,7 @@ export async function fetchCart(
   cookieHeader?: string | null
 ): Promise<Cart> {
   const res = await fetch(`${apiUrl}/api/storefront/stores/${storeId}/cart`, {
+    credentials: 'include',
     headers: cookieHeader ? { Cookie: cookieHeader } : undefined,
     cache: 'no-store',
   });
