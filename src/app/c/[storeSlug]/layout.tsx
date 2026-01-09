@@ -3,6 +3,9 @@ import { loadStoreContext } from '@/lib/storefront/load-store-context';
 import { StoreProvider } from '@/lib/storefront/store-context';
 import { ThemeProvider } from '@/lib/storefront/theme-provider';
 import { ReactNode } from 'react';
+import { cookies } from 'next/headers';
+import { fetchCart } from '@/lib/storefront/fetch-storefront-data';
+import { CartProvider } from '@/lib/storefront/cart-context';
 
 export default async function StorefrontLayout({
   children,
@@ -20,10 +23,20 @@ export default async function StorefrontLayout({
     return <div>Store not found</div>;
   }
 
+  const cookieStore = await cookies();
+  const cookieHeader = cookieStore
+    .getAll()
+    .map((c) => `${c.name}=${c.value}`)
+    .join('; ');
+
+  const cart = await fetchCart(ctx.store.id, cookieHeader);
+
   return (
     <ThemeProvider theme={ctx.theme}>
       <StoreProvider value={{ store: ctx.store, theme: ctx.theme }}>
-        <LayoutShell store={ctx.store}>{children}</LayoutShell>
+        <CartProvider initialCart={cart}>
+          <LayoutShell store={ctx.store}>{children}</LayoutShell>
+        </CartProvider>
       </StoreProvider>
     </ThemeProvider>
   );

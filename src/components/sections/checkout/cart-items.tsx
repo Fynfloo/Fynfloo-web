@@ -11,9 +11,9 @@ import { useCart } from '@/lib/storefront/cart-context';
 type Props = { data: CartItemsData };
 
 function CartItems({ data }: Props) {
-  const cart = useCart();
+  const { cart } = useCart();
 
-  if (!cart.items.length) {
+  if (!cart?.items.length) {
     return (
       <SectionShell>
         <p className="text-sm text-muted-foreground">Your cart is empty.</p>

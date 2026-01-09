@@ -1,18 +1,28 @@
 'use client';
 
+import React, { useState } from 'react';
 import { createContext, useContext } from 'react';
 import type { Cart } from '@/lib/storefront/types';
 
-const CartContext = createContext<Cart | null>(null);
+const CartContext = createContext<{
+  cart: Cart | null;
+  setCart: (c: Cart) => void;
+} | null>(null);
 
 export function CartProvider({
-  cart,
+  initialCart,
   children,
 }: {
-  cart: Cart;
+  initialCart: Cart | null;
   children: React.ReactNode;
 }) {
-  return <CartContext.Provider value={cart}>{children}</CartContext.Provider>;
+  const [cart, setCart] = useState<Cart | null>(initialCart);
+
+  return (
+    <CartContext.Provider value={{ cart, setCart }}>
+      {children}
+    </CartContext.Provider>
+  );
 }
 
 export function useCart() {

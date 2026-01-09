@@ -26,7 +26,7 @@ export default async function CheckoutPage({
   const cart = await fetchCart(ctx.store.id, cookieHeader);
 
   return (
-    <CartProvider cart={cart}>
+    <CartProvider initialCart={cart}>
       <RenderPage layout={ctx.layout} />
     </CartProvider>
   );
