@@ -16,17 +16,5 @@ export default async function CartPage({
     notFound();
   }
 
-  const cookie = await cookies();
-  const cookieHeader = cookie
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ');
-
-  const cart = await fetchCart(ctx.store.id, cookieHeader);
-
-  return (
-    <CartProvider initialCart={cart}>
-      <RenderPage layout={ctx.layout} />
-    </CartProvider>
-  );
+  return <RenderPage layout={ctx.layout} />;
 }

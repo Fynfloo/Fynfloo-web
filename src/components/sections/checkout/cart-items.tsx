@@ -47,8 +47,8 @@ function CartItems({ data }: Props) {
             </div>
             <div className="text-xs">
               {data.showLineTotals
-                ? `£${item.totalPrice.toFixed(2)}`
-                : `£${item.unitPrice.toFixed(2)}`}
+                ? `£${item.totalPrice?.toFixed(2)}`
+                : `£${item.unitPrice?.toFixed(2)}`}
             </div>
           </div>
         ))}
