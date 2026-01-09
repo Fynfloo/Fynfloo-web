@@ -60,7 +60,29 @@ export async function fetchCart(
     cache: 'no-store',
   });
   if (!res.ok) {
-    return { items: [], subtotal: 0, total: 0 };
+    return { id: '', items: [], subtotal: 0, total: 0 };
   }
+  return res.json();
+}
+
+export async function addToCart(
+  storeId: string,
+  productId: string,
+  quantity = 1
+) {
+  const res = await fetch(
+    `${apiUrl}/api/storefront/stores/${storeId}/cart/items`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ productId, quantity }),
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error('Failed to add item to cart');
+  }
+
   return res.json();
 }

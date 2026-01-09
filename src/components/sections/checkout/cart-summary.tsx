@@ -9,22 +9,22 @@ import { useCart } from '@/lib/storefront/cart-context';
 type Props = { data: CartSummaryData };
 
 function CartSummary({ data }: Props) {
-  const cart = useCart();
+  const { cart } = useCart();
 
   return (
     <SectionShell variant="muted" className="mt-4">
       <div className="space-y-3 text-sm">
         <div className="flex justify-between">
           <span>Subtotal</span>
-          <span>£{cart.subtotal.toFixed(2)}</span>
+          <span>£{cart?.subtotal.toFixed(2)}</span>
         </div>
-        {cart.shipping != null && (
+        {cart?.shipping != null && (
           <div className="flex justify-between">
             <span>Shipping</span>
             <span>£{cart.shipping.toFixed(2)}</span>
           </div>
         )}
-        {cart.tax != null && (
+        {cart?.tax != null && (
           <div className="flex justify-between">
             <span>Tax</span>
             <span>£{cart.tax.toFixed(2)}</span>
@@ -32,7 +32,7 @@ function CartSummary({ data }: Props) {
         )}
         <div className="flex justify-between pt-2 border-t border-black/10">
           <span className="font-medium">Total</span>
-          <span className="font-medium">£{cart.total.toFixed(2)}</span>
+          <span className="font-medium">£{cart?.total.toFixed(2)}</span>
         </div>
         {data.showDiscountCode && (
           <div className="pt-2">

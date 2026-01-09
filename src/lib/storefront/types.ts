@@ -58,6 +58,7 @@ export type CartItem = {
 };
 
 export type Cart = {
+  id: string;
   items: CartItem[];
   subtotal: number;
   shipping?: number | null;
