@@ -1,5 +1,6 @@
 import type { Store, StorePage, Product, Cart } from './types';
 import { apiUrl } from '../utils';
+import { getBaseUrl } from './get-base-url';
 
 export async function fetchStoreBySlug(slug: string): Promise<Store | null> {
   const res = await fetch(`${apiUrl}/api/storefront/stores/${slug}`, {
@@ -51,35 +52,13 @@ export async function fetchProductsForListing(
   return res.json();
 }
 
-export async function fetchCart(
-  storeId: string,
-  cookieHeader?: string | null
-): Promise<Cart> {
-  const res = await fetch(`${apiUrl}/api/storefront/stores/${storeId}/cart`, {
+export async function addToCart(productId: string, quantity = 1) {
+  const res = await fetch('/api/cart/items', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    headers: cookieHeader ? { Cookie: cookieHeader } : undefined,
-    cache: 'no-store',
+    body: JSON.stringify({ productId, quantity }),
   });
-  if (!res.ok) {
-    return { id: '', items: [], subtotal: 0, total: 0 };
-  }
-  return res.json();
-}
-
-export async function addToCart(
-  storeId: string,
-  productId: string,
-  quantity = 1
-) {
-  const res = await fetch(
-    `${apiUrl}/api/storefront/stores/${storeId}/cart/items`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ productId, quantity }),
-    }
-  );
 
   if (!res.ok) {
     throw new Error('Failed to add item to cart');

@@ -23,7 +23,7 @@ function ProductHero(_: Props) {
   async function handleAddToCart() {
     try {
       setLoading(true);
-      const cart = await addToCart(store.id, product.id, 1);
+      const cart = await addToCart(product.id, 1);
       setCart(cart);
     } catch (err) {
       alert('Failed to add to cart. Please try again.');

@@ -1,7 +1,6 @@
 import { loadStoreContext } from '@/lib/storefront/load-store-context';
 import { notFound } from 'next/navigation';
-import { cookies } from 'next/headers';
-import { fetchCart } from '@/lib/storefront/fetch-storefront-data';
+import { fetchCart } from '@/lib/storefront/cart.server';
 import { CartProvider } from '@/lib/storefront/cart-context';
 import { RenderPage } from '@/components/storefront/render-page';
 
@@ -17,13 +16,7 @@ export default async function CheckoutPage({
     notFound();
   }
 
-  const cookie = await cookies();
-  const cookieHeader = cookie
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ');
-
-  const cart = await fetchCart(ctx.store.id, cookieHeader);
+  const cart = await fetchCart();
 
   return (
     <CartProvider initialCart={cart}>
