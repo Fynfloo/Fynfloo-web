@@ -9,8 +9,8 @@ import type {
   SectionDefaultContext,
 } from '@/lib/sections/types';
 import { useStoreContext } from '@/lib/storefront/store-context';
-import { addToCart } from '@/lib/storefront/fetch-storefront-data';
 import { useCart } from '@/lib/storefront/cart-context';
+import { addToCartClient } from '@/lib/storefront/fetch-storefront-data';
 
 type Props = { data: ProductHeroData };
 
@@ -23,7 +23,7 @@ function ProductHero(_: Props) {
   async function handleAddToCart() {
     try {
       setLoading(true);
-      const cart = await addToCart(product.id, 1);
+      const cart = await addToCartClient(product.id, 1);
       setCart(cart);
     } catch (err) {
       alert('Failed to add to cart. Please try again.');

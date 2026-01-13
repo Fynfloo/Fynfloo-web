@@ -3,8 +3,8 @@ import { loadStoreContext } from '@/lib/storefront/load-store-context';
 import { StoreProvider } from '@/lib/storefront/store-context';
 import { ThemeProvider } from '@/lib/storefront/theme-provider';
 import { ReactNode } from 'react';
-import { fetchCart } from '@/lib/storefront/cart.server';
 import { CartProvider } from '@/lib/storefront/cart-context';
+import { fetchCartServer } from '@/lib/storefront/cartApi.server';
 
 export default async function StorefrontLayout({
   children,
@@ -22,7 +22,7 @@ export default async function StorefrontLayout({
     return <div>Store not found</div>;
   }
 
-  const cart = await fetchCart();
+  const cart = await fetchCartServer(storeSlug);
 
   return (
     <ThemeProvider theme={ctx.theme}>
