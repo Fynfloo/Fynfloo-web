@@ -4,10 +4,7 @@ import React, { useState } from 'react';
 import { SectionShell } from '../core/section-shell';
 import { registerSection } from '@/lib/sections/registry';
 import { useProduct } from '@/lib/storefront/product-context';
-import type {
-  ProductHeroData,
-  SectionDefaultContext,
-} from '@/lib/sections/types';
+import type { ProductHeroData } from '@/lib/sections/types';
 import { useStoreContext } from '@/lib/storefront/store-context';
 import { useCart } from '@/lib/storefront/cart-context';
 import { addToCartClient } from '@/lib/storefront/fetch-storefront-data';

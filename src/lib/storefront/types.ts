@@ -50,11 +50,13 @@ export type CartItem = {
   id: string;
   productId: string;
   name: string;
+  image?: {
+    url: string;
+    alt?: string;
+  };
+  price: number; // in pounds
   quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-  image?: { url: string; alt?: string };
-  meta?: Record<string, unknown>;
+  lineTotal: number; // price * quantity
 };
 
 export type Cart = {
