@@ -2,18 +2,16 @@
 
 import { SectionShell } from '../core/section-shell';
 import { registerSection } from '@/lib/sections/registry';
-import type {
-  CartItemsData,
-  SectionDefaultContext,
-} from '@/lib/sections/types';
+import type { CartItemsData } from '@/lib/sections/types';
 import { useCart } from '@/lib/storefront/cart-context';
 
 type Props = { data: CartItemsData };
 
 function CartItems({ data }: Props) {
   const { cart } = useCart();
+  console.log('CartItems cart:', cart);
 
-  if (!cart?.items.length) {
+  if (!cart || cart.items.length === 0) {
     return (
       <SectionShell>
         <p className="text-sm text-muted-foreground">Your cart is empty.</p>
@@ -34,7 +32,7 @@ function CartItems({ data }: Props) {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={item.image.url}
-                  alt={item.image.alt || item.name}
+                  alt={item.image.alt ?? item.name}
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -47,8 +45,8 @@ function CartItems({ data }: Props) {
             </div>
             <div className="text-xs">
               {data.showLineTotals
-                ? `£${item.totalPrice?.toFixed(2)}`
-                : `£${item.unitPrice?.toFixed(2)}`}
+                ? `£${item.lineTotal.toFixed(2)}`
+                : `£${item.price?.toFixed(2)}`}
             </div>
           </div>
         ))}
