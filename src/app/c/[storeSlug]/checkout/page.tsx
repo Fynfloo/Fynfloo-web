@@ -1,8 +1,8 @@
 import { loadStoreContext } from '@/lib/storefront/load-store-context';
 import { notFound } from 'next/navigation';
-import { fetchCart } from '@/lib/storefront/cart.server';
 import { CartProvider } from '@/lib/storefront/cart-context';
 import { RenderPage } from '@/components/storefront/render-page';
+import { fetchCartServer } from '@/lib/storefront/cartApi.server';
 
 export default async function CheckoutPage({
   params,
@@ -16,7 +16,7 @@ export default async function CheckoutPage({
     notFound();
   }
 
-  const cart = await fetchCart();
+  const cart = await fetchCartServer(storeSlug);
 
   return (
     <CartProvider initialCart={cart}>
