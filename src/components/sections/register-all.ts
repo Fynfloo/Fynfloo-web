@@ -20,6 +20,7 @@ import './checkout/cart-summary';
 import './checkout/checkout-form';
 import './checkout/delivery-time-selector';
 import './checkout/event-date-selector';
+import './checkout/checkout-summary';
 
 // CORE
 import './core/section-heading';
