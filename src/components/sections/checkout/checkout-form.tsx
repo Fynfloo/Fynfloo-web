@@ -13,7 +13,10 @@ function CheckoutForm({ data }: Props) {
   // TODO: Wire to real checkout submit handler
   return (
     <SectionShell>
-      <form className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)] items-start">
+      <form
+        id="checkout-form"
+        className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)] items-start"
+      >
         <div className="space-y-4">
           <div className="space-y-2">
             <h2 className="text-sm font-medium">Contact details</h2>
