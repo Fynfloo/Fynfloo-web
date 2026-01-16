@@ -18,7 +18,8 @@ export type SectionType =
   | 'checkout.cartSummary'
   | 'checkout.checkoutForm'
   | 'checkout.deliveryTimeSelector'
-  | 'checkout.eventDateSelector';
+  | 'checkout.eventDateSelector'
+  | 'checkout.checkoutSummary';
 
 /** ==== section data shapes ==== */
 
@@ -145,6 +146,11 @@ export type EventDateSelectorData = {
   heading?: string;
 };
 
+export type CheckoutSummaryData = {
+  showDiscountCode: boolean;
+  payButtonLabel: string;
+};
+
 export interface SectionDataMap {
   'hero.basic': HeroBasicData;
   'content.textWithMedia': TextWithMediaData;
@@ -164,6 +170,7 @@ export interface SectionDataMap {
   'checkout.checkoutForm': CheckoutFormData;
   'checkout.deliveryTimeSelector': DeliveryTimeSelectorData;
   'checkout.eventDateSelector': EventDateSelectorData;
+  'checkout.checkoutSummary': CheckoutSummaryData;
 }
 
 export type PageKind =
