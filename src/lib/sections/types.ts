@@ -147,7 +147,6 @@ export type EventDateSelectorData = {
 };
 
 export type CheckoutSummaryData = {
-  showDiscountCode: boolean;
   payButtonLabel: string;
 };
 
