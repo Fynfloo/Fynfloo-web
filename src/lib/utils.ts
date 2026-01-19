@@ -10,3 +10,6 @@ export const protocol =
 export const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'app.lvh.me';
 export const apiUrl =
   process.env.NEXT_PUBLIC_API_URL || 'http://api.lvh.me:8080';
+
+export const stripePublishableKey =
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '';
