@@ -49,7 +49,7 @@ function PaymentForm({
       {error && <p className="text-xs text-red-600">{error}</p>}
       <button
         type="submit"
-        disabled={!stripe || loading}
+        disabled={!stripe || !elements || !loading}
         className="inline-flex w-full items-center justify-center rounded-full bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
       >
         {loading ? 'Processing...' : 'Pay Now'}
@@ -102,11 +102,15 @@ function PaymentMethods() {
       }
     }
     initPayment();
-  }, [cart]);
+  }, [cart, clientSecret]);
 
   return (
     <SectionShell>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700">
+          <strong>Payment failed:</strong> {error}
+        </div>
+      )}
 
       {!clientSecret || !orderId ? (
         <p className="text-sm text-muted-foreground">Loading secure payment…</p>
