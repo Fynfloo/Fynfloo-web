@@ -19,7 +19,8 @@ export type SectionType =
   | 'checkout.checkoutForm'
   | 'checkout.deliveryTimeSelector'
   | 'checkout.eventDateSelector'
-  | 'checkout.checkoutSummary';
+  | 'checkout.checkoutSummary'
+  | 'checkout.paymentMethods';
 
 /** ==== section data shapes ==== */
 
@@ -170,6 +171,7 @@ export interface SectionDataMap {
   'checkout.deliveryTimeSelector': DeliveryTimeSelectorData;
   'checkout.eventDateSelector': EventDateSelectorData;
   'checkout.checkoutSummary': CheckoutSummaryData;
+  'checkout.paymentMethods': Record<string, never>;
 }
 
 export type PageKind =

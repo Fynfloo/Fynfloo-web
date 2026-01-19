@@ -21,6 +21,7 @@ import './checkout/checkout-form';
 import './checkout/delivery-time-selector';
 import './checkout/event-date-selector';
 import './checkout/checkout-summary';
+import './checkout/payment-methods';
 
 // CORE
 import './core/section-heading';
