@@ -49,7 +49,7 @@ function PaymentForm({
       {error && <p className="text-xs text-red-600">{error}</p>}
       <button
         type="submit"
-        disabled={!stripe || !elements || !loading}
+        disabled={!stripe || !elements || loading}
         className="inline-flex w-full items-center justify-center rounded-full bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
       >
         {loading ? 'Processing...' : 'Pay Now'}
