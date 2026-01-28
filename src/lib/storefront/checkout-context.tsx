@@ -1,24 +1,89 @@
 'use client';
 
-import { createContext, useContext } from 'react';
-import React from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
 
-type CheckoutState = {
+export type CheckoutFormState = {
+  name: string;
+  email: string;
+  phone: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  postcode: string;
+  notes: string;
+};
+
+const EMPTY_FORM: CheckoutFormState = {
+  name: '',
+  email: '',
+  phone: '',
+  addressLine1: '',
+  addressLine2: '',
+  city: '',
+  postcode: '',
+  notes: '',
+};
+
+type CheckoutContextValue = {
   orderId: string | null;
   clientSecret: string | null;
-  // Add other checkout-related state properties here
+  form: CheckoutFormState;
+  updateField: (name: keyof CheckoutFormState, value: string) => void;
+  resetForm: () => void;
 };
-const CheckoutContext = createContext<CheckoutState | null>(null);
+const CheckoutContext = createContext<CheckoutContextValue | null>(null);
 
 export function CheckoutProvider({
   checkoutState,
   children,
 }: {
-  checkoutState: CheckoutState;
+  checkoutState: {
+    orderId: string | null;
+    clientSecret: string | null;
+  };
   children: React.ReactNode;
 }) {
+  const [form, setForm] = useState<CheckoutFormState>(EMPTY_FORM);
+
+  const updateField = useCallback(
+    (name: keyof CheckoutFormState, value: string) => {
+      setForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    },
+    [],
+  );
+
+  const resetForm = useCallback(() => {
+    setForm(EMPTY_FORM);
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      orderId: checkoutState.orderId,
+      clientSecret: checkoutState.clientSecret,
+      form,
+      updateField,
+      resetForm,
+    }),
+    [
+      checkoutState.orderId,
+      checkoutState.clientSecret,
+      form,
+      updateField,
+      resetForm,
+    ],
+  );
+
   return (
-    <CheckoutContext.Provider value={checkoutState}>
+    <CheckoutContext.Provider value={value}>
       {children}
     </CheckoutContext.Provider>
   );
