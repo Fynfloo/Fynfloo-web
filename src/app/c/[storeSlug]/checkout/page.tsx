@@ -1,8 +1,8 @@
 import { loadStoreContext } from '@/lib/storefront/load-store-context';
 import { notFound } from 'next/navigation';
 import { CartProvider } from '@/lib/storefront/cart-context';
-import { RenderPage } from '@/components/storefront/render-page';
 import { fetchCartServer } from '@/lib/storefront/cartApi.server';
+import CheckoutClient from './checkout-client';
 
 export default async function CheckoutPage({
   params,
@@ -20,7 +20,7 @@ export default async function CheckoutPage({
 
   return (
     <CartProvider initialCart={cart}>
-      <RenderPage layout={ctx.layout} />
+      <CheckoutClient storeSlug={storeSlug} layout={ctx.layout} />
     </CartProvider>
   );
 }

@@ -1,15 +1,14 @@
-import { useCart } from '@/lib/storefront/cart-context';
-import { apiUrl } from '@/lib/utils';
 import {
   Elements,
   PaymentElement,
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SectionShell } from '../core/section-shell';
 import { stripePromise } from '@/lib/stripe/stripe-client';
 import { registerSection } from '@/lib/sections/registry';
+import { useCheckout } from '@/lib/storefront/checkout-context';
 
 function PaymentForm({
   clientSecret,
@@ -63,46 +62,8 @@ function PaymentForm({
 }
 
 function PaymentMethods() {
-  const { cart } = useCart();
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [orderId, setOrderId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function initPayment() {
-      try {
-        const res = await fetch(
-          `${apiUrl}/api/storefront/checkout/create-payment-intent`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Store-Slug': window.location.hostname.split('.')[0],
-              'X-Cart-Token':
-                document.cookie
-                  .split('; ')
-                  .find((c) => c.startsWith('cart_token='))
-                  ?.split('=')[1] ?? '',
-            },
-            body: JSON.stringify({}),
-          },
-        );
-
-        if (!res.ok) {
-          throw new Error('Failed to initialize payment.');
-        }
-
-        const data = await res.json();
-        setClientSecret(data.clientSecret);
-        setOrderId(data.orderId);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : 'Failed to load payment.',
-        );
-      }
-    }
-    initPayment();
-  }, [cart, clientSecret]);
+  const { orderId, clientSecret } = useCheckout();
 
   return (
     <SectionShell>

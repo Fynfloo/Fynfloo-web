@@ -7,6 +7,7 @@ import type {
   SectionDefaultContext,
 } from '@/lib/sections/types';
 
+
 type Props = { data: CheckoutFormData };
 
 function CheckoutForm({ data }: Props) {
