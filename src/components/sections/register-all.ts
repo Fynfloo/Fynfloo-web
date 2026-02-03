@@ -17,11 +17,8 @@ import './commerce/related-products';
 // CHECKOUT
 import './checkout/cart-items';
 import './checkout/cart-summary';
-import './checkout/checkout-form';
 import './checkout/delivery-time-selector';
 import './checkout/event-date-selector';
-import './checkout/checkout-summary';
-import './checkout/payment-methods';
 
 // CORE
 import './core/section-heading';

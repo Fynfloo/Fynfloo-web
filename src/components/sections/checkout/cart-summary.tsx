@@ -5,6 +5,8 @@ import type {
   SectionDefaultContext,
 } from '@/lib/sections/types';
 import { useCart } from '@/lib/storefront/cart-context';
+import { Button } from '../core/button';
+import { startStripeCheckout } from '@/lib/storefront/start-stripe-checkout';
 
 type Props = { data: CartSummaryData };
 
@@ -43,12 +45,14 @@ function CartSummary({ data }: Props) {
             />
           </div>
         )}
-        <a
-          href="/checkout"
+        <Button
+          onClick={() =>
+            startStripeCheckout(window.location.hostname.split('.')[0])
+          }
           className="mt-2 inline-flex w-full items-center justify-center rounded-full bg-[var(--color-primary)] px-4 py-2 text-xs font-medium text-white"
         >
           Go to checkout
-        </a>
+        </Button>
       </div>
     </SectionShell>
   );
