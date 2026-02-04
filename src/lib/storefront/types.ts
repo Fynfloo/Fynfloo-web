@@ -68,27 +68,6 @@ export type Cart = {
   total: number;
 };
 
-export type CheckoutCustomer = {
-  name: string;
-  email: string;
-  phone?: string;
-};
-
-export type CheckoutShipping = {
-  addressLine1: string;
-  addressLine2?: string;
-  city?: string;
-  state?: string;
-  postalCode?: string;
-  country?: string;
-};
-
-export type CheckoutData = {
-  customer?: CheckoutCustomer;
-  shipping?: CheckoutShipping;
-  notes?: string;
-};
-
 export type CheckoutDeliveryData = {
   title: string;
   firstName: string;
