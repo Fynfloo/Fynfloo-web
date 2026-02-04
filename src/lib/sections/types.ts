@@ -16,11 +16,8 @@ export type SectionType =
   | 'events.enquiryCta'
   | 'checkout.cartItems'
   | 'checkout.cartSummary'
-  | 'checkout.checkoutForm'
   | 'checkout.deliveryTimeSelector'
-  | 'checkout.eventDateSelector'
-  | 'checkout.checkoutSummary'
-  | 'checkout.paymentMethods';
+  | 'checkout.eventDateSelector';
 
 /** ==== section data shapes ==== */
 
@@ -133,22 +130,12 @@ export type CartSummaryData = {
   showDiscountCode?: boolean;
 };
 
-export type CheckoutFormData = {
-  showShippingSection?: boolean;
-  showBillingSection?: boolean;
-  showNotesField?: boolean;
-};
-
 export type DeliveryTimeSelectorData = {
   heading?: string;
 };
 
 export type EventDateSelectorData = {
   heading?: string;
-};
-
-export type CheckoutSummaryData = {
-  payButtonLabel: string;
 };
 
 export interface SectionDataMap {
@@ -167,11 +154,8 @@ export interface SectionDataMap {
   'events.enquiryCta': EnquiryCtaData;
   'checkout.cartItems': CartItemsData;
   'checkout.cartSummary': CartSummaryData;
-  'checkout.checkoutForm': CheckoutFormData;
   'checkout.deliveryTimeSelector': DeliveryTimeSelectorData;
   'checkout.eventDateSelector': EventDateSelectorData;
-  'checkout.checkoutSummary': CheckoutSummaryData;
-  'checkout.paymentMethods': Record<string, never>;
 }
 
 export type PageKind =
