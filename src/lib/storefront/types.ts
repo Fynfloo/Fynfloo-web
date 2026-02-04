@@ -88,3 +88,15 @@ export type CheckoutData = {
   shipping?: CheckoutShipping;
   notes?: string;
 };
+
+export type CheckoutDeliveryData = {
+  title: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  address1: string;
+  address2: string;
+  city: string;
+  county: string;
+  postcode: string;
+};
