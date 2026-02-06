@@ -5,7 +5,7 @@ import { cookies, headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
-  const cookieStore = await cookies();
+  //const cookieStore = await cookies();
   const headerStore = await headers();
   const body = await req.json();
 
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   if (!storeSlug) {
     return NextResponse.json(
       { error: 'Store slug not found in host' },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -24,10 +24,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Store not found' }, { status: 404 });
   }
 
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join('; ');
+  const cookie = headerStore.get('cookie') ?? '';
+  console.log(cookie);
 
   const backendRes = await fetch(
     `${apiUrl}/api/storefront/stores/${store.id}/cart/items`,
@@ -35,11 +33,11 @@ export async function POST(req: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+        ...(cookie ? { cookie } : {}),
       },
-      credentials: 'include',
+      //credentials: 'include',
       body: JSON.stringify(body),
-    }
+    },
   );
 
   const data = await backendRes.json();

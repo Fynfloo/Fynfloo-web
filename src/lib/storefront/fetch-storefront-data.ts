@@ -15,15 +15,15 @@ export async function fetchStoreBySlug(slug: string): Promise<Store | null> {
 
 export async function fetchStorePage(
   storeId: string,
-  path: string
+  path: string,
 ): Promise<StorePage | null> {
   const res = await fetch(
     `${apiUrl}/api/storefront/stores/${storeId}/pages?path=${encodeURIComponent(
-      path
+      path,
     )}`,
     {
       cache: 'no-store',
-    }
+    },
   );
   if (!res.ok) return null;
   return res.json();
@@ -34,7 +34,7 @@ export async function fetchProductByHandle(storeId: string, handle: string) {
     `${apiUrl}/api/storefront/stores/${storeId}/products/${handle}`,
     {
       cache: 'no-store',
-    }
+    },
   );
   if (!res.ok) return null;
   return res.json();
@@ -42,14 +42,14 @@ export async function fetchProductByHandle(storeId: string, handle: string) {
 
 export async function fetchProductsForListing(
   storeId: string,
-  params: Record<string, string | undefined> = {}
+  params: Record<string, string | undefined> = {},
 ): Promise<Product[]> {
   const qs = new URLSearchParams(
-    Object.entries(params).filter(([, v]) => v != null) as [string, string][]
+    Object.entries(params).filter(([, v]) => v != null) as [string, string][],
   );
   const res = await fetch(
     `${apiUrl}/api/storefront/stores/${storeId}/products?${qs.toString()}`,
-    { cache: 'no-store' }
+    { cache: 'no-store' },
   );
   if (!res.ok) return [];
   return res.json();
@@ -77,7 +77,7 @@ export async function fetchCartClient(): Promise<Cart> {
 
 export async function addToCartClient(
   productId: string,
-  quantity = 1
+  quantity = 1,
 ): Promise<Cart> {
   const storeSlug = getStoreSlugFromHostClient();
   const cartToken = getCartTokenClient();

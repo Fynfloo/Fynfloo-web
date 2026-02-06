@@ -5,13 +5,13 @@ import type { Cart } from './types';
 
 type CartResponse = { cartToken: string; cart: Cart };
 
-/**
- * SSR fetchCart: uses storeSlug from params and token from cookie if present.
- * If no token exists yet, backend will generate one and return it,
- * but SSR cannot set client cookie. That's okay: first client interaction will store it.
- */
 export async function fetchCartServer(storeSlug: string): Promise<Cart> {
   const cartToken = await getCartTokenServer();
+
+  // SSR is read-only
+  if (!cartToken) {
+    return { id: '', items: [], subtotal: 0, total: 0 };
+  }
 
   const res = await fetch(`${apiUrl}/api/storefront/cart`, {
     method: 'GET',
