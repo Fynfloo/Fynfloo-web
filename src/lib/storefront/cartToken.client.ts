@@ -16,6 +16,12 @@ export function setCartTokenClient(token: string) {
 
   // Host-only cookie: DO NOT set Domain=
   document.cookie = `cart_token=${encodeURIComponent(
-    token
+    token,
   )}; Path=/; SameSite=Lax`;
+}
+
+export function clearCartTokenClient() {
+  if (typeof document === 'undefined') return;
+
+  document.cookie = `cart_token=; Path=/; Max-Age=0; SameSite=Lax`;
 }
