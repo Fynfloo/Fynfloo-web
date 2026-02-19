@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/${storeId}/create-connect-account`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/dashboard/${storeId}/create-account-link`,
     {
       method: 'POST',
       headers: {
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
   if (!res.ok) {
     return NextResponse.json(
-      { error: 'Failed to create Stripe account' },
+      { error: 'Failed to create account link' },
       { status: res.status },
     );
   }

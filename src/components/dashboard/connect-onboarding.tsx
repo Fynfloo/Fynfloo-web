@@ -26,10 +26,41 @@ export function ConnectOnboarding({ storeId }: { storeId: string }) {
     }
   };
 
+  const handleOnboarding = async () => {
+    try {
+      setLoading(true);
+      const onboardingRes = await fetch(
+        `/api/dashboard/create-account-link?storeId=${storeId}`,
+        {
+          method: 'POST',
+        },
+      );
+      if (!onboardingRes.ok) {
+        console.error('Failed to create onboarding link');
+        return;
+      }
+      const { url } = await onboardingRes.json();
+
+      if (!url) {
+        console.error('Onboarding link URL is missing');
+        return;
+      }
+      window.location.href = url;
+    } catch (error) {
+      console.error('Error creating onboarding link:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Button onClick={handleCreateAccount} disabled={loading}>
         {loading ? 'Connnecting...' : 'Connect Stripe Account'}
+      </Button>
+
+      <Button onClick={handleOnboarding} disabled={loading}>
+        {loading ? 'Redirecting...' : 'Start Onboarding'}
       </Button>
     </>
   );
